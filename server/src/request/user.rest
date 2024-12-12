@@ -1,0 +1,42 @@
+### signup
+post http://localhost:3000/user/signup
+Content-Type: application/json
+
+{
+    "name":"john",
+    "password":"123456",
+    "email":"john1@gmail.com",
+     "birthDate":"01/01/2024"
+}
+### login
+post http://localhost:3000/user/login
+Content-Type: application/json
+
+{
+    "password":"123456",
+    "email":"john1@gmail.com"
+   
+}
+### info
+GET  http://localhost:3000/user/info
+Content-Type: application/json
+Cookie: access_token=Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVhYjk2MWNlNjc5Y2NkYjI2YTk4MjUiLCJyb2xlIjoidXNlciIsImlhdCI6MTczNDAwMTg0MSwiZXhwIjoxNzM2NTkzODQxfQ.Z034v37tRfXozn0voOVYr6Yxsl_WhDB7tu6Lzt7xbSQ; Path=/; HttpOnly; Secure; SameSite=None,refresh_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVhYjk2MWNlNjc5Y2NkYjI2YTk4MjUiLCJpYXQiOjE3MzQwMDE4NDEsImV4cCI6MTczNjU5Mzg0MX0.Svuj94Jj3rc30tH2sVfnSwWHP6xljPt4oin4momTDnk; Path=/; HttpOnly; Secure; SameSite=None
+
+### update
+PUT  http://localhost:3000/user/update
+Content-Type: application/json
+Cookie: access_token=Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVhYjk2MWNlNjc5Y2NkYjI2YTk4MjUiLCJyb2xlIjoidXNlciIsImlhdCI6MTczNDAwMTg0MSwiZXhwIjoxNzM2NTkzODQxfQ.Z034v37tRfXozn0voOVYr6Yxsl_WhDB7tu6Lzt7xbSQ; Path=/; HttpOnly; Secure; SameSite=None,refresh_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVhYjk2MWNlNjc5Y2NkYjI2YTk4MjUiLCJpYXQiOjE3MzQwMDE4NDEsImV4cCI6MTczNjU5Mzg0MX0.Svuj94Jj3rc30tH2sVfnSwWHP6xljPt4oin4momTDnk; Path=/; HttpOnly; Secure; SameSite=None
+
+{
+    "name": "johny"
+}
+
+### delete
+DELETE   http://localhost:3000/user/delete
+Content-Type: application/json
+Cookie: access_token=Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVhYjk2MWNlNjc5Y2NkYjI2YTk4MjUiLCJyb2xlIjoidXNlciIsImlhdCI6MTczNDAwMTg0MSwiZXhwIjoxNzM2NTkzODQxfQ.Z034v37tRfXozn0voOVYr6Yxsl_WhDB7tu6Lzt7xbSQ; Path=/; HttpOnly; Secure; SameSite=None,refresh_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVhYjk2MWNlNjc5Y2NkYjI2YTk4MjUiLCJpYXQiOjE3MzQwMDE4NDEsImV4cCI6MTczNjU5Mzg0MX0.Svuj94Jj3rc30tH2sVfnSwWHP6xljPt4oin4momTDnk; Path=/; HttpOnly; Secure; SameSite=None
+
+{
+    "password": "123456"
+}
+

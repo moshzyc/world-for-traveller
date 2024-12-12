@@ -1,0 +1,35 @@
+POST  http://localhost:3000/products/add
+Content-Type: application/json
+
+{
+ "title": "Uri's Shawarma Wheel",
+ "description": "Passed down from generation to generation, from one Uri to another, the legends say that the fifth Uri who held the wheel was originally Jacob., know as U.S.W",
+ "price": 999999,
+ "category": "food",
+ "image": "https://res.cloudinary.com/dbfsp3hfk/image/upload/v1732008081/pexels-rdne-5779371_fkpyib.jpg"
+}
+
+###
+
+GET http://localhost:3000/products
+Content-Type: application/json
+
+###
+
+GET http://localhost:3000/products/categories
+Content-Type: application/json
+
+###
+
+PUT http://localhost:3000/products/update/675ad413242284ceb5920d27
+Content-Type: application/json
+
+{
+    
+"price": 999995
+}
+
+###
+
+DELETE  http://localhost:3000/products/delete/675ad413242284ceb5920d27
+Content-Type: application/json
