@@ -6,12 +6,13 @@ Content-Type: application/json
  "description": "Passed down from generation to generation, from one Uri to another, the legends say that the fifth Uri who held the wheel was originally Jacob., know as U.S.W",
  "price": 999999,
  "category": "food",
- "image": "https://res.cloudinary.com/dbfsp3hfk/image/upload/v1732008081/pexels-rdne-5779371_fkpyib.jpg"
+ "subCategory":"shawarma2",
+ "image": "C:/Full stuck/training/פרוייקט/project1/client/src/assets/photos/large.png"
 }
 
 ###
 
-GET http://localhost:3000/products
+GET http://localhost:3000/products?cat=food&sCat=
 Content-Type: application/json
 
 ###
