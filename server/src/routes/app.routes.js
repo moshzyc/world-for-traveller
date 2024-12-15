@@ -1,7 +1,6 @@
 import express from "express"
 import userRouter from "./users.routes.js"
 import productRouter from "./products.routes.js"
-import AppError from "../utils/appError.js"
 
 const router = express.Router()
 
