@@ -20,13 +20,13 @@ const userCtrl = {
     try {
       const user = await User.findOne({ email })
       if (!user || !(await bcrypt.compare(password, user.password))) {
-        return next(new AppError("user or password wrong", 401))
+        return next(new AppError("email or password wrong", 401))
       }
 
       const accessToken = jwt.sign(
         { _id: user._id, role: user.role },
         secretKey,
-        { expiresIn: "30d" }
+        { expiresIn: "15m" }
       )
       const refreshToken = jwt.sign({ _id: user._id }, secretKey, {
         expiresIn: "30d",
