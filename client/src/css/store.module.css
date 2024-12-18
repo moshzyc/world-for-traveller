@@ -1,0 +1,47 @@
+.store {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px;
+  gap: 20px;
+}
+.card {
+  padding: 10px;
+  border: solid black 1px;
+  width: 300px;
+  height: 460px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+}
+.img {
+  max-height: 50%;
+  max-width: 100%;
+  margin: 0 auto;
+  object-fit: contain;
+  cursor: pointer;
+}
+.title {
+  font-size: x-large;
+  font-weight: bold;
+}
+.category {
+  font-size: large;
+  font-weight: 600;
+}
+.btn {
+  padding: 2px;
+  border: none;
+  background: black;
+  border-radius: 10px;
+  color: white;
+  font-size: large;
+}
+.btn:hover {
+  background: rgb(27, 26, 26);
+}
+.btn:active {
+  transform: scale(0.98);
+  background: rgb(39, 37, 37);
+}
