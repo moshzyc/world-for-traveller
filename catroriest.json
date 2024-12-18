@@ -1,0 +1,18 @@
+[
+  {
+    "category": "Men's Clothing",
+    "subCategory": ["Jackets", "Climbing Shoes", "Thermal Wear", "Accessories"]
+  },
+  {
+    "category": "Women's Clothing",
+    "subCategory": ["Jackets", "Climbing Shoes", "Thermal Wear", "Accessories"]
+  },
+  {
+    "category": "Camping Gear",
+    "subCategory": ["Tents", "Sleeping Bags", "Backpacks", "Mats"]
+  },
+  {
+    "category": "Cooking Gear",
+    "subCategory": ["Stoves", "Pots", "Tableware", "Burners"]
+  }
+]

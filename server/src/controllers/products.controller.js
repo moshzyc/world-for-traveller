@@ -11,62 +11,63 @@ cloudinary.config({
 
 const productsCtrl = {
   //מוסיף מוצר
-async addProduct(req, res) {
-  try {
-    const productData = req.body
+  async addProduct(req, res) {
+    try {
+      const productData = req.body
 
-    // העלאת תמונה ל-Cloudinary
-    if (req.file && req.file.path) {
-      // אם התמונה נשלחה בקובץ
-      const uploadResult = await cloudinary.uploader.upload(req.file.path, {
-        folder: "products", // תיקייה ב-Cloudinary
-      })
-      productData.image = uploadResult.secure_url // שמירת קישור התמונה
-    }
-
-    // בדיקה אם הקטגוריה כבר קיימת
-    let category = await Category.findOne({ category: productData.category })
-
-    if (!category) {
-      // אם הקטגוריה לא קיימת, ליצור חדשה עם subCategory (אם קיים)
-      const newCategory = new Category({
-        category: productData.category,
-        subCategory: productData.subCategory ? [productData.subCategory] : [],
-      })
-      category = await newCategory.save()
-    } else if (productData.subCategory) {
-      // אם הקטגוריה קיימת, לבדוק אם ה-subCategory קיים
-      if (!category.subCategory.includes(productData.subCategory)) {
-        category.subCategory.push(productData.subCategory) // הוספת תת-קטגוריה חדשה
-        await category.save() // שמירת הקטגוריה עם התת-קטגוריה המעודכנת
+      // העלאת תמונה ל-Cloudinary
+      if (req.file && req.file.path) {
+        // אם התמונה נשלחה בקובץ
+        const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+          folder: "products", // תיקייה ב-Cloudinary
+        })
+        productData.image = uploadResult.secure_url // שמירת קישור התמונה
       }
+
+      // בדיקה אם הקטגוריה כבר קיימת
+      let category = await Category.findOne({ category: productData.category })
+
+      if (!category) {
+        // אם הקטגוריה לא קיימת, ליצור חדשה עם subCategory (אם קיים)
+        const newCategory = new Category({
+          category: productData.category,
+          subCategory: productData.subCategory ? [productData.subCategory] : [],
+        })
+        category = await newCategory.save()
+      } else if (productData.subCategory) {
+        // אם הקטגוריה קיימת, לבדוק אם ה-subCategory קיים
+        if (!category.subCategory.includes(productData.subCategory)) {
+          category.subCategory.push(productData.subCategory) // הוספת תת-קטגוריה חדשה
+          await category.save() // שמירת הקטגוריה עם התת-קטגוריה המעודכנת
+        }
+      }
+
+      // יצירת מוצר חדש ושמירתו
+      const newProduct = new Product(productData)
+      const savedProduct = await newProduct.save()
+
+      res.status(201).json({
+        message: "Product created successfully",
+        product: savedProduct,
+        category: category, // מחזירים גם את הקטגוריה שנוצרה או עודכנה
+      })
+    } catch (err) {
+      console.error("Error saving product:", err)
+
+      res.status(400).json({
+        error: "Failed to create product",
+        details: err.message,
+      })
     }
-
-    // יצירת מוצר חדש ושמירתו
-    const newProduct = new Product(productData)
-    const savedProduct = await newProduct.save()
-
-    res.status(201).json({
-      message: "Product created successfully",
-      product: savedProduct,
-      category: category, // מחזירים גם את הקטגוריה שנוצרה או עודכנה
-    })
-  } catch (err) {
-    console.error("Error saving product:", err);
-
-    res.status(400).json({
-      error: "Failed to create product",
-      details: err.message,
-    });
-  }
-},
+  },
   //לקבל את כל המוצרים
   async getProdacts(req, res) {
-    const cat = new RegExp(req.query.cat || "", "i")
-    const sCat = new RegExp(req.query.sCat || "", "i")
+    const cat = new RegExp(req.query.cat || "")
+    const sCat = new RegExp(req.query.sCat || "")
+    const title = new RegExp(req.query.title || "", "i")
     try {
       const Products = await Product.aggregate([
-        { $match: { category: cat, subCategory: sCat } },
+        { $match: { category: cat, subCategory: sCat, title: title } },
       ])
       // const Products = await Product.find()
       res.status(200).json(Products)

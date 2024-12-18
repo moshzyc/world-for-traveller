@@ -9,8 +9,8 @@ const upload = multer({ dest: "uploads/" })
 
 router.get("/", productsCtrl.getProdacts)
 router.get("/categories", productsCtrl.getCategories)
-router.post("/add", upload.single("image"), productsCtrl.addProduct)
-router.put("/update/:id", productsCtrl.updateProduct)
-router.delete("/delete/:id", productsCtrl.deleteProduct)
+router.post("/add", autAdmin,upload.single("image"), productsCtrl.addProduct)
+router.put("/update/:id", autAdmin, productsCtrl.updateProduct)
+router.delete("/delete/:id", autAdmin, productsCtrl.deleteProduct)
 
 export default router

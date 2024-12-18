@@ -42,7 +42,7 @@ const userCtrl = {
         secure: true,
         sameSite: "none",
       })
-      res.cookie("refresh_token", refreshToken, {
+      res.cookie("refresh_token", "Bearer " + refreshToken, {
         httpOnly: true,
         secure: true,
         sameSite: "none",
@@ -128,6 +128,96 @@ const userCtrl = {
       res.status(200).json({ message: "User updated successfully" })
     } catch (error) {
       next(new AppError("Error updating user", 500, error))
+    }
+  },
+  async saveCart(req, res, next) {
+    const { cart } = req.body // קבלת ה-cart מהבקשה
+    try {
+      if (!Array.isArray(cart)) {
+        return next(new AppError("Cart must be an array", 400))
+      }
+
+      const user = await User.findById(req._id) // מציאת המשתמש לפי ה-ID שנמצא ב-token
+      if (!user) {
+        return next(new AppError("User not found", 404))
+      }
+
+      // סינון הנתונים ושמירה בפורמט אחיד
+      const formattedCart = cart.map((item) => ({
+        productId: item.productId || item._id, // אחידות לשדה productId
+        title: item.title,
+        category: item.category,
+        price: item.price,
+        quantity: item.quantity || 1, // ברירת מחדל לכמות
+      }))
+
+      user.cart = formattedCart // דריסת המערך הקיים
+      await user.save() // שמירת השינויים במסד הנתונים
+
+      res.status(200).json({ message: "Cart saved successfully" })
+    } catch (error) {
+      next(new AppError("Error saving cart", 500, error))
+    }
+  },
+  async getCart(req, res, next) {
+    try {
+      const user = await User.findById(req._id).populate({
+        path: "cart.productId", // אכלוס המידע מהקולקשן products
+        select: "title price category", // שליפת השדות הרצויים בלבד
+      })
+
+      if (!user) {
+        return next(new AppError("User not found", 404))
+      }
+
+      // סינון השדות והחזרת מבנה אחיד
+      const formattedCart = user.cart.map((item) => ({
+        productId: item.productId._id, // שמירת ה-ID של המוצר
+        title: item.productId.title,
+        category: item.productId.category,
+        price: item.productId.price,
+        quantity: item.quantity,
+      }))
+
+      res.status(200).json(formattedCart)
+    } catch (error) {
+      next(new AppError("Error fetching cart", 500, error))
+    }
+  },
+  async saveOrder(req, res, next) {
+    const { cart, totalAmount, address } = req.body // קבלת העגלה, הסכום והכתובת מהבקשה
+    try {
+      // ודא שהעגלה לא ריקה
+      if (!Array.isArray(cart) || cart.length === 0) {
+        return next(new AppError("Cart cannot be empty", 400))
+      }
+
+      const user = await User.findById(req._id) // מציאת המשתמש לפי ה-ID שנמצא ב-token
+      if (!user) {
+        return next(new AppError("User not found", 404))
+      }
+
+      // יצירת אובייקט הזמנה
+      const newOrder = {
+        cart: cart.map((item) => ({
+          productId: item.productId, // אחידות לשדה productId
+          quantity: item.quantity || 1,
+          addedAt: new Date(),
+        })),
+        orderDate: new Date(),
+        status: "pending", // ברירת מחדל
+        totalAmount: totalAmount,
+      }
+
+      // הוספת ההזמנה לשדה orders של המשתמש
+      user.orders.push(newOrder)
+      await user.save() // שמירה במסד הנתונים
+
+      res
+        .status(200)
+        .json({ message: "Order saved successfully", order: newOrder })
+    } catch (error) {
+      next(new AppError("Error saving order", 500, error))
     }
   },
 }
