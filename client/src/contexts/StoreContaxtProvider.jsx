@@ -1,122 +1,225 @@
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from "react"
+import axios from "axios"
+import { CART_URL, PRODUCTS_URL } from "../constants/endPoint"
+import { UserContext } from "../contexts/UserContextpProvider"
 export const StoreContext = createContext()
+
 export const StoreContaxtProvider = ({ children }) => {
+  const { user } = useContext(UserContext)
   const [cart, setCart] = useState([])
   const [cartSum, setCartSum] = useState(0)
-  const SAVE = 0.5
+  const [products, setProducts] = useState([])
+  const [allProducts, setAllProducts] = useState([])
+  const [category, setCategory] = useState("")
+  const [subCategory, setSubCategory] = useState("")
+  const [title, setTitle] = useState("")
+
+  useEffect(() => {
+    getProductsFilterd()
+  }, [category, subCategory, title])
+  useEffect(() => {
+    getProducts()
+  }, [])
+
+  const getProducts = async () => {
+    try {
+      const { data } = await axios.get(`${PRODUCTS_URL}`)
+      setAllProducts(data)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  const getProductsFilterd = async () => {
+    try {
+      const { data } = await axios.get(
+        `${PRODUCTS_URL}?cat=${category}&sCat=${subCategory}&title=${title}`
+      )
+      setProducts(data)
+      console.log(data)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   const roundToTwo = (num) => {
     return Math.round(num * 100) / 100
   }
   useEffect(() => {
-    const sortedData = localStorage.getItem("cart")
-    const itemsArrey = sortedData ? JSON.parse(sortedData) : []
-    setCart(itemsArrey)
-    const totalSum = itemsArrey.reduce(
-      (sum, item) => sum + (item.price || 0),
-      0
-    )
-    setCartSum(totalSum)
-  }, [])
- const addItem = (item) => {
-   let exist = false
-
-   const updatedCart = cart.map((element) => {
-     if (element.title === item.title) {
-       exist = true
-       return {
-         ...element,
-         price: roundToTwo(element.price + item.price),
-         amount: element.amount + item.amount,
-       }
-     }
-     return element
-   })
-
-   if (!exist) {
-     updatedCart.push(item)
-   }
-
-   setCart(updatedCart)
-   setCartSum(roundToTwo(cartSum + item.price))
-
-   const sortedData = localStorage.getItem("cart")
-   const existingItems = sortedData ? JSON.parse(sortedData) : []
-
-   exist = false
-   const updatedLocalCart = existingItems.map((element) => {
-     if (element.title === item.title) {
-       exist = true
-       return {
-         ...element,
-         price: roundToTwo(element.price + item.price),
-         amount: element.amount + item.amount,
-       }
-     }
-     return element
-   })
-
-   if (!exist) {
-     updatedLocalCart.push(item)
-   }
-
-   localStorage.setItem("cart", JSON.stringify(updatedLocalCart))
- }
-
-  const deletItem = (number) => {
-    setCartSum(roundToTwo(cartSum - cart[number - 1].price))
-    const newCart = cart.filter((item, index) => index + 1 != number)
-    setCart(newCart)
-    if ([...cart]) localStorage.setItem("cart", JSON.stringify(newCart))
-    else localStorage.clear()
-  }
-  const minusAmount = (number) => {
-    const index = number - 1
-    const updatedCart = [...cart]
-    const item = updatedCart[index]
-
-    if (item.amount > 1) {
-      const pricePerUnit = roundToTwo(item.price / item.amount)
-      item.amount--
-      item.price = roundToTwo(item.price - pricePerUnit)
-      setCartSum(roundToTwo(cartSum - pricePerUnit))
+    if (!user) {
+      const sortedData = localStorage.getItem("cart")
+      const itemsArrey = sortedData ? JSON.parse(sortedData) : []
+      setCart(itemsArrey)
+      const totalSum = itemsArrey.reduce(
+        (sum, item) => sum + (item.price || 0),
+        0
+      )
+      setCartSum(totalSum)
     } else {
-      updatedCart.splice(index, 1)
-      setCartSum(roundToTwo(cartSum - item.price))
+      getCart()
+    }
+  }, [user])
+  const getCart = async () => {
+    try {
+      const { data } = await axios.get(CART_URL)
+      const formattedData = data.map((item) => ({
+        productId: item.productId,
+        title: item.title,
+        category: item.category,
+        price: item.price,
+        quantity: item.quantity,
+      }))
+
+      setCart(formattedData)
+      const totalSum = formattedData.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+      )
+      setCartSum(totalSum)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const updateCart = async (updatedCart) => {
+    try {
+      await axios.put(CART_URL, { cart: updatedCart })
+    } catch (error) {
+      console.log("Error updating cart:", error)
+    }
+  }
+
+  const addItem = (item) => {
+    let exist = false
+
+    const updatedCart = cart.map((element) => {
+      if (element.productId === item.productId) {
+        exist = true
+        return {
+          ...element,
+          price: roundToTwo(element.price + item.price),
+          quantity: element.quantity + item.quantity,
+        }
+      }
+      return element
+    })
+
+    if (!exist) {
+      updatedCart.push({
+        productId: item.productId,
+        title: item.title,
+        category: item.category,
+        price: roundToTwo(item.price),
+        quantity: item.quantity || 1,
+      })
     }
 
     setCart(updatedCart)
+    setCartSum(
+      roundToTwo(updatedCart.reduce((sum, item) => sum + item.price, 0))
+    )
+
+    if (!user) {
+      localStorage.setItem("cart", JSON.stringify(updatedCart))
+    } else {
+      updateCart()
+    }
+  }
+
+const deletItem = (number) => {
+  const updatedCart = cart.filter((item, index) => index + 1 !== number)
+  const removedItem = cart[number - 1]
+
+  // עדכון cartSum לפני שליחת הבקשה לשרת
+  const updatedSum = roundToTwo(cartSum - removedItem.price)
+  setCartSum(updatedSum) // עדכון הסכום
+
+  setCart(updatedCart) // עדכון העגלה ב-state
+
+  if (!user) {
     if (updatedCart.length > 0) {
       localStorage.setItem("cart", JSON.stringify(updatedCart))
     } else {
       localStorage.clear()
     }
+  } else {
+    updateCart(updatedCart) // שליחה לשרת
   }
- const addAnother = (number) => {
-   const index = number - 1
-   const updatedCart = [...cart]
-   const item = updatedCart[index]
-   const pricePerUnit = roundToTwo(item.price / item.amount)
+}
 
-   item.amount++
-   item.price = roundToTwo(item.price + pricePerUnit)
 
-   setCart(updatedCart)
-   setCartSum(roundToTwo(cartSum + pricePerUnit))
-   localStorage.setItem("cart", JSON.stringify(updatedCart))
- }
+  const minusAmount = (number) => {
+    const index = number - 1
+    const updatedCart = [...cart]
+    const item = updatedCart[index]
+
+    if (item.quantity > 1) {
+      const pricePerUnit = roundToTwo(item.price / item.quantity)
+      item.quantity--
+      item.price = roundToTwo(item.price - pricePerUnit)
+      setCartSum(roundToTwo(cartSum - pricePerUnit))
+    } else {
+      setCartSum(roundToTwo(cartSum - item.price))
+      updatedCart.splice(index, 1)
+    }
+
+    setCart(updatedCart)
+
+    if (!user) {
+      if (updatedCart.length > 0) {
+        localStorage.setItem("cart", JSON.stringify(updatedCart))
+      } else {
+        localStorage.clear()
+      }
+    } else {
+      updateCart(updatedCart) // עדכון השרת
+    }
+  }
+
+  const addAnother = (number) => {
+    const index = number - 1
+    const updatedCart = [...cart]
+    const item = updatedCart[index]
+    const pricePerUnit = roundToTwo(item.price / item.quantity)
+
+    item.quantity++
+    item.price = roundToTwo(item.price + pricePerUnit)
+
+    setCart(updatedCart)
+    setCartSum(roundToTwo(cartSum + pricePerUnit))
+
+    if (!user) {
+      localStorage.setItem("cart", JSON.stringify(updatedCart))
+    } else {
+      updateCart(updatedCart) // עדכון השרת
+    }
+  }
+  const clearCart = () => {
+    setCart([]) // מנקה את העגלה ב-state
+    setCartSum(0) // מאפס את הסכום של העגלה
+
+    if (!user) {
+      localStorage.removeItem("cart") // אם המשתמש לא מחובר, מסירים את העגלה מ- localStorage
+    } else {
+      updateCart([]) // אם המשתמש מחובר, שולחים עגלה ריקה לשרת
+    }
+  }
+
+
   return (
     <StoreContext.Provider
       value={{
-        SAVE,
-        cart,
-        cartSum,
-        setCartSum,
-        setCart,
+        products,
+        setCategory,
+        setSubCategory,
+        setTitle,
         addItem,
+        cart,
         deletItem,
-        roundToTwo,
-        minusAmount,
         addAnother,
+        minusAmount,
+        deletItem,
+        cartSum,
+        clearCart,
       }}
     >
       {children}

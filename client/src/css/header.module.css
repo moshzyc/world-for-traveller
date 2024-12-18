@@ -22,9 +22,23 @@ header {
   display: block;
 }
 .navlink {
+  font-size: small;
   border-bottom: black solid 1px;
 }
 .navlink:active {
+  transform: scale(0.98);
+}
+.subCategories{
+
+  background: white;
+}
+.subCategory{
+  display: none;
+}
+.categoryBlock:hover .subCategory{
+  display: block;
+}
+.subCategory:active{
   transform: scale(0.98);
 }
 .lines {
@@ -45,7 +59,7 @@ header {
   border-radius: 17px 0px 0px 17px;
   padding: 5px;
 }
-.sBtn:active{
+.sBtn:active {
   transform: scale(0.98);
 }
 .input {
@@ -53,19 +67,17 @@ header {
   padding: 5px;
   border-radius: 0px 17px 17px 0px;
 }
-.icons{
+.icons {
   width: 30px;
   cursor: pointer;
 }
-.userForm{
-  display: none;
-}
-.userIcon:hover .userForm{
-  display: block;
+.userForm {
+  position: absolute;
+  width: 250px;
 }
 
-@media (min-width: 738px) {
 
+@media (min-width: 768px) {
   .linseBox {
     display: none;
   }
@@ -82,16 +94,16 @@ header {
   }
   .navBlock {
     display: inline-flex;
+    /* vertical-align: bottom; */
     position: relative;
-    background-color: #f9f9f9;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0);
+    box-shadow: none;
     padding: 12px 16px;
     gap: 10px;
   }
   .navBlockApear {
     display: inline-flex;
   }
-
   .navBar {
     position: relative;
     display: inline-flex;
@@ -99,5 +111,8 @@ header {
 
   .navBar:hover .navBlock {
     display: inline-flex;
+  }
+  .input {
+    width: 400px;
   }
 }
