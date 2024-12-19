@@ -1,12 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react"
+import { StoreContext } from "../contexts/StoreContaxtProvider"
 
-const PayPalCheckout = () => {
+const PayPalCheckout = ({ handleSubmit }) => {
+  const { cartSum } = useContext(StoreContext)
+
   useEffect(() => {
     const loadPayPalScript = async () => {
       if (!window.paypal) {
-        const script = document.createElement("script");
-        script.src = "https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID = AQ1kDWf-rb55Z9J6rHasEyNSWSbnomO7h9pSv-N5QJfF4MMvBvVTI_d2Qz3NKedYXHnGtsOa2IYJJWJy";
-        script.async = true;
+        const script = document.createElement("script")
+
+        // כאן שמים רק את ה-Client ID בלי ה-URL המלא
+        script.src =
+          "https://www.paypal.com/sdk/js?client-id=AQ1kDWf-rb55Z9J6rHasEyNSWSbnomO7h9pSv-N5QJfF4MMvBvVTI_d2Qz3NKedYXHnGtsOa2IYJJWJy&debug=true"
+
+        script.async = true
         script.onload = () => {
           // יצירת כפתור PayPal לאחר טעינת ה-SDK
           window.paypal
@@ -16,32 +23,36 @@ const PayPalCheckout = () => {
                   purchase_units: [
                     {
                       amount: {
-                        value: "10.00", // הסכום לתשלום
+                        value: cartSum.toFixed(2), // הסכום לתשלום
                       },
                     },
                   ],
-                });
+                })
               },
-              onApprove: function (data, actions) {
-                return actions.order.capture().then(function (details) {
-                  alert(`Transaction completed by ${details.payer.name.given_name}`);
-                });
+              onApprove: (data, actions) => {
+                return actions.order.capture().then((details) => {
+                  alert(
+                    `Transaction completed by ${details.payer.name.given_name}`
+                  )
+                  console.log("Calling handleSubmit...")
+                  handleSubmit()
+                })
               },
               onError: function (err) {
-                console.error("PayPal Error:", err);
-                alert("There was an error processing the payment.");
+                console.error("PayPal Error:", err)
+                alert("There was an error processing the payment.")
               },
             })
-            .render("#paypal-button-container"); // רינדור הכפתור
-        };
-        document.body.appendChild(script);
+            .render("#paypal-button-container") // רינדור הכפתור
+        }
+        document.body.appendChild(script)
       }
-    };
+    }
 
-    loadPayPalScript();
-  }, []);
+    loadPayPalScript()
+  }, [cartSum, handleSubmit])
 
-  return <div id="paypal-button-container"></div>;
-};
+  return <div id="paypal-button-container"></div>
+}
 
-export default PayPalCheckout;
+export default PayPalCheckout

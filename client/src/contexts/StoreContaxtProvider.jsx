@@ -80,13 +80,29 @@ export const StoreContaxtProvider = ({ children }) => {
     }
   }
 
-  const updateCart = async (updatedCart) => {
-    try {
-      await axios.put(CART_URL, { cart: updatedCart })
-    } catch (error) {
-      console.log("Error updating cart:", error)
+  // const updateCart = async (updatedCart) => {
+  //   try {
+  //     await axios.put(CART_URL, { cart: updatedCart })
+  //   } catch (error) {
+  //     console.log("Error updating cart:", error)
+  //   }
+  // }
+const updateCart = async (updatedCart) => {
+  try {
+    if (!Array.isArray(updatedCart)) {
+      console.error(
+        "updateCart failed: updatedCart is not an array",
+        updatedCart
+      )
+      return
     }
+    await axios.put(CART_URL, { cart: updatedCart })
+    console.log("Cart updated successfully")
+  } catch (error) {
+    console.error("Error updating cart:", error)
   }
+}
+
 
   const addItem = (item) => {
     let exist = false
@@ -121,7 +137,7 @@ export const StoreContaxtProvider = ({ children }) => {
     if (!user) {
       localStorage.setItem("cart", JSON.stringify(updatedCart))
     } else {
-      updateCart()
+      updateCart(updatedCart)
     }
   }
 

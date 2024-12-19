@@ -5,6 +5,8 @@ const CartTable = ({ fullScreen }) => {
   const { cart, addAnother, minusAmount, deletItem, cartSum } = useContext(
     StoreContext)
 
+    
+
 
   return (
     <div
