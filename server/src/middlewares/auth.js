@@ -30,9 +30,10 @@ const auth = async (req, res, next) => {
       console.log("Access token expired, checking refresh token")
     }
 
-    if (!refreshToken) {
-      return next(new AppError("Unauthorized: Refresh token missing", 401))
-    }
+    // if (!refreshToken) {
+    //   return next(new AppError("Unauthorized: Refresh token missing", 401))
+    // }
+
     const decodedRefresh = jwt.verify(refreshToken, secretKey)
     const user = await User.findOne({
       _id: decodedRefresh._id,

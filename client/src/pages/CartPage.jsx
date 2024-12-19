@@ -11,12 +11,20 @@ const CartPage = () => {
   const {user} = useContext(UserContext)
 
 
+
   return (
     <main>
-      <div className="mycontainer">
-      <CartTable fullScreen />
-      <button onClick={()=>{setOrder(p=>!p)}}>complete order</button>
-      {order&&<div><Order/></div>}
+      <div className="mycontainer text-center">
+        <CartTable fullScreen />
+        <button
+          className="m-4 rounded-lg bg-green-400 p-1 font-semibold hover:bg-green-300 active:scale-[0.98]"
+          onClick={() => {
+            setOrder((p) => !p)
+          }}
+        >
+          complete order
+        </button>
+        {order && <Order exit={setOrder} />}
       </div>
     </main>
   )

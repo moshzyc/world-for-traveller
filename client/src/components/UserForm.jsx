@@ -45,12 +45,7 @@ export default function UserForm({ isSignup, formChenge}) {
   return (
     <form onSubmit={onSubmit} className={css.form}>
       {error && <span className="w-full rounded-md bg-red-500">{error}</span>}
-      <p
-        className="cursor-pointer text-center text-blue-700 hover:underline"
-        onClick={() => formChenge((p)=>!p)}
-      >
-        {isSignup?"to login":"create account"}
-      </p>
+
       {/* name */}
 
       {isSignup && (
@@ -114,7 +109,7 @@ export default function UserForm({ isSignup, formChenge}) {
       {isSignup && (
         <div>
           <label htmlFor="age" className="mr-2 w-1/4 text-left">
-           birth-date:
+            birth-date:
           </label>
           <input
             name="birthDate"
@@ -133,6 +128,12 @@ export default function UserForm({ isSignup, formChenge}) {
       <button type="submit" className={css.btn}>
         {isSignup ? "signup" : "login"}
       </button>
+      <p
+        className="cursor-pointer text-center text-blue-700 hover:underline"
+        onClick={() => formChenge((p) => !p)}
+      >
+        {isSignup ? "to login" : "create account"}
+      </p>
     </form>
   )
 }
