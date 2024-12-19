@@ -26,11 +26,11 @@ export default function UserForm({ isSignup, formChenge}) {
 
   const onSubmit = async (e) => {
     e.preventDefault()
+    console.log(formValues)
 
     try {
       if (isSignup) {
         await axios.post(SIGNUP_URL, formValues)
-        console.log(formValues)
         formChenge((p) => !p)
       } else {
         const { data } = await axios.post(LOGIN_URL, formValues)
@@ -45,12 +45,7 @@ export default function UserForm({ isSignup, formChenge}) {
   return (
     <form onSubmit={onSubmit} className={css.form}>
       {error && <span className="w-full rounded-md bg-red-500">{error}</span>}
-      <p
-        className="cursor-pointer text-center text-blue-700 hover:underline"
-        onClick={() => formChenge((p)=>!p)}
-      >
-        {isSignup?"to login":"create account"}
-      </p>
+      
       {/* name */}
 
       {isSignup && (
@@ -133,6 +128,12 @@ export default function UserForm({ isSignup, formChenge}) {
       <button type="submit" className={css.btn}>
         {isSignup ? "signup" : "login"}
       </button>
+      <p
+        className="cursor-pointer text-center text-blue-700 hover:underline"
+        onClick={() => formChenge((p)=>!p)}
+      >
+        {isSignup?"to login":"create account"}
+      </p>
     </form>
   )
 }

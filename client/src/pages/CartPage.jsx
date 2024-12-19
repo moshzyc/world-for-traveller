@@ -13,10 +13,10 @@ const CartPage = () => {
 
   return (
     <main>
-      <div className="mycontainer">
+      <div className="mycontainer text-center">
       <CartTable fullScreen />
-      <button onClick={()=>{setOrder(p=>!p)}}>complete order</button>
-      {order&&<div><Order/></div>}
+      <button className="bg-green-400 p-1 rounded-lg m-4 font-semibold hover:bg-green-300 active: scale-[0.98]"onClick={()=>{setOrder(p=>!p)}}>complete order</button>
+      {order&&<div><Order exit={setOrder}/></div>}
       </div>
     </main>
   )

@@ -19,6 +19,10 @@ const userCtrl = {
     const { email, password } = req.body
     try {
       const user = await User.findOne({ email })
+      console.log(email);
+      console.log(password);
+      
+      
       if (!user || !(await bcrypt.compare(password, user.password))) {
         return next(new AppError("email or password wrong", 401))
       }
