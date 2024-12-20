@@ -1,6 +1,6 @@
 const BASE_URL = "http://localhost:3000/"
-const USER_URL = BASE_URL + "user/"
 const PRODUCTS_URL = BASE_URL + "products"
+const USER_URL = BASE_URL + "user/"
 
 const SIGNUP_URL = USER_URL + "signup"
 const LOGIN_URL = USER_URL + "login"
@@ -8,6 +8,7 @@ const LOGOUT_URL = USER_URL + "logout"
 const GET_INFO_URL = USER_URL + "info"
 const CART_URL = USER_URL + "cart"
 const ORDER_URL = USER_URL + "save-order"
+const ADD_PRODUCT_URL = PRODUCTS_URL + "/add"
 const GET_CATEGORIES_URL = PRODUCTS_URL + "/categories"
 
 export {
@@ -19,4 +20,5 @@ export {
   GET_CATEGORIES_URL,
   CART_URL,
   ORDER_URL,
+  ADD_PRODUCT_URL,
 }

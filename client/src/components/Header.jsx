@@ -19,23 +19,13 @@ export const Header = () => {
   const [isSignup, setIsSignup] = useState(false)
   const [seeCart, setSeeCart] = useState(false)
   const [seeUserBoxs, setSeeUserBox] = useState(false)
-  const [categories, setCategories] = useState([])
   const navigate = useNavigate()
   const { user } = useContext(UserContext)
-  const { setTitle } = useContext(StoreContext)
-  let title
+  const { setTitle, categories } = useContext(StoreContext)
 
-  useEffect(() => {
-    getCategories()
-  }, [])
 
-  const getCategories = async () => {
-    try {
-      const { data } = await axios.get(GET_CATEGORIES_URL)
-      setCategories(data)
-      console.log(data)
-    } catch (error) {}
-  }
+
+
   const categoriesGenerator = (arr) => {
     const categoriesArr = arr.map((item) => {
       return (

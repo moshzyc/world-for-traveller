@@ -6,7 +6,7 @@ export const UserContext = createContext()
 
 export const UserContextpProvider = ({ children }) => {
   let [user, setUser] = useState(null)
-  const [admin, setAdmin] = useState("")
+  const [role, setRole] = useState("")
 
   useEffect(() => {
     console.log(user)
@@ -19,7 +19,7 @@ export const UserContextpProvider = ({ children }) => {
     try {
       const { data } = await axios.get(GET_INFO_URL)
       setUser(data)
-      setAdmin(data.role)
+      setRole(data.role)
     } catch (error) {}
   }
 
@@ -27,7 +27,7 @@ export const UserContextpProvider = ({ children }) => {
     <UserContext.Provider
       value={{
         user,
-        admin,
+        role,
         setUser,
       }}
     >

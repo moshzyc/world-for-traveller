@@ -22,9 +22,14 @@
   object-fit: contain;
   cursor: pointer;
 }
+.pImg {
+  max-height: 100%;
+  max-width: 100%;
+}
 .title {
   font-size: x-large;
   font-weight: bold;
+  cursor: pointer;
 }
 .category {
   font-size: large;

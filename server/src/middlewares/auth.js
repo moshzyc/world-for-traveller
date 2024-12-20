@@ -86,18 +86,81 @@ const auth = async (req, res, next) => {
 
 const autAdmin = async (req, res, next) => {
   try {
-    const cookie = req.cookies.access_token || ""
-    const token = cookie.split(" ")[1]
-    if (!token) return next(new AppError("unauthorized", 401))
+    const accessCookie = req.cookies.access_token || ""
+    const refreshCookie = req.cookies.refresh_token || ""
+    const accessToken = accessCookie.startsWith("Bearer ")
+      ? accessCookie.split(" ")[1]
+      : accessCookie
+    const refreshToken = refreshCookie.startsWith("Bearer ")
+      ? refreshCookie.split(" ")[1]
+      : refreshCookie
 
-    const decoded = jwt.verify(token, secretKey)
-    if (decoded.role !== "admin") {
+    if (!accessToken && !refreshToken) {
+      return next(new AppError("Unauthorized: No tokens provided", 401))
+    }
+
+    try {
+      const decoded = jwt.verify(accessToken, secretKey)
+      if (decoded.role !== "admin") {
+        return res.status(403).json({ message: "Access denied. Admins only" })
+      }
+      req._id = decoded._id
+      req.role = decoded.role
+      return next()
+    } catch {
+      console.log("Access token expired, checking refresh token")
+    }
+
+    const decodedRefresh = jwt.verify(refreshToken, secretKey)
+    const user = await User.findOne({
+      _id: decodedRefresh._id,
+      "refreshTokens.token": refreshToken,
+    })
+    if (!user) {
+      return next(
+        new AppError("Unauthorized: Invalid refresh token or expired", 401)
+      )
+    }
+    const newAccessToken = generateToken(
+      { _id: decodedRefresh._id, role: decodedRefresh.role },
+      "15m"
+    )
+    const newRefreshToken = generateToken(
+      { _id: decodedRefresh._id, role: decodedRefresh.role },
+      "30d"
+    )
+    const MAX_REFRESH_TOKENS = 5
+
+    await User.updateOne(
+      { _id: decodedRefresh._id },
+      {
+        $push: {
+          refreshTokens: {
+            $each: [{ token: newRefreshToken, createdAt: new Date() }],
+            $slice: -MAX_REFRESH_TOKENS,
+          },
+        },
+      }
+    )
+
+    res.cookie("access_token", "Bearer " + newAccessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    })
+    res.cookie("refresh_token", "Bearer " + newRefreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    })
+    if (decodedRefresh.role !== "admin") {
       return res.status(403).json({ message: "Access denied. Admins only" })
     }
-    req.user = decoded
+    req._id = decodedRefresh._id
+    req.role = decodedRefresh.role
     next()
   } catch (error) {
-    return res.status(401).json({ message: "Invalid token" })
+    return next(new AppError("Unauthorized", 401, error))
   }
 }
 

@@ -1,6 +1,7 @@
 import mongoose from "mongoose"
 import { Product } from "../models/Product.model.js"
 import { Category } from "../models/Category.model.js"
+import AppError from "../utils/appError.js"
 import { v2 as cloudinary } from "cloudinary"
 
 cloudinary.config({
@@ -81,6 +82,16 @@ const productsCtrl = {
       res.status(200).json(categories)
     } catch (error) {
       console.log(error)
+    }
+  },
+  //קבלת מוצר יחיד
+  async getProdact(req, res, next) {
+    const id = req.params.id
+    try {
+      const product = await Product.findById(id)
+      res.status(200).json(product)
+    } catch (error) {
+      next(new AppError("Error geting product", 500, error))
     }
   },
   //לעדכן מוצר לפי ID
