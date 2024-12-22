@@ -2,13 +2,15 @@ import React, { useContext, useState } from "react"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
 import { EditProductWin } from "../components/EditProductWin"
 import logo from "../assets/Untitled.png"
+import axios from "axios"
+import { PRODUCTS_URL } from "../constants/endPoint"
 
 export const EditProduct = () => {
   const { categories, products, setCategory, setSubCategory } =
     useContext(StoreContext)
   const [subIndex, setSubIndex] = useState(0)
   const [edit, setEdit] = useState(false)
-  const [productEdited, setProductEdited] = useState({})
+  const [productEdited, setProductEdited] = useState(null)
 
   const categoriesGenerator = (arr) =>
     arr.map((item) => (
@@ -40,15 +42,27 @@ export const EditProduct = () => {
             <p>description: {item.description}</p>
             <p>price: {item.price}</p>
           </div>
-          <div>
+          <div className="flex flex-col">
             <button
               onClick={() => {
                 setProductEdited(item)
                 setEdit(true)
               }}
-              className="whiteBtn"
+              className="whiteBtn w-[80px]"
             >
               edit
+            </button>
+            <button
+              onClick={async () => {
+                try {
+                  await axios.delete(PRODUCTS_URL + `/delete/${item._id}`)
+                } catch (error) {
+                  console.error(error)
+                }
+              }}
+              className="redBtn mt-1 w-[80px]"
+            >
+              delete
             </button>
           </div>
         </div>

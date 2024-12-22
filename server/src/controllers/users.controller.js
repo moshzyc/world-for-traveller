@@ -224,6 +224,37 @@ const userCtrl = {
       next(new AppError("Error saving order", 500, error))
     }
   },
+  async getOrders(req, res, next) {
+    try {
+      const user = await User.findById(req._id).populate({
+        path: "orders.cart.productId", // אכלוס המידע מהקולקשן products
+        select: "title price category", // שליפת השדות הרצויים בלבד
+      })
+
+      if (!user) {
+        return next(new AppError("User not found", 404))
+      }
+
+      // עיבוד ההזמנות למבנה אחיד
+      const formattedOrders = user.orders.map((order) => ({
+        orderDate: order.orderDate,
+        status: order.status,
+        totalAmount: order.totalAmount,
+        cart: order.cart.map((item) => ({
+          productId: item.productId._id, // שמירת ה-ID של המוצר
+          title: item.productId.title,
+          category: item.productId.category,
+          price: item.productId.price,
+          quantity: item.quantity,
+          addedAt: item.addedAt,
+        })),
+      }))
+
+      res.status(200).json(formattedOrders)
+    } catch (error) {
+      next(new AppError("Error fetching orders", 500, error))
+    }
+  },
 }
 
 export default userCtrl

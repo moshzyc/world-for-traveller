@@ -27,10 +27,13 @@ export const AddProducts = () => {
     }
   }, [categories])
 
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files)
-    setImages([...images, ...files])
-  }
+const handleFileChange = (e) => {
+  const files = Array.from(e.target.files)
+  const uniqueFiles = files.filter(
+    (file) => !images.some((existingFile) => existingFile.name === file.name)
+  )
+  setImages([...images, ...uniqueFiles])
+}
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -41,9 +44,9 @@ export const AddProducts = () => {
       formData.append("category", formValue.category)
       formData.append("subCategory", formValue.subCategory)
       formData.append("description", formValue.description)
-      formData.append("price", formValue.price) // appending price to formData
+      formData.append("price", formValue.price)
       images.forEach((image, index) => {
-        formData.append(`images`, image) // השתמש בשם התואם לדרישות השרת
+        formData.append(`images`, image) 
       })
 
       const response = await axios.post(ADD_PRODUCT_URL, formData, {
@@ -155,6 +158,18 @@ export const AddProducts = () => {
           multiple
           onChange={handleFileChange}
         />
+        <div className="preview">
+          {images.map((image, index) => (
+            <div key={index}>
+              <img
+                src={URL.createObjectURL(image)}
+                alt={`Preview ${index}`}
+                className="preview-image"
+              />
+            </div>
+          ))}
+        </div>
+
         <button className="blackBtn" type="submit">
           Submit
         </button>

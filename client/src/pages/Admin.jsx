@@ -10,6 +10,7 @@ export const Admin = () => {
   return (
     <main>
       <div className="mycontainer">
+
           <h2 className="ml-[5%] text-2xl">Products Management</h2>
           <div className="m-auto w-[90%] border border-black">
             <div onClick={() => setAdd((p) => !p)}>

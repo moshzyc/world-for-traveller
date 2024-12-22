@@ -21,7 +21,7 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  image: {
+  images: {
     type: [String],
     required: true,
   },
@@ -34,9 +34,9 @@ const productSchema = new mongoose.Schema({
       count: {
         type: Number,
         default: 0,
-      }
+      },
     },
-    default: { rate: 0, count: 0 }, 
+    default: { rate: 0, count: 0 },
   },
 })
 

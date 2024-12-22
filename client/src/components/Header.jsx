@@ -91,6 +91,7 @@ export const Header = () => {
                 onClick={() => setSeeUserBox((p) => !p)}
                 onDoubleClick={() => {
                   !user && navigate("/loginsingup")
+                  user && navigate("/user")
                 }}
                 className={`${css.icons} ${user && "text-red-700"}`}
                 src={userIcon}
