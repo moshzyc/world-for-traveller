@@ -8,6 +8,7 @@ const router = express.Router()
 const upload = multer({ dest: "uploads/" })
 
 router.get("/", productsCtrl.getProdacts)
+router.get("/:id", productsCtrl.getProdact)
 router.get("/categories", productsCtrl.getCategories)
 router.post("/add", autAdmin,upload.single("image"), productsCtrl.addProduct)
 router.put("/update/:id", autAdmin, productsCtrl.updateProduct)

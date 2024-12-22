@@ -6,6 +6,8 @@ import { LoginSignup } from "../pages/LoginSignup"
 import { Home } from "../pages/Home"
 import { StoreContaxtProvider } from "../contexts/StoreContaxtProvider"
 import CartPage from "../pages/CartPage"
+import { Product } from "../pages/Product"
+import Admin from "../pages/Admin"
 
 export const AppRoutes = () => {
   const router = createBrowserRouter([
@@ -24,8 +26,16 @@ export const AppRoutes = () => {
         {
           path: "cart",
           element: <CartPage/>
-        }
-      ],
+        },
+        {
+          path:"product/:id",
+          element:<Product/>
+        },
+        {
+        path: 'admin',
+        element: <Admin/>
+        },
+      ]
     },
   ])
   return (

@@ -16,6 +16,8 @@ const CartPage = () => {
     <main>
       <div className="mycontainer text-center">
         <CartTable fullScreen />
+
+       {user&&(
         <button
           className="m-4 rounded-lg bg-green-400 p-1 font-semibold hover:bg-green-300 active:scale-[0.98]"
           onClick={() => {
@@ -23,8 +25,8 @@ const CartPage = () => {
           }}
         >
           complete order
-        </button>
-        {order && <Order exit={setOrder} />}
+        </button>)}
+        {user&&order && <Order exit={setOrder} />}
       </div>
     </main>
   )

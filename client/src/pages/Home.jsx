@@ -18,6 +18,7 @@ export const Home = () => {
           title={item.title}
           category={item.category}
           subCategory={item.subCategory}
+          description={item.description}
           price={item.price}
         />
       )
