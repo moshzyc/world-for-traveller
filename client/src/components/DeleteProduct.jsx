@@ -1,11 +1,7 @@
 import React from 'react'
 
-const DeleteProduct = () => {
+export const DeleteProduct = () => {
   return (
-    <div>
-      
-    </div>
+    <div>DeleteProduct</div>
   )
 }
-
-export default DeleteProduct

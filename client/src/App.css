@@ -8,13 +8,41 @@ body{
   padding: 0.5%;
   border: solid black 2px;
 }
-
+.blackBtn {
+  padding: 2px;
+  border: none;
+  background: black;
+  border-radius: 10px;
+  color: white;
+  font-size: large;
+}
+.blackBtn:hover {
+  background: rgb(27, 26, 26);
+}
+.blackBtn:active {
+  transform: scale(0.98);
+}
 .redBtn {
   padding: 5px;
   border: none;
   background: red;
   border-radius: 10px;
   color: white;
+  font-size: large;
+}
+.redBtn:hover {
+  background: rgba(241, 34, 34, 0.856);
+}
+.redBtn:active {
+  transform: scale(0.98);
+}
+.whiteBtn {
+  padding: 5px;
+  width: 80px;
+  margin-top: 5px;
+  border: black solid 1px;
+  /* background: red; */
+  border-radius: 10px;
   font-size: large;
 }
 .redBtn:hover {

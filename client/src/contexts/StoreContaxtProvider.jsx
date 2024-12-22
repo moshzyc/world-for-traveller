@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react"
 import axios from "axios"
-import { CART_URL, PRODUCTS_URL } from "../constants/endPoint"
+import { CART_URL, GET_CATEGORIES_URL, PRODUCTS_URL } from "../constants/endPoint"
 import { UserContext } from "../contexts/UserContextpProvider"
 export const StoreContext = createContext()
 
@@ -13,6 +13,7 @@ export const StoreContaxtProvider = ({ children }) => {
   const [category, setCategory] = useState("")
   const [subCategory, setSubCategory] = useState("")
   const [title, setTitle] = useState("")
+  const [categories, setCategories] = useState([])
 
   useEffect(() => {
     getProductsFilterd()
@@ -20,6 +21,9 @@ export const StoreContaxtProvider = ({ children }) => {
   useEffect(() => {
     getProducts()
   }, [])
+    useEffect(() => {
+      getCategories()
+    }, [])
 
   const getProducts = async () => {
     try {
@@ -29,6 +33,15 @@ export const StoreContaxtProvider = ({ children }) => {
       console.log(err)
     }
   }
+    const getCategories = async () => {
+      try {
+        console.log("lala");
+        const { data } = await axios.get(GET_CATEGORIES_URL)
+        
+        setCategories(data)
+        console.log(data)
+      } catch (error) {}
+    }
   const getProductsFilterd = async () => {
     try {
       const { data } = await axios.get(
@@ -236,6 +249,7 @@ const deletItem = (number) => {
         deletItem,
         cartSum,
         clearCart,
+        categories,
       }}
     >
       {children}

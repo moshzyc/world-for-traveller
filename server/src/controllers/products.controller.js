@@ -1,6 +1,7 @@
 import mongoose from "mongoose"
 import { Product } from "../models/Product.model.js"
 import { Category } from "../models/Category.model.js"
+import AppError from "../utils/appError.js"
 import { v2 as cloudinary } from "cloudinary"
 import AppError from "../utils/appError.js"
 
@@ -84,37 +85,50 @@ const productsCtrl = {
       console.log(error)
     }
   },
-
-  async getProdact(req,res,next){
-    const id = req.params.id
-    try{
-      const product = await Product.findById(id)
-      res.status(200).json(product
-      )
-    }
-    catch(error){
-    next(new AppError("Error geting product", 500 ,error))
-    }
-  },
-
-  //לעדכן מוצר לפי ID
-  async updateProduct(req, res, next) {
+  //קבלת מוצר יחיד
+  async getProdact(req, res, next) {
     const id = req.params.id
     try {
-      const updatedProduct = await Product.findByIdAndUpdate(id, req.body)
-
-      if (!updatedProduct) {
-        return res.status(404).json({ message: "Product not found" })
-      }
-
-      return res.status(200).json({
-        message: "Product updated successfully",
-        Product: updatedProduct,
-      })
+      const product = await Product.findById(id)
+      res.status(200).json(product)
     } catch (error) {
-      next(new AppError("Error updating product", 500, error))
+      next(new AppError("Error geting product", 500, error))
     }
   },
+  //לעדכן מוצר לפי ID
+ async updateProduct(req, res, next) {
+  const id = req.params.id;
+  try {
+    // קבלת נתוני המוצר
+    const productData = req.body;
+    
+    // אם יש קובץ בתמונה, נעלה אותו ל-Cloudinary
+    if (req.file && req.file.path) {
+      const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+        folder: "products", // תיקיית העלאה
+      });
+      // נעדכן את התמונות עם ה-URL של Cloudinary
+      if (!productData.images) {
+        productData.images = [];
+      }
+      productData.images.push(uploadResult.secure_url); // הוספת התמונה החדשה
+    }
+
+    // עדכון המוצר במסד הנתונים
+    const updatedProduct = await Product.findByIdAndUpdate(id, productData, { new: true });
+
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    return res.status(200).json({
+      message: "Product updated successfully",
+      product: updatedProduct,
+    });
+  } catch (error) {
+    next(new AppError("Error updating product", 500, error));
+  }
+},
   //למחוק מוצר לפי ID
   async deleteProduct(req, res) {
     const id = req.params.id

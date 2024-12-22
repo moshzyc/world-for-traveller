@@ -10,8 +10,8 @@ router.use("/products", productRouter)
 
 // errror handler
 router.use((err, req, res, next) => {
-  err.print()
-  // console.error(err)
+  // err.print()
+  console.error(err)
   res.status(err.status).json(err)
 })
 

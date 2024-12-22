@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import { UserContext } from "../contexts/UserContextpProvider"
 import css from "../css/userForm.module.css"
 import axios from "axios"
@@ -12,7 +13,14 @@ export const UserProfile = ({ setIsSignup }) => {
     <div className={css.form}>
       <p>name: {user.name}</p>
       <p>email: {user.email}</p>
-      {role =='admin'&&<p onClick={() => navigate("/admin")} className="w-[50px] cursor-pointer font-bold text-blue-600 hover:underline active:text-blue-500">{role}</p>}
+      {role == "admin" && (
+        <p
+          onClick={() => navigate("/admin")}
+          className="w-[50px] cursor-pointer font-bold text-blue-600 hover:underline active:text-blue-500"
+        >
+          {role}
+        </p>
+      )}
       <button
         className={css.logoutBtn}
         onClick={async () => {

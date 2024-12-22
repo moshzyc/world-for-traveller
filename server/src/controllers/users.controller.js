@@ -32,9 +32,13 @@ const userCtrl = {
         secretKey,
         { expiresIn: "15m" }
       )
-      const refreshToken = jwt.sign({ _id: user._id }, secretKey, {
-        expiresIn: "30d",
-      })
+      const refreshToken = jwt.sign(
+        { _id: user._id, role: user.role },
+        secretKey,
+        {
+          expiresIn: "30d",
+        }
+      )
       user.refreshTokens.push({
         token: refreshToken,
         createdAt: new Date(),
