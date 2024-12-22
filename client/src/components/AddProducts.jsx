@@ -42,8 +42,8 @@ export const AddProducts = () => {
       formData.append("subCategory", formValue.subCategory)
       formData.append("description", formValue.description)
       formData.append("price", formValue.price) // appending price to formData
-      images.forEach((image) => {
-        formData.append("image", image)
+      images.forEach((image, index) => {
+        formData.append(`images`, image) // השתמש בשם התואם לדרישות השרת
       })
 
       const response = await axios.post(ADD_PRODUCT_URL, formData, {

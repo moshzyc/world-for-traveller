@@ -23,9 +23,6 @@ export const Header = () => {
   const { user } = useContext(UserContext)
   const { setTitle, categories } = useContext(StoreContext)
 
-
-
-
   const categoriesGenerator = (arr) => {
     const categoriesArr = arr.map((item) => {
       return (
@@ -40,14 +37,14 @@ export const Header = () => {
     return categoriesArr
   }
 
-      // const searchFilter = (value) => {
-      //   const filteredArr = rabbis.filter((item) => {
-      //     return String(item)
-      //       .toLowerCase()
-      //       .includes(value.toLowerCase())
-      //   })
-      //   return filteredArr
-      // }
+  // const searchFilter = (value) => {
+  //   const filteredArr = rabbis.filter((item) => {
+  //     return String(item)
+  //       .toLowerCase()
+  //       .includes(value.toLowerCase())
+  //   })
+  //   return filteredArr
+  // }
 
   return (
     <header>
@@ -62,65 +59,71 @@ export const Header = () => {
         />
 
         <div className="flex">
-        <div className="flex h-[30px]">
-          <button onClick={()=>setTitle(title)} className={`${css.sBtn} ${css.icons}`}>
-            <img src={searchIcon} alt="" />
-          </button>
-          <input
-          onChange={(e)=>title=e.target.value}
-            className={css.input}
-            type="text"
-            placeholder="search products"
-          />
-        </div>
-        <div className="flex gap-1">
-          <div>
-            <img
-              onClick={() => setSeeCart((p) => !p)}
-              onDoubleClick={() => navigate("/cart")}
-              className={css.icons}
-              src={cartIcon}
-              alt=""
-            />
-            <div className={`${!seeCart ? "hidden" : "block"} absolute`}>
-              <CartTable />
-            </div>
-          </div>
-          <div>
-            <img
-              onClick={() => setSeeUserBox((p) => !p)}
-              onDoubleClick={() => {
-                !user && navigate("/loginsingup")
-              }}
-              className={`${css.icons} ${user && "text-red-700"}`}
-              src={userIcon}
-              alt=""
-            />
-            <div
-              className={`${css.userForm} ${!seeUserBoxs ? "hidden" : "block"}`}
+          <div className="flex h-[30px]">
+            <button
+              onClick={() => setTitle(title)}
+              className={`${css.sBtn} ${css.icons}`}
             >
-              {!user && (
-                <UserForm formChenge={setIsSignup} isSignup={isSignup} />
-              )}
-              {user && <UserProfile setIsSignup={setIsSignup} />}
+              <img src={searchIcon} alt="" />
+            </button>
+            <input
+              onChange={(e) => (title = e.target.value)}
+              className={css.input}
+              type="text"
+              placeholder="search products"
+            />
+          </div>
+          <div className="flex gap-1">
+            <div>
+              <img
+                onClick={() => setSeeCart((p) => !p)}
+                onDoubleClick={() => navigate("/cart")}
+                className={css.icons}
+                src={cartIcon}
+                alt=""
+              />
+              <div className={`${!seeCart ? "hidden" : "block"} absolute`}>
+                <CartTable />
+              </div>
+            </div>
+            <div>
+              <img
+                onClick={() => setSeeUserBox((p) => !p)}
+                onDoubleClick={() => {
+                  !user && navigate("/loginsingup")
+                }}
+                className={`${css.icons} ${user && "text-red-700"}`}
+                src={userIcon}
+                alt=""
+              />
+              <div
+                className={`${css.userForm} ${!seeUserBoxs ? "hidden" : "block"}`}
+              >
+                {user ? (
+                  <UserProfile setIsSignup={setIsSignup} />
+                ) : (
+                  <UserForm formChenge={setIsSignup} isSignup={isSignup} />
+                )}
+              </div>
             </div>
           </div>
-        </div>
-        <nav className={css.navBar}>
-          <div
-            onClick={() => {
-              setRotateBox(!rotateBox)
-            }}
-            className={`${css.linseBox} ${rotateBox && css.linseBoxRotate}`}
-          >
-            <div className={`${css.lines}`}></div>
-            <div className={`${css.lines}`}></div>
-            <div className={`${css.lines}`}></div>
-          </div>
-          <div className={`${css.navBlock} ${rotateBox && css.navBlockApear}`}>
-            {categoriesGenerator(categories)}
-          </div>
-        </nav>
+          <nav className={css.navBar}>
+            <div
+              onClick={() => {
+                setRotateBox(!rotateBox)
+              }}
+              className={`${css.linseBox} ${rotateBox && css.linseBoxRotate}`}
+            >
+              <div className={`${css.lines}`}></div>
+              <div className={`${css.lines}`}></div>
+              <div className={`${css.lines}`}></div>
+            </div>
+            <div
+              className={`${css.navBlock} ${rotateBox && css.navBlockApear}`}
+            >
+              {categoriesGenerator(categories)}
+            </div>
+          </nav>
         </div>
       </div>
     </header>

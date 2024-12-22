@@ -95,23 +95,39 @@ const productsCtrl = {
     }
   },
   //לעדכן מוצר לפי ID
-  async updateProduct(req, res, next) {
-    const id = req.params.id
-    try {
-      const updatedProduct = await Product.findByIdAndUpdate(id, req.body)
-
-      if (!updatedProduct) {
-        return res.status(404).json({ message: "Product not found" })
+ async updateProduct(req, res, next) {
+  const id = req.params.id;
+  try {
+    // קבלת נתוני המוצר
+    const productData = req.body;
+    
+    // אם יש קובץ בתמונה, נעלה אותו ל-Cloudinary
+    if (req.file && req.file.path) {
+      const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+        folder: "products", // תיקיית העלאה
+      });
+      // נעדכן את התמונות עם ה-URL של Cloudinary
+      if (!productData.images) {
+        productData.images = [];
       }
-
-      return res.status(200).json({
-        message: "Product updated successfully",
-        Product: updatedProduct,
-      })
-    } catch (error) {
-      next(new AppError("Error updating product", 500, error))
+      productData.images.push(uploadResult.secure_url); // הוספת התמונה החדשה
     }
-  },
+
+    // עדכון המוצר במסד הנתונים
+    const updatedProduct = await Product.findByIdAndUpdate(id, productData, { new: true });
+
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    return res.status(200).json({
+      message: "Product updated successfully",
+      product: updatedProduct,
+    });
+  } catch (error) {
+    next(new AppError("Error updating product", 500, error));
+  }
+},
   //למחוק מוצר לפי ID
   async deleteProduct(req, res) {
     const id = req.params.id

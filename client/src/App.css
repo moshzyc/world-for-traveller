@@ -36,3 +36,18 @@ body{
 .redBtn:active {
   transform: scale(0.98);
 }
+.whiteBtn {
+  padding: 5px;
+  width: 80px;
+  margin-top: 5px;
+  border: black solid 1px;
+  /* background: red; */
+  border-radius: 10px;
+  font-size: large;
+}
+.redBtn:hover {
+  background: rgba(241, 34, 34, 0.856);
+}
+.redBtn:active {
+  transform: scale(0.98);
+}

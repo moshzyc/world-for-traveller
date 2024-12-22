@@ -9,6 +9,7 @@ const GET_INFO_URL = USER_URL + "info"
 const CART_URL = USER_URL + "cart"
 const ORDER_URL = USER_URL + "save-order"
 const ADD_PRODUCT_URL = PRODUCTS_URL + "/add"
+const EDIT_PRODUCT_URL = PRODUCTS_URL + "/update/"
 const GET_CATEGORIES_URL = PRODUCTS_URL + "/categories"
 
 export {
@@ -21,4 +22,5 @@ export {
   CART_URL,
   ORDER_URL,
   ADD_PRODUCT_URL,
+  EDIT_PRODUCT_URL,
 }
