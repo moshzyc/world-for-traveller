@@ -45,9 +45,9 @@ body{
   border-radius: 10px;
   font-size: large;
 }
-.redBtn:hover {
-  background: rgba(241, 34, 34, 0.856);
+.whiteBtn :hover {
+  background: lightgray;
 }
-.redBtn:active {
+.whiteBtn :active {
   transform: scale(0.98);
 }

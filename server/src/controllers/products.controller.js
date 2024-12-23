@@ -3,7 +3,6 @@ import { Product } from "../models/Product.model.js"
 import { Category } from "../models/Category.model.js"
 import AppError from "../utils/appError.js"
 import { v2 as cloudinary } from "cloudinary"
-import AppError from "../utils/appError.js"
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,

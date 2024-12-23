@@ -12,7 +12,8 @@ router.delete("/delete", auth, userCtrl.deleteUser)
 router.put("/update", auth, userCtrl.updateUser)
 router.put("/cart", auth, userCtrl.saveCart); 
 router.get("/cart", auth, userCtrl.getCart); 
-router.post("/save-order", auth,userCtrl.saveOrder)
+router.post("/get-order", auth,userCtrl.saveOrder)
+router.get("/get-orders",auth,userCtrl.getOrders)
 
 
 export default router

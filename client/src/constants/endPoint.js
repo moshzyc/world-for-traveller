@@ -23,4 +23,5 @@ export {
   ORDER_URL,
   ADD_PRODUCT_URL,
   EDIT_PRODUCT_URL,
+  USER_URL,
 }

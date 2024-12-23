@@ -8,6 +8,7 @@ import { StoreContaxtProvider } from "../contexts/StoreContaxtProvider"
 import CartPage from "../pages/CartPage"
 import { Product } from "../pages/Product"
 import { Admin } from "../pages/Admin"
+import { UserProfile } from "../components/UserProfile"
 
 export const AppRoutes = () => {
   const router = createBrowserRouter([
@@ -34,7 +35,12 @@ export const AppRoutes = () => {
         {
           path: 'admin',
           element: <Admin/>
-        }
+        },
+        {
+          path: "user",
+          element: <UserProfile fullScreen/>
+        },
+        
       ],
     },
   ])
