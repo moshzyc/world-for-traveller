@@ -55,7 +55,8 @@ export const EditProduct = () => {
             <button
               onClick={async () => {
                 try {
-                  await axios.delete(PRODUCTS_URL + `/delete/${item._id}`)
+                  if(window.confirm("are you shoore?"))
+                    await axios.delete(PRODUCTS_URL + `/delete/${item._id}`)
                 } catch (error) {
                   console.error(error)
                 }

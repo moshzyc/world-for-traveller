@@ -29,7 +29,6 @@ const productsCtrl = {
           const uploadResult = await cloudinary.uploader.upload(file.path, {
             folder: "products",
           })
-          console.log(uploadResult.secure_url)
 
           productData.images.push(uploadResult.secure_url)
           fs.unlinkSync(file.path) // מוחק את הקובץ מהשרת
