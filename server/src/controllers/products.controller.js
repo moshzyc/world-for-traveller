@@ -3,6 +3,7 @@ import { Product } from "../models/Product.model.js"
 import { Category } from "../models/Category.model.js"
 import AppError from "../utils/appError.js"
 import { v2 as cloudinary } from "cloudinary"
+import fs from "fs"
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -14,53 +15,40 @@ const productsCtrl = {
   //מוסיף מוצר
   async addProduct(req, res) {
     try {
-      const productData = req.body
-
-      // העלאת תמונה ל-Cloudinary
-      if (req.file && req.file.path) {
-        // אם התמונה נשלחה בקובץ
-        const uploadResult = await cloudinary.uploader.upload(req.file.path, {
-          folder: "products", // תיקייה ב-Cloudinary
-        })
-        productData.image = uploadResult.secure_url // שמירת קישור התמונה
+      const productData = {
+        title: req.body.title,
+        description: req.body.description,
+        price: req.body.price,
+        category: req.body.category,
+        subCategory: req.body.subCategory,
+        images: [],
       }
 
-      // בדיקה אם הקטגוריה כבר קיימת
-      let category = await Category.findOne({ category: productData.category })
+      if (req.files && req.files.length > 0) {
+        for (const file of req.files) {
+          const uploadResult = await cloudinary.uploader.upload(file.path, {
+            folder: "products",
+          })
+          console.log(uploadResult.secure_url)
 
-      if (!category) {
-        // אם הקטגוריה לא קיימת, ליצור חדשה עם subCategory (אם קיים)
-        const newCategory = new Category({
-          category: productData.category,
-          subCategory: productData.subCategory ? [productData.subCategory] : [],
-        })
-        category = await newCategory.save()
-      } else if (productData.subCategory) {
-        // אם הקטגוריה קיימת, לבדוק אם ה-subCategory קיים
-        if (!category.subCategory.includes(productData.subCategory)) {
-          category.subCategory.push(productData.subCategory) // הוספת תת-קטגוריה חדשה
-          await category.save() // שמירת הקטגוריה עם התת-קטגוריה המעודכנת
+          productData.images.push(uploadResult.secure_url)
+          fs.unlinkSync(file.path) // מוחק את הקובץ מהשרת
         }
       }
-
-      // יצירת מוצר חדש ושמירתו
-      const newProduct = new Product(productData)
-      const savedProduct = await newProduct.save()
+     const newProduct = new Product(productData)
+     const savedProduct = await newProduct.save()
+     console.log("Saved Product:", savedProduct)
 
       res.status(201).json({
         message: "Product created successfully",
         product: savedProduct,
-        category: category, // מחזירים גם את הקטגוריה שנוצרה או עודכנה
       })
-    } catch (err) {
-      console.error("Error saving product:", err)
-
-      res.status(400).json({
-        error: "Failed to create product",
-        details: err.message,
-      })
+    } catch (error) {
+      console.error("Error saving product:", error)
+      res.status(500).json({ message: "Failed to create product", error })
     }
   },
+
   //לקבל את כל המוצרים
   async getProdacts(req, res) {
     const cat = new RegExp(req.query.cat || "")
@@ -95,39 +83,41 @@ const productsCtrl = {
     }
   },
   //לעדכן מוצר לפי ID
- async updateProduct(req, res, next) {
-  const id = req.params.id;
-  try {
-    // קבלת נתוני המוצר
-    const productData = req.body;
-    
-    // אם יש קובץ בתמונה, נעלה אותו ל-Cloudinary
-    if (req.file && req.file.path) {
-      const uploadResult = await cloudinary.uploader.upload(req.file.path, {
-        folder: "products", // תיקיית העלאה
-      });
-      // נעדכן את התמונות עם ה-URL של Cloudinary
-      if (!productData.images) {
-        productData.images = [];
+  async updateProduct(req, res, next) {
+    const id = req.params.id
+    try {
+      // קבלת נתוני המוצר
+      const productData = req.body
+
+      // אם יש קובץ בתמונה, נעלה אותו ל-Cloudinary
+      if (req.file && req.file.path) {
+        const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+          folder: "products", // תיקיית העלאה
+        })
+        // נעדכן את התמונות עם ה-URL של Cloudinary
+        if (!productData.images) {
+          productData.images = []
+        }
+        productData.images.push(uploadResult.secure_url) // הוספת התמונה החדשה
       }
-      productData.images.push(uploadResult.secure_url); // הוספת התמונה החדשה
+
+      // עדכון המוצר במסד הנתונים
+      const updatedProduct = await Product.findByIdAndUpdate(id, productData, {
+        new: true,
+      })
+
+      if (!updatedProduct) {
+        return res.status(404).json({ message: "Product not found" })
+      }
+
+      return res.status(200).json({
+        message: "Product updated successfully",
+        product: updatedProduct,
+      })
+    } catch (error) {
+      next(new AppError("Error updating product", 500, error))
     }
-
-    // עדכון המוצר במסד הנתונים
-    const updatedProduct = await Product.findByIdAndUpdate(id, productData, { new: true });
-
-    if (!updatedProduct) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-
-    return res.status(200).json({
-      message: "Product updated successfully",
-      product: updatedProduct,
-    });
-  } catch (error) {
-    next(new AppError("Error updating product", 500, error));
-  }
-},
+  },
   //למחוק מוצר לפי ID
   async deleteProduct(req, res) {
     const id = req.params.id

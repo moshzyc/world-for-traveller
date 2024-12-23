@@ -3,15 +3,23 @@ import AppError from "../utils/appError.js"
 import { productsCtrl } from "../controllers/products.controller.js"
 import { autAdmin, auth } from "../middlewares/auth.js"
 import multer from "multer"
+import fs from "fs"
 const router = express.Router()
-multer.memoryStorage()
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/") // וודא שהתיקייה קיימת
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`)
+  },
+})
+const upload = multer({ storage })
 
-const upload = multer({ dest: "uploads/" })
 
 router.get("/", productsCtrl.getProdacts)
 router.get("/product/:id", productsCtrl.getProdact)
 router.get("/categories", productsCtrl.getCategories)
-router.post("/add", autAdmin, upload.array("images"), productsCtrl.addProduct)
+router.post("/add",upload.array("images"), productsCtrl.addProduct)
 router.put("/update/:id", autAdmin, productsCtrl.updateProduct)
 router.delete("/delete/:id", autAdmin, productsCtrl.deleteProduct)
 

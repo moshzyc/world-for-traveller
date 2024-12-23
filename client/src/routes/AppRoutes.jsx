@@ -33,14 +33,13 @@ export const AppRoutes = () => {
           element: <Product />,
         },
         {
-          path: 'admin',
-          element: <Admin/>
+          path: "admin",
+          element: <Admin />,
         },
         {
           path: "user",
-          element: <UserProfile fullScreen/>
+          element: <UserProfile fullScreen />,
         },
-        
       ],
     },
   ])

@@ -48,24 +48,21 @@ export const EditProduct = () => {
                 setProductEdited(item)
                 setEdit(true)
               }}
-              className="whiteBtn  w-[80px]"
+              className="whiteBtn w-[80px]"
             >
               edit
             </button>
-
             <button
-            onClick={async()=>{
-                try{
-                    console.log(item._id);
-                    
-                    await axios.delete(PRODUCTS_URL + `/delete/${item._id}`)
+              onClick={async () => {
+                try {
+                  await axios.delete(PRODUCTS_URL + `/delete/${item._id}`)
+                } catch (error) {
+                  console.error(error)
                 }
-                catch (error){
-                    console.error(error)
-                }
-            }}
-            className="redBtn mt-1 w-[80px]">
-                delete
+              }}
+              className="redBtn mt-1 w-[80px]"
+            >
+              delete
             </button>
           </div>
         </div>

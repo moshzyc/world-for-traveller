@@ -38,16 +38,15 @@ body{
 }
 .whiteBtn {
   padding: 5px;
-  width: 80px;
   margin-top: 5px;
   border: black solid 1px;
   /* background: red; */
   border-radius: 10px;
   font-size: large;
 }
-.whiteBtn :hover {
-  background: lightgray;
+.whiteBtn:hover {
+  background: lightgrey;
 }
-.whiteBtn :active {
+.whiteBtn:active {
   transform: scale(0.98);
 }
