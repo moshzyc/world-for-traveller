@@ -3,7 +3,7 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:3000/guide/update/67692c1889d9d18808bd830d
+PUT http://localhost:3000/guide/update/6769572d2d82e30bdbb0ee5b
 Content-Type: application/json
 
 {

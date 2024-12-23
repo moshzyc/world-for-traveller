@@ -44,6 +44,8 @@ const guidesCtrl = {
   },
   async updateGuide(req, res) {
     try {
+        console.log(req.body) // הדפסת המידע שנשלח
+        console.log(req.files) 
       const guideId = req.params.id
       const updateData = {
         title: req.body.title,

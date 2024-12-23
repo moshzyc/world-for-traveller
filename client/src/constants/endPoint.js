@@ -13,7 +13,9 @@ const ADD_PRODUCT_URL = PRODUCTS_URL + "/add"
 const EDIT_PRODUCT_URL = PRODUCTS_URL + "/update/"
 const GET_CATEGORIES_URL = PRODUCTS_URL + "/categories"
 const ADD_GUIDE_URL = GUIDE_URL + "add"
-const EDIT_GUIDE_URL = GUIDE_URL + "add"
+const DELETE_GUIDE_URL = GUIDE_URL + "delete"
+const EDIT_GUIDE_URL = GUIDE_URL + "update"
+const GET_GUIDE_URL = GUIDE_URL + "get"
 
 export {
   SIGNUP_URL,
@@ -29,4 +31,6 @@ export {
   USER_URL,
   ADD_GUIDE_URL,
   EDIT_GUIDE_URL,
+  GET_GUIDE_URL,
+  DELETE_GUIDE_URL,
 }
