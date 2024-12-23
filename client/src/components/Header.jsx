@@ -87,16 +87,20 @@ export const Header = () => {
               </div>
             </div>
             <div>
+              <div className="flex flex-col">
               <img
                 onClick={() => setSeeUserBox((p) => !p)}
                 onDoubleClick={() => {
                   !user && navigate("/loginsingup")
                   user && navigate("/user")
                 }}
-                className={`${css.icons} ${user && "text-red-700"}`}
+                className={`${css.icons} ${user&&css.userLogIcon} m-auto`}
                 src={userIcon}
                 alt=""
               />
+              {user&&<p>{user.name}</p>}
+              </div>
+
               <div
                 className={`${css.userForm} ${!seeUserBoxs ? "hidden" : "block"}`}
               >

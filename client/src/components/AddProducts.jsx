@@ -58,10 +58,10 @@ const handleFileChange = (e) => {
       console.log("Product created successfully:", response.data)
       setFormValue({
         title: "",
-        category: categories[0].category, // Reset to default category
-        subCategory: categories[0].subCategory?.[0] || "", // Reset to default subcategory
+        category: categories[0].category, 
+        subCategory: categories[0].subCategory?.[0] || "",
         description: "",
-        price: "", // reset price
+        price: "",
         image: [],
       })
       setImages([])

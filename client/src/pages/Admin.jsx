@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import { AddProducts } from "../components/AddProducts"
 import { EditProduct } from "../components/EditProduct"
-import { DeleteProduct } from "../components/DeleteProduct"
 
 export const Admin = () => {
   const [add, setAdd] = useState(false)
@@ -28,14 +27,6 @@ export const Admin = () => {
               className={`border-b border-t border-black ${edit ? "block" : "hidden"}`}
             >
               <EditProduct/>
-            </div>
-            <div onClick={() => setDel((p) => !p)}>
-              <h3 className="text-lg">{del ? "-" : "+"}Delete Products</h3>
-            </div>
-            <div
-              className={`border-t border-black ${del ? "block" : "hidden"}`}
-            >
-             <DeleteProduct/>
             </div>
           </div>
       </div>
