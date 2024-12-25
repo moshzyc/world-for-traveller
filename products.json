@@ -1,311 +1,243 @@
 [
   {
     "title": "Men's Insulated Jacket",
-    "description": "Warm and lightweight insulated jacket for outdoor adventures.",
+    "description": "Stay warm and comfortable with this insulated jacket, designed for extreme cold weather and versatile outdoor activities.",
     "price": 120,
     "category": "Men's Clothing",
     "subCategory": "Jackets",
-    "image": ["https://example.com/mens-jacket1.jpg"],
+    "images": [
+      "https://www.rei.com/media/229519ca-76f3-496d-a608-cecd9673e351.jpg?size=576x768"
+    ],
     "rating": {
       "rate": 0,
       "count": 0
     }
   },
   {
-    "title": "Men's Waterproof Jacket",
-    "description": "Durable waterproof jacket to keep you dry in any weather.",
+    "title": "Men's Waterproof Hiking Jacket",
+    "description": "A durable and waterproof jacket built for challenging hikes, ensuring you stay dry and protected from the elements.",
     "price": 150,
     "category": "Men's Clothing",
     "subCategory": "Jackets",
-    "image": ["https://example.com/mens-jacket2.jpg"],
+    "images": [
+      "https://images.pexels.com/photos/17167935/pexels-photo-17167935/free-photo-of-young-man-in-hooded-windbreaker-jacket-posing-outdoors.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+    ],
     "rating": {
       "rate": 0,
       "count": 0
     }
   },
   {
-    "title": "Men's Fleece Jacket",
-    "description": "Soft and cozy fleece jacket for layering.",
-    "price": 75,
+    "title": "Men's Lightweight Windbreaker",
+    "description": "Lightweight and breathable, this windbreaker is ideal for windy and mild conditions during your outdoor excursions.",
+    "price": 80,
     "category": "Men's Clothing",
     "subCategory": "Jackets",
-    "image": ["https://example.com/mens-jacket3.jpg"],
+    "images": ["https://example.com/mens-windbreaker1.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
     }
   },
   {
-    "title": "Men's Hiking Jacket",
-    "description": "Breathable and windproof hiking jacket for active use.",
+    "title": "Men's Fleece Lined Jacket",
+    "description": "Experience unmatched comfort with this fleece-lined jacket, perfect for layering in cooler temperatures.",
     "price": 100,
     "category": "Men's Clothing",
     "subCategory": "Jackets",
-    "image": ["https://example.com/mens-jacket4.jpg"],
+    "images": ["https://example.com/mens-fleece-jacket1.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
     }
   },
   {
-    "title": "Men's Down Jacket",
-    "description": "High-quality down jacket for extreme cold conditions.",
+    "title": "Men's Down Puffer Jacket",
+    "description": "This puffer jacket combines style and functionality, featuring premium down insulation for maximum warmth.",
+    "price": 180,
+    "category": "Men's Clothing",
+    "subCategory": "Jackets",
+    "images": ["https://example.com/mens-down-jacket1.jpg"],
+    "rating": {
+      "rate": 0,
+      "count": 0
+    }
+  },
+  {
+    "title": "Men's Softshell Jacket",
+    "description": "A versatile softshell jacket that balances wind resistance and breathability for outdoor activities in mild weather.",
+    "price": 110,
+    "category": "Men's Clothing",
+    "subCategory": "Jackets",
+    "images": ["https://example.com/mens-softshell-jacket1.jpg"],
+    "rating": {
+      "rate": 0,
+      "count": 0
+    }
+  },
+  {
+    "title": "Men's Winter Parka",
+    "description": "Stay shielded from harsh winter conditions with this parka, featuring a weatherproof design and insulated interior.",
     "price": 200,
     "category": "Men's Clothing",
     "subCategory": "Jackets",
-    "image": ["https://example.com/mens-jacket5.jpg"],
+    "images": ["https://example.com/mens-winter-parka1.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
     }
   },
   {
-    "title": "Men's Climbing Shoes",
-    "description": "Comfortable climbing shoes with excellent grip.",
-    "price": 85,
-    "category": "Men's Clothing",
-    "subCategory": "Climbing Shoes",
-    "image": ["https://example.com/mens-shoes1.jpg"],
-    "rating": {
-      "rate": 0,
-      "count": 0
-    }
-  },
-  {
-    "title": "Men's Approach Shoes",
-    "description": "Versatile approach shoes for rocky terrain.",
-    "price": 90,
-    "category": "Men's Clothing",
-    "subCategory": "Climbing Shoes",
-    "image": ["https://example.com/mens-shoes2.jpg"],
-    "rating": {
-      "rate": 0,
-      "count": 0
-    }
-  },
-  {
-    "title": "Men's Bouldering Shoes",
-    "description": "Precise fit bouldering shoes for maximum performance.",
-    "price": 110,
-    "category": "Men's Clothing",
-    "subCategory": "Climbing Shoes",
-    "image": ["https://example.com/mens-shoes3.jpg"],
-    "rating": {
-      "rate": 0,
-      "count": 0
-    }
-  },
-  {
-    "title": "Men's Trail Running Shoes",
-    "description": "Lightweight trail running shoes for rugged paths.",
+    "title": "Men's Trail Running Jacket",
+    "description": "Designed for trail runners, this lightweight jacket provides excellent mobility and protection from light rain and wind.",
     "price": 95,
     "category": "Men's Clothing",
-    "subCategory": "Climbing Shoes",
-    "image": ["https://example.com/mens-shoes4.jpg"],
+    "subCategory": "Jackets",
+    "images": ["https://example.com/mens-trail-jacket1.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
     }
   },
   {
-    "title": "Men's Mountaineering Boots",
-    "description": "Sturdy boots designed for high-altitude expeditions.",
-    "price": 250,
-    "category": "Men's Clothing",
-    "subCategory": "Climbing Shoes",
-    "image": ["https://example.com/mens-shoes5.jpg"],
-    "rating": {
-      "rate": 0,
-      "count": 0
-    }
-  },
-  {
-    "title": "Men's Thermal Base Layer",
-    "description": "Lightweight and breathable thermal base layer for cold conditions.",
-    "price": 50,
-    "category": "Men's Clothing",
-    "subCategory": "Thermal Wear",
-    "image": ["https://example.com/mens-thermal1.jpg"],
-    "rating": {
-      "rate": 0,
-      "count": 0
-    }
-  },
-  {
-    "title": "Men's Thermal Top",
-    "description": "Moisture-wicking thermal top for outdoor activities.",
-    "price": 60,
-    "category": "Men's Clothing",
-    "subCategory": "Thermal Wear",
-    "image": ["https://example.com/mens-thermal2.jpg"],
-    "rating": {
-      "rate": 0,
-      "count": 0
-    }
-  },
-  {
-    "title": "Men's Thermal Leggings",
-    "description": "Flexible and warm leggings for layering.",
-    "price": 55,
-    "category": "Men's Clothing",
-    "subCategory": "Thermal Wear",
-    "image": ["https://example.com/mens-thermal3.jpg"],
-    "rating": {
-      "rate": 0,
-      "count": 0
-    }
-  },
-  {
-    "title": "Men's Merino Wool Shirt",
-    "description": "Soft and odor-resistant merino wool shirt for cold weather.",
-    "price": 75,
-    "category": "Men's Clothing",
-    "subCategory": "Thermal Wear",
-    "image": ["https://example.com/mens-thermal4.jpg"],
-    "rating": {
-      "rate": 0,
-      "count": 0
-    }
-  },
-  {
-    "title": "Men's Insulated Pants",
-    "description": "Warm and weatherproof pants for winter hiking.",
+    "title": "Men's Travel Jacket",
+    "description": "A practical travel jacket with multiple pockets, combining functionality and comfort for long trips and adventures.",
     "price": 130,
     "category": "Men's Clothing",
-    "subCategory": "Thermal Wear",
-    "image": ["https://example.com/mens-thermal5.jpg"],
+    "subCategory": "Jackets",
+    "images": ["https://example.com/mens-travel-jacket1.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
     }
   },
   {
-    "title": "Men's Wool Hat",
-    "description": "Warm and comfortable wool hat for cold weather.",
-    "price": 30,
+    "title": "Men's Heavy Duty Work Jacket",
+    "description": "Rugged and durable, this work jacket is designed for tough outdoor tasks while providing warmth and protection.",
+    "price": 170,
     "category": "Men's Clothing",
-    "subCategory": "Accessories",
-    "image": ["https://example.com/mens-accessory1.jpg"],
+    "subCategory": "Jackets",
+    "images": ["https://example.com/mens-work-jacket1.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
     }
   },
   {
-    "title": "Men's Hiking Gloves",
-    "description": "Durable gloves for outdoor adventures.",
-    "price": 40,
+    "title": "Men's Insulated Jacket",
+    "description": "Stay warm and comfortable with this insulated jacket, designed for extreme cold weather and versatile outdoor activities.",
+    "price": 120,
     "category": "Men's Clothing",
-    "subCategory": "Accessories",
-    "image": ["https://example.com/mens-accessory2.jpg"],
+    "subCategory": "Jackets",
+    "images": ["https://example.com/mens-insulated-jacket1.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
     }
   },
   {
-    "title": "Men's Travel Backpack",
-    "description": "Lightweight and versatile backpack for hiking trips.",
+    "title": "Men's Waterproof Hiking Jacket",
+    "description": "A durable and waterproof jacket built for challenging hikes, ensuring you stay dry and protected from the elements.",
+    "price": 150,
+    "category": "Men's Clothing",
+    "subCategory": "Jackets",
+    "images": ["https://example.com/mens-waterproof-jacket1.jpg"],
+    "rating": {
+      "rate": 0,
+      "count": 0
+    }
+  },
+  {
+    "title": "Men's Lightweight Windbreaker",
+    "description": "Lightweight and breathable, this windbreaker is ideal for windy and mild conditions during your outdoor excursions.",
     "price": 80,
     "category": "Men's Clothing",
-    "subCategory": "Accessories",
-    "image": ["https://example.com/mens-accessory3.jpg"],
+    "subCategory": "Jackets",
+    "images": ["https://example.com/mens-windbreaker1.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
     }
   },
   {
-    "title": "Men's Waterproof Socks",
-    "description": "Waterproof socks for wet conditions.",
-    "price": 35,
+    "title": "Men's Fleece Lined Jacket",
+    "description": "Experience unmatched comfort with this fleece-lined jacket, perfect for layering in cooler temperatures.",
+    "price": 100,
     "category": "Men's Clothing",
-    "subCategory": "Accessories",
-    "image": ["https://example.com/mens-accessory4.jpg"],
-    "rating": {
-      "rate": 0,
-      "count": 0
-    }
-  },
-  {
-    "title": "Men's Sunglasses",
-    "description": "Polarized sunglasses for outdoor protection.",
-    "price": 60,
-    "category": "Men's Clothing",
-    "subCategory": "Accessories",
-    "image": ["https://example.com/mens-accessory5.jpg"],
-    "rating": {
-      "rate": 0,
-      "count": 0
-    }
-  },
-  {
-    "title": "Women's Insulated Jacket",
-    "description": "Stylish and warm insulated jacket for outdoor use.",
-    "price": 110,
-    "category": "Women's Clothing",
     "subCategory": "Jackets",
-    "image": ["https://example.com/womens-jacket1.jpg"],
+    "images": ["https://example.com/mens-fleece-jacket1.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
     }
   },
   {
-    "title": "Women's Waterproof Jacket",
-    "description": "Waterproof jacket to handle rainy adventures.",
-    "price": 140,
-    "category": "Women's Clothing",
-    "subCategory": "Jackets",
-    "image": ["https://example.com/womens-jacket2.jpg"],
-    "rating": {
-      "rate": 0,
-      "count": 0
-    }
-  },
-  {
-    "title": "Women's Fleece Jacket",
-    "description": "Cozy fleece jacket for comfortable layering.",
-    "price": 70,
-    "category": "Women's Clothing",
-    "subCategory": "Jackets",
-    "image": ["https://example.com/womens-jacket3.jpg"],
-    "rating": {
-      "rate": 0,
-      "count": 0
-    }
-  },
-  {
-    "title": "Women's Hiking Jacket",
-    "description": "Lightweight hiking jacket for active trails.",
-    "price": 95,
-    "category": "Women's Clothing",
-    "subCategory": "Jackets",
-    "image": ["https://example.com/womens-jacket4.jpg"],
-    "rating": {
-      "rate": 0,
-      "count": 0
-    }
-  },
-  {
-    "title": "Women's Down Jacket",
-    "description": "High-performance down jacket for extreme cold weather.",
+    "title": "Men's Down Puffer Jacket",
+    "description": "This puffer jacket combines style and functionality, featuring premium down insulation for maximum warmth.",
     "price": 180,
-    "category": "Women's Clothing",
+    "category": "Men's Clothing",
     "subCategory": "Jackets",
-    "image": ["https://example.com/womens-jacket5.jpg"],
+    "images": ["https://example.com/mens-down-jacket1.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
     }
   },
   {
-    "title": "Women's Climbing Shoes",
-    "description": "Secure and comfortable climbing shoes for optimal grip.",
-    "price": 90,
-    "category": "Women's Clothing",
-    "subCategory": "Climbing Shoes",
-    "image": ["https://example.com/womens-shoes1.jpg"],
+    "title": "Men's Softshell Jacket",
+    "description": "A versatile softshell jacket that balances wind resistance and breathability for outdoor activities in mild weather.",
+    "price": 110,
+    "category": "Men's Clothing",
+    "subCategory": "Jackets",
+    "images": ["https://example.com/mens-softshell-jacket1.jpg"],
+    "rating": {
+      "rate": 0,
+      "count": 0
+    }
+  },
+  {
+    "title": "Men's Winter Parka",
+    "description": "Stay shielded from harsh winter conditions with this parka, featuring a weatherproof design and insulated interior.",
+    "price": 200,
+    "category": "Men's Clothing",
+    "subCategory": "Jackets",
+    "images": ["https://example.com/mens-winter-parka1.jpg"],
+    "rating": {
+      "rate": 0,
+      "count": 0
+    }
+  },
+  {
+    "title": "Men's Trail Running Jacket",
+    "description": "Designed for trail runners, this lightweight jacket provides excellent mobility and protection from light rain and wind.",
+    "price": 95,
+    "category": "Men's Clothing",
+    "subCategory": "Jackets",
+    "images": ["https://example.com/mens-trail-jacket1.jpg"],
+    "rating": {
+      "rate": 0,
+      "count": 0
+    }
+  },
+  {
+    "title": "Men's Travel Jacket",
+    "description": "A practical travel jacket with multiple pockets, combining functionality and comfort for long trips and adventures.",
+    "price": 130,
+    "category": "Men's Clothing",
+    "subCategory": "Jackets",
+    "images": ["https://example.com/mens-travel-jacket1.jpg"],
+    "rating": {
+      "rate": 0,
+      "count": 0
+    }
+  },
+  {
+    "title": "Men's Heavy Duty Work Jacket",
+    "description": "Rugged and durable, this work jacket is designed for tough outdoor tasks while providing warmth and protection.",
+    "price": 170,
+    "category": "Men's Clothing",
+    "subCategory": "Jackets",
+    "images": ["https://example.com/mens-work-jacket1.jpg"],
     "rating": {
       "rate": 0,
       "count": 0

@@ -44,7 +44,7 @@ export const Card = (props) => {
         <h4 className={`${css.category} text-base font-light`}>
           sub-catrgory: {props.subCategory}
         </h4>
-        <p>$ {props.price}</p>
+        <p>ILS {props.price}</p>
       </div>
       <div className="flex flex-col gap-1">
         <button onClick={() => productNavigate(props._id)} className={css.btn}>

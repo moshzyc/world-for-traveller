@@ -18,7 +18,12 @@ router.get("/", productsCtrl.getProdacts)
 router.get("/product/:id", productsCtrl.getProdact)
 router.get("/categories", productsCtrl.getCategories)
 router.post("/add", autAdmin, upload.array("images"), productsCtrl.addProduct)
-router.put("/update/:id", autAdmin, productsCtrl.updateProduct)
+router.put(
+  "/update/:id",
+  autAdmin,
+  upload.array("images"),
+  productsCtrl.updateProduct
+)
 router.delete("/delete/:id", autAdmin, productsCtrl.deleteProduct)
 
 export default router

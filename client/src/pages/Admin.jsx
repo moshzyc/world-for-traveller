@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { AddProducts } from "../components/AddProducts"
 import { EditProduct } from "../components/EditProduct"
-import {AddGuide} from '../components/GuideMennagement'
+import {AddGuide} from '../components/AddGuide'
 import { EditGuide } from "../components/EditGuid"
 
 export const Admin = () => {

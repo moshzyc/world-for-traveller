@@ -7,7 +7,7 @@ import searchIcon from "../assets/search-alt-2-svgrepo-com.svg"
 import UserForm from "./UserForm"
 import { UserContext } from "../contexts/UserContextpProvider"
 import { UserProfile } from "./UserProfile"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
 import { GET_CATEGORIES_URL } from "../constants/endPoint"
 import axios from "axios"
@@ -21,8 +21,9 @@ export const Header = () => {
   const [seeUserBoxs, setSeeUserBox] = useState(false)
   const navigate = useNavigate()
   const { user } = useContext(UserContext)
-  const { setTitle, categories } = useContext(StoreContext)
-
+  const { setTitle, categories, setCategory, setSubCategory } =
+    useContext(StoreContext)
+    let title
   const categoriesGenerator = (arr) => {
     const categoriesArr = arr.map((item) => {
       return (
@@ -52,6 +53,9 @@ export const Header = () => {
         <img
           onClick={() => {
             navigate("/")
+            setCategory([])
+            setSubCategory([])
+            console.log("work")
           }}
           className="h-[80px] rounded-md"
           src={logo}
@@ -61,13 +65,21 @@ export const Header = () => {
         <div className="flex">
           <div className="flex h-[30px]">
             <button
-              onClick={() => setTitle(title)}
+              onClick={() => {
+                setTitle(title)
+                setCategory([])
+                setSubCategory([])
+              }}
               className={`${css.sBtn} ${css.icons}`}
             >
               <img src={searchIcon} alt="" />
             </button>
             <input
               onChange={(e) => (title = e.target.value)}
+              // onFocus={() => {
+              //   setCategory([])
+              //   setSubCategory([])
+              // }}
               className={css.input}
               type="text"
               placeholder="search products"
@@ -77,35 +89,42 @@ export const Header = () => {
             <div>
               <img
                 onClick={() => setSeeCart((p) => !p)}
-                onDoubleClick={() => navigate("/cart")}
+                onDoubleClick={() => {
+                  navigate("/cart")
+                  setSeeCart(false)
+                }}
                 className={css.icons}
                 src={cartIcon}
                 alt=""
               />
               <div className={`${!seeCart ? "hidden" : "block"} absolute`}>
-                <CartTable />
+                <CartTable seeCart={() => setSeeCart(false)} />
               </div>
             </div>
             <div>
               <div className="flex flex-col">
-              <img
-                onClick={() => setSeeUserBox((p) => !p)}
-                onDoubleClick={() => {
-                  !user && navigate("/loginsingup")
-                  user && navigate("/user")
-                }}
-                className={`${css.icons} ${user&&css.userLogIcon} m-auto`}
-                src={userIcon}
-                alt=""
-              />
-              {user&&<p>{user.name}</p>}
+                <img
+                  onClick={() => setSeeUserBox((p) => !p)}
+                  onDoubleClick={() => {
+                    !user && navigate("/loginsingup")
+                    user && navigate("/user")
+                    setSeeUserBox((p) => !p)
+                  }}
+                  className={`${css.icons} ${user && css.userLogIcon} m-auto`}
+                  src={userIcon}
+                  alt=""
+                />
+                {user && <p>{user.name}</p>}
               </div>
 
               <div
                 className={`${css.userForm} ${!seeUserBoxs ? "hidden" : "block"}`}
               >
                 {user ? (
-                  <UserProfile setIsSignup={setIsSignup} />
+                  <UserProfile
+                    onNav={() => setSeeUserBox((p) => !p)}
+                    setIsSignup={setIsSignup}
+                  />
                 ) : (
                   <UserForm formChenge={setIsSignup} isSignup={isSignup} />
                 )}

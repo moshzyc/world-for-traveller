@@ -34,9 +34,9 @@ const productsCtrl = {
           fs.unlinkSync(file.path) // מוחק את הקובץ מהשרת
         }
       }
-     const newProduct = new Product(productData)
-     const savedProduct = await newProduct.save()
-     console.log("Saved Product:", savedProduct)
+      const newProduct = new Product(productData)
+      const savedProduct = await newProduct.save()
+      console.log("Saved Product:", savedProduct)
 
       res.status(201).json({
         message: "Product created successfully",
@@ -88,20 +88,39 @@ const productsCtrl = {
       // קבלת נתוני המוצר
       const productData = req.body
 
-      // אם יש קובץ בתמונה, נעלה אותו ל-Cloudinary
-      if (req.file && req.file.path) {
-        const uploadResult = await cloudinary.uploader.upload(req.file.path, {
-          folder: "products", // תיקיית העלאה
-        })
-        // נעדכן את התמונות עם ה-URL של Cloudinary
-        if (!productData.images) {
-          productData.images = []
+      // נתונים לעדכון
+      const updateData = {
+        ...(productData.title && { title: productData.title }),
+        ...(productData.description && {
+          description: productData.description,
+        }),
+        ...(productData.price && { price: productData.price }),
+      }
+
+      // אם יש קבצים להעלאה, נעדכן את התמונות
+      if (req.files && req.files.length > 0) {
+        updateData.images = []
+        for (const file of req.files) {
+          const uploadResult = await cloudinary.uploader.upload(file.path, {
+            folder: "products", // תיקיית העלאה
+          })
+          updateData.images.push(uploadResult.secure_url) // הוספת ה-URL של התמונה
+          fs.unlinkSync(file.path) // מוחק את הקובץ מהשרת
         }
-        productData.images.push(uploadResult.secure_url) // הוספת התמונה החדשה
+      }
+
+      // אתחול של התמונות אם אין כאלה
+      if (!updateData.images) {
+        updateData.images = []
+      }
+
+      // הוספת תמונות שמגיעות כ-URLs (אם יש)
+      if (req.body.images && req.body.images.length > 0) {
+        updateData.images = [...updateData.images, ...req.body.images] // הוספת ה-URLs המתקבלים
       }
 
       // עדכון המוצר במסד הנתונים
-      const updatedProduct = await Product.findByIdAndUpdate(id, productData, {
+      const updatedProduct = await Product.findByIdAndUpdate(id, updateData, {
         new: true,
       })
 

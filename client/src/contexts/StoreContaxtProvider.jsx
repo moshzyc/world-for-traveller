@@ -18,28 +18,26 @@ export const StoreContaxtProvider = ({ children }) => {
   useEffect(() => {
     getProductsFilterd()
   }, [category, subCategory, title])
-  useEffect(() => {
-    getProducts()
-  }, [])
+  // useEffect(() => {
+  //   getProducts()
+  // }, [])
     useEffect(() => {
       getCategories()
     }, [])
 
-  const getProducts = async () => {
-    try {
-      const { data } = await axios.get(`${PRODUCTS_URL}`)
-      setAllProducts(data)
-    } catch (err) {
-      console.log(err)
-    }
-  }
+  // const getProducts = async () => {
+  //   try {
+  //     const { data } = await axios.get(`${PRODUCTS_URL}`)
+  //     setAllProducts(data)
+  //   } catch (err) {
+  //     console.log(err)
+  //   }
+  // }
     const getCategories = async () => {
       try {
-        console.log("lala");
         const { data } = await axios.get(GET_CATEGORIES_URL)
-        
         setCategories(data)
-        console.log(data)
+        // console.log(data)
       } catch (error) {}
     }
   const getProductsFilterd = async () => {

@@ -47,7 +47,6 @@ export const EditProduct = () => {
             <button
               onClick={() => {
                 setProductEdited(item)
-                setEdit(true)
               }}
               className="whiteBtn w-[80px]"
             >

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { DELETE_GUIDE_URL, GET_GUIDE_URL } from "../constants/endPoint"
 import axios from "axios"
-import { EditGuideWin } from "./GuideMennagement"
+import { EditGuideWin } from "./EditGuideWin"
 
 export const EditGuide = () => {
   const [guides, setGuides] = useState([])
@@ -24,10 +24,15 @@ export const EditGuide = () => {
       return (
         <div key={item._id} className="flex border-t border-black p-2">
           <div className="flex gap-2">
-            <img src={item.images[0]} alt="" />
+            <img className="w-[25%]" src={item.images[0]} alt="" />
             <div>
               <p>title: {item.title}</p>
-              <p>content: {item.content}</p>
+              <div className="w-[80%]">
+                {/* הדפס את כל הפסקאות בנפרד */}
+                {item.content.map((paragraph, index) => (
+                  <p key={index}>paragraph-{index+1} : {paragraph}</p>
+                ))}
+              </div>
             </div>
           </div>
           <div className="flex flex-col gap-2">
@@ -40,8 +45,8 @@ export const EditGuide = () => {
             <button
               onClick={async () => {
                 try {
-                  if (window.confirm("are you shoore?"))
-                    await axios.delete( DELETE_GUIDE_URL+ `/${item._id}`)
+                  if (window.confirm("are you sure?"))
+                    await axios.delete(DELETE_GUIDE_URL + `/${item._id}`)
                 } catch (error) {
                   console.error(error)
                 }
@@ -56,6 +61,7 @@ export const EditGuide = () => {
     })
     return guidesArr
   }
+
   return (
     <div>
       {guideGenerator(guides)}

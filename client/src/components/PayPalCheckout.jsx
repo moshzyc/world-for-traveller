@@ -11,7 +11,8 @@ const PayPalCheckout = ({ handleSubmit }) => {
 
         // כאן שמים רק את ה-Client ID בלי ה-URL המלא
         script.src =
-          "https://www.paypal.com/sdk/js?client-id=AQ1kDWf-rb55Z9J6rHasEyNSWSbnomO7h9pSv-N5QJfF4MMvBvVTI_d2Qz3NKedYXHnGtsOa2IYJJWJy&debug=true"
+          "https://www.paypal.com/sdk/js?client-id=AQ1kDWf-rb55Z9J6rHasEyNSWSbnomO7h9pSv-N5QJfF4MMvBvVTI_d2Qz3NKedYXHnGtsOa2IYJJWJy&currency=ILS&debug=true"
+
 
         script.async = true
         script.onload = () => {
@@ -23,7 +24,8 @@ const PayPalCheckout = ({ handleSubmit }) => {
                   purchase_units: [
                     {
                       amount: {
-                        value: cartSum.toFixed(2), // הסכום לתשלום
+                        value: cartSum.toFixed(2),
+                        currency_code: "ILS",
                       },
                     },
                   ],

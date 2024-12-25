@@ -16,7 +16,7 @@ const upload = multer({ storage })
 
 router.get("/get", guidesCtrl.getGuides)
 router.post("/add", upload.array("images"), guidesCtrl.addGuide)
-router.put("/update/:id", guidesCtrl.updateGuide)
+router.put("/update/:id", upload.array("images"), guidesCtrl.updateGuide)
 router.delete("/delete/:id", autAdmin, guidesCtrl.deleteGuide)
 
 export default router

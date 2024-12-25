@@ -6,7 +6,7 @@ import axios from "axios"
 import { LOGOUT_URL, USER_URL } from "../constants/endPoint"
 import { PrvOrder } from "./PrvOrder"
 
-export const UserProfile = ({ setIsSignup, fullScreen }) => {
+export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
   const { user, setUser, role } = useContext(UserContext)
   const [seeOrders, setSeeOrders] = useState(false)
   const [orders, setOrders] = useState([])
@@ -14,12 +14,13 @@ export const UserProfile = ({ setIsSignup, fullScreen }) => {
   useEffect(() => {
     user && getOrders()
   }, [user])
-
   const getOrders = async () => {
     try {
       const { data } = await axios.get(`${USER_URL}get-orders`)
       setOrders(data)
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const ordersGenerator = (arr) => {
@@ -28,13 +29,20 @@ export const UserProfile = ({ setIsSignup, fullScreen }) => {
     })
     return ordersArr
   }
+
+  const onLogout = async () => {
+    await axios.get(LOGOUT_URL)
+  }
   return (
     <div className={`${fullScreen ? "mycontainer" : css.form}`}>
       {user && <p>name: {user.name}</p>}
       {user && <p>email: {user.email}</p>}
       {role == "admin" && (
         <p
-          onClick={() => navigate("/admin")}
+          onClick={() => {
+            navigate("/admin")
+            onNav()
+          }}
           className="w-[50px] cursor-pointer font-bold text-blue-600 hover:underline active:text-blue-500"
         >
           {role}
@@ -56,11 +64,10 @@ export const UserProfile = ({ setIsSignup, fullScreen }) => {
       <div className="text-center">
         <button
           className={`${css.logoutBtn}`}
-          onClick={async () => {
-            await axios.get(LOGOUT_URL)
+          onClick={() => {
+            onLogout()
             setUser(null)
             setIsSignup(false)
-            location.reload()
           }}
         >
           logout
