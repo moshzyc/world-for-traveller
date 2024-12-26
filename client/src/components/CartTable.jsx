@@ -2,12 +2,13 @@
 import React, { useContext } from "react"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
 
-const CartTable = ({ fullScreen }) => {
-  const { cart, addAnother, minusAmount, deletItem, cartSum } = useContext(
-    StoreContext)
+const CartTable = ({ fullScreen, seeCart }) => {
+  const { cart, addAnother, minusAmount, deletItem, cartSum } =
+    useContext(StoreContext)
+  // if (fullScreen&&seeCart) seeCart()
+  // console.log("lili", fullScreen)
 
-    
-
+  // console.log("lala", seeCart)
 
   return (
     <div
@@ -56,7 +57,7 @@ const CartTable = ({ fullScreen }) => {
                   -
                 </button>
               </td>
-              <td className="px-4 py-2 text-center">{item.price}$</td>
+              <td className="px-4 py-2 text-center">{item.price} ILS</td>
               {fullScreen && (
                 <td>
                   <button
@@ -76,7 +77,7 @@ const CartTable = ({ fullScreen }) => {
               <td className="px-4 py-2 text-left"></td>
               <td className="px-4 py-2 text-left"></td>
               <td className="px-4 py-2 text-center"></td>
-              <td className="px-4 py-2 text-center">sum of: {cartSum}$</td>
+              <td className="px-4 py-2 text-center">sum of: {cartSum} ILS</td>
               <td></td>
             </tr>
           )}

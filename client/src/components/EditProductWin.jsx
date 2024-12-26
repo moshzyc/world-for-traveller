@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import axios from "axios"
 import { EDIT_PRODUCT_URL } from "../constants/endPoint"
 
@@ -7,60 +7,76 @@ export const EditProductWin = (props) => {
   const [description, setDescription] = useState(props.description || "")
   const [price, setPrice] = useState(props.price || 0)
   const [images, setImages] = useState(props.images || [])
-  const [newImage, setNewImage] = useState("")
+  const [newImage, setNewImage] = useState("") // התמונות החדשות מקישור URL
+  const [newFiles, setNewFiles] = useState([]) // התמונות החדשות שממתינות להעלאה כקבצים
 
+  useEffect(() => {
+    setTitle(props.title)
+    setDescription(props.description)
+    setPrice(props.price)
+    setImages(props.images || [])
+  }, [props])
+
+  // הוספת תמונה חדשה מקישור (URL)
   const handleAddImage = () => {
     if (newImage.trim()) {
       setImages([...images, newImage.trim()])
-      setNewImage("")
+      setNewImage("") // נקה את השדה אחרי ההוספה
     }
   }
 
+  // הסרת תמונה
   const handleRemoveImage = (index) => {
     setImages(images.filter((_, i) => i !== index))
   }
 
-  const handleFileUpload = async (e) => {
-    const file = e.target.files[0]
-    if (file) {
-      const formData = new FormData()
-      formData.append("file", file)
-      formData.append("upload_preset", "your_upload_preset") // עדכן לפי Cloudinary שלך
-
-      try {
-        const res = await axios.post(
-          "https://api.cloudinary.com/v1_1/your_cloud_name/image/upload", // עדכן לפי Cloudinary שלך
-          formData
-        )
-        setImages([...images, res.data.secure_url])
-      } catch (err) {
-        alert("Failed to upload image.")
-      }
-    }
+  // העלאת קובץ תמונה
+  const handleFileUpload = (e) => {
+    const files = Array.from(e.target.files)
+    setNewFiles([...newFiles, ...files]) // נוסיף את הקבצים החדשים
   }
 
+  // שליחת הנתונים עם התמונות (העלות)
   const onSubmit = async (e) => {
     e.preventDefault()
+
+    const formData = new FormData()
+    formData.append("title", title)
+    formData.append("description", description)
+    formData.append("price", price)
+
+    // הוספת כל התמונות החדשות (קבצים) ל-FormData
+    newFiles.forEach((file) => {
+      formData.append("images", file)
+    })
+
+    // הוספת התמונות שכבר היו קיימות (ה-URLs) אם יש כאלה
+    images.forEach((image) => {
+      formData.append("existingImages", image)
+    })
+
     try {
-      await axios.put(`${EDIT_PRODUCT_URL}${props._id}`, {
-        title,
-        description,
-        price,
-        images,
+      // שליחה לשרת עם FormData (לא ל-Cloudinary ישירות)
+      await axios.put(`${EDIT_PRODUCT_URL}${props._id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data", // חשוב לשלוח כ-Multipart
+        },
       })
+
       props.onClose()
     } catch (err) {
-      alert(err.message)
+      alert("Error while saving the product.")
+      console.error(err)
     }
   }
 
   return (
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div className="w-[80%] max-w-md rounded-lg bg-white p-4 shadow-lg overflow-x-auto">
+        <div className="w-[80%] max-w-md overflow-x-auto rounded-lg bg-white p-4 shadow-lg">
           <h2 className="mb-4 text-xl font-bold">Edit Product</h2>
           <form onSubmit={onSubmit} className="flex flex-col gap-2">
-            <label htmlFor="title">title:</label>
+            <label htmlFor="title">Title:</label>
             <input
               type="text"
               id="title"
@@ -124,7 +140,12 @@ export const EditProductWin = (props) => {
             </div>
 
             <label>Upload Image:</label>
-            <input type="file" onChange={handleFileUpload} className="mb-4" />
+            <input
+              type="file"
+              multiple
+              onChange={handleFileUpload}
+              className="mb-4"
+            />
 
             <div className="flex justify-end gap-2">
               <button type="button" onClick={props.onClose} className="redBtn">

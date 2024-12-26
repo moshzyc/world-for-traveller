@@ -9,7 +9,6 @@ export const EditProduct = () => {
   const { categories, products, setCategory, setSubCategory } =
     useContext(StoreContext)
   const [subIndex, setSubIndex] = useState(0)
-  const [edit, setEdit] = useState(false)
   const [productEdited, setProductEdited] = useState(null)
 
   const categoriesGenerator = (arr) =>
@@ -30,9 +29,10 @@ export const EditProduct = () => {
     const productsArr = arr.map((item) => {
       return (
         <div
-          className="flex justify-between border-t border-black"
+          className="flex border-t justify-between border-black"
           key={item._id}
         >
+          <div className="flex gap-1">
           <img src={logo} alt="" />
           <div className="flex flex-col gap-4">
             <p>id: {item._id}</p>
@@ -42,11 +42,11 @@ export const EditProduct = () => {
             <p>description: {item.description}</p>
             <p>price: {item.price}</p>
           </div>
+          </div>
           <div className="flex flex-col">
             <button
               onClick={() => {
                 setProductEdited(item)
-                setEdit(true)
               }}
               className="whiteBtn w-[80px]"
             >
@@ -55,7 +55,8 @@ export const EditProduct = () => {
             <button
               onClick={async () => {
                 try {
-                  await axios.delete(PRODUCTS_URL + `/delete/${item._id}`)
+                  if(window.confirm("are you shoore?"))
+                    await axios.delete(PRODUCTS_URL + `/delete/${item._id}`)
                 } catch (error) {
                   console.error(error)
                 }

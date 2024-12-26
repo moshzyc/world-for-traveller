@@ -27,13 +27,13 @@ export const AddProducts = () => {
     }
   }, [categories])
 
-const handleFileChange = (e) => {
-  const files = Array.from(e.target.files)
-  const uniqueFiles = files.filter(
-    (file) => !images.some((existingFile) => existingFile.name === file.name)
-  )
-  setImages([...images, ...uniqueFiles])
-}
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files)
+    const uniqueFiles = files.filter(
+      (file) => !images.some((existingFile) => existingFile.name === file.name)
+    )
+    setImages([...images, ...uniqueFiles])
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -46,7 +46,7 @@ const handleFileChange = (e) => {
       formData.append("description", formValue.description)
       formData.append("price", formValue.price)
       images.forEach((image, index) => {
-        formData.append(`images`, image) 
+        formData.append(`images`, image)
       })
 
       const response = await axios.post(ADD_PRODUCT_URL, formData, {
@@ -58,7 +58,7 @@ const handleFileChange = (e) => {
       console.log("Product created successfully:", response.data)
       setFormValue({
         title: "",
-        category: categories[0].category, 
+        category: categories[0].category,
         subCategory: categories[0].subCategory?.[0] || "",
         description: "",
         price: "",

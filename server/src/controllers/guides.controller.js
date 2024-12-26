@@ -13,9 +13,17 @@ cloudinary.config({
 const guidesCtrl = {
   async addGuide(req, res) {
     try {
+      const { title, content } = req.body
+
+      if (!title || !content) {
+        return res
+          .status(400)
+          .json({ message: "Title and content are required" })
+      }
+
       const guideData = {
-        title: req.body.title,
-        content: req.body.content,
+        title,
+        content: Array.isArray(content) ? content : [content], // מוודא שה-content הוא מערך
         images: [],
       }
 
@@ -42,24 +50,41 @@ const guidesCtrl = {
       res.status(500).json({ message: "Failed to create guide", error })
     }
   },
+
   async updateGuide(req, res) {
     try {
+      console.log("Body:", req.body)
+      console.log("Files:", req.files)
+
       const guideId = req.params.id
+      const { title, content } = req.body
+
       const updateData = {
-        title: req.body.title,
-        content: req.body.content,
+        ...(title && { title }),
+        ...(content && {
+          content: Array.isArray(content) ? content : [content],
+        }), // מוודא שה-content הוא מערך
       }
 
+      // אם יש קבצים להעלאה, עדכן את התמונות
       if (req.files && req.files.length > 0) {
         updateData.images = []
         for (const file of req.files) {
           const uploadResult = await cloudinary.uploader.upload(file.path, {
             folder: "guides",
           })
-
           updateData.images.push(uploadResult.secure_url)
           fs.unlinkSync(file.path) // מוחק את הקובץ מהשרת
         }
+      }
+
+      if (!updateData.images) {
+        updateData.images = [] // אתחול של updateData.images אם הוא לא קיים
+      }
+      
+      // הוספת תמונות שמגיעות כ-URL (אם יש)
+      if (req.body.images && req.body.images.length > 0) {
+        updateData.images = [...updateData.images, ...req.body.images]
       }
 
       const updatedGuide = await Guide.findByIdAndUpdate(guideId, updateData, {
@@ -79,6 +104,7 @@ const guidesCtrl = {
       res.status(500).json({ message: "Failed to update guide", error })
     }
   },
+
   async getGuides(req, res) {
     try {
       const guides = await Guide.find()
