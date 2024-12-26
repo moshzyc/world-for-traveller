@@ -20,7 +20,7 @@ const userCtrl = {
     try {
       const user = await User.findOne({ email })
       if (!user || !(await bcrypt.compare(password, user.password))) {
-        return next(new AppError("email or password wrong", 401))
+        return next(new AppError("Invalid credentials", 401))
       }
 
       const accessToken = jwt.sign(
@@ -53,32 +53,33 @@ const userCtrl = {
       })
       res.status(201).json({ ...user._doc, password: "****" })
     } catch (error) {
-      next(new AppError(null, 401, error))
+      next(new AppError("Error during login", 401, error))
     }
   },
   async getInfo(req, res, next) {
     try {
       const user = await User.findById(req._id)
+      if (!user) {
+        return next(new AppError("User not found", 404))
+      }
       res.status(200).json({ ...user._doc, password: "*******" })
     } catch (error) {
-      next(new AppError(null, null, error))
+      next(new AppError("Error fetching user info", 500, error))
     }
   },
-  async logout(req, res) {
+  async logout(req, res, next) {
     try {
       clearCookie(res, "access_token")
       clearCookie(res, "refresh_token")
 
       await User.updateOne(
-        { _id },
+        { _id: req._id },
         { $unset: { "loggedUsers.refreshToken": "" } }
       )
 
       res.status(200).json({ message: "Cookies cleared successfully!" })
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Error during logout", error: error.message })
+      next(new AppError("Error during logout", 500, error))
     }
   },
   async deleteUser(req, res, next) {
@@ -107,12 +108,15 @@ const userCtrl = {
   async updateUser(req, res, next) {
     const { name, email, password, newPassword } = req.body
     try {
+      if (email && !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+        return next(new AppError("Invalid email format", 400))
+      }
       const user = await User.findById(req._id) // מציאת המשתמש לפי ה-ID שנמצא ב-token
       if (!user) {
         return next(new AppError("User not found", 404))
       }
 
-      // אם המשתמש רוצה לשנות את הסיסמה, נוודא שהסיסמה הישנה נכונה
+      // אם המשתמש וצה לשנות את הסיסמה, נוודא שהסיסמה הישנה נכונה
       if (newPassword) {
         const isPasswordValid = await bcrypt.compare(password, user.password)
         if (!isPasswordValid) {
@@ -146,7 +150,7 @@ const userCtrl = {
         return next(new AppError("User not found", 404))
       }
 
-      // סינון הנתונים ושמירה בפורמט אחיד
+      // סינון הנתונים ושמירה ב��ורמט אחיד
       const formattedCart = cart.map((item) => ({
         productId: item.productId || item._id, // אחידות לשדה productId
         title: item.title,
@@ -189,9 +193,12 @@ const userCtrl = {
     }
   },
   async saveOrder(req, res, next) {
-    const { cart, totalAmount, address } = req.body // קבלת העגלה, הסכום והכתובת מהבקשה
+    const { cart, totalAmount, address } = req.body
     try {
-      // ודא שהעגלה לא ריקה
+      if (!totalAmount || !address) {
+        return next(new AppError("Total amount and address are required", 400))
+      }
+
       if (!Array.isArray(cart) || cart.length === 0) {
         return next(new AppError("Cart cannot be empty", 400))
       }

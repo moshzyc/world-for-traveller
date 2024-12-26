@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import AppError from "../utils/appError.js"
 import { UserPost } from "../models/UserPost.model.js"
 import { User } from "../models/user.model.js"
 import { PostCategory } from "../models/PostCategory.model.js"
@@ -13,20 +13,20 @@ cloudinary.config({
 
 const userPostCtrl = {
   // Add a new post
-  async addPost(req, res) {
+  async addPost(req, res, next) {
     try {
       const { title, content, category } = req.body
       const userId = req.user.id
 
       if (!title || !content || !category) {
-        return res
-          .status(400)
-          .json({ message: "Title, content, and category are required" })
+        return next(
+          new AppError("Title, content, and category are required", 400)
+        )
       }
 
       const user = await User.findById(userId)
       if (!user) {
-        return res.status(404).json({ message: "User not found" })
+        return next(new AppError("User not found", 404))
       }
 
       const postData = {
@@ -55,7 +55,7 @@ const userPostCtrl = {
       } else if (req.body.mainImage) {
         postData.mainImage = req.body.mainImage // Use mainImage as URL
       } else {
-        return res.status(400).json({ message: "Main image is required" })
+        return next(new AppError("Main image is required", 400))
       }
 
       // Handle additional images
@@ -90,13 +90,12 @@ const userPostCtrl = {
         post: savedPost,
       })
     } catch (error) {
-      console.error("Error saving post:", error)
-      res.status(500).json({ message: "Failed to create post", error })
+      next(new AppError("Error creating post", 500, error))
     }
   },
 
   // Update an existing post
-  async updatePost(req, res) {
+  async updatePost(req, res, next) {
     try {
       const postId = req.params.id
       const { title, content, category } = req.body
@@ -154,7 +153,7 @@ const userPostCtrl = {
       })
 
       if (!updatedPost) {
-        return res.status(404).json({ message: "Post not found" })
+        return next(new AppError("Post not found", 404))
       }
 
       res.status(200).json({
@@ -162,39 +161,35 @@ const userPostCtrl = {
         post: updatedPost,
       })
     } catch (error) {
-      console.error("Error updating post:", error)
-      res.status(500).json({ message: "Failed to update post", error })
+      next(new AppError("Error updating post", 500, error))
     }
   },
 
   // Get all posts
-  async getPosts(req, res) {
+  async getPosts(req, res, next) {
     const cat = new RegExp(req.query.cat || "")
 
     try {
       const posts = await UserPost.aggregate([{ $match: { category: cat } }])
       res.status(200).json(posts)
     } catch (error) {
-      console.error("Error fetching posts:", error)
-      res.status(500).json({ message: "Failed to fetch posts", error })
+      next(new AppError("Error fetching posts", 500, error))
     }
   },
 
   // Delete a post
-  async deletePost(req, res) {
+  async deletePost(req, res, next) {
     try {
       const postId = req.params.id
       const userId = req.user.id
 
       const post = await UserPost.findById(postId)
       if (!post) {
-        return res.status(404).json({ message: "Post not found" })
+        return next(new AppError("Post not found", 404))
       }
 
       if (post.createBy.userId !== userId) {
-        return res
-          .status(403)
-          .json({ message: "Unauthorized to delete this post" })
+        return next(new AppError("Unauthorized to delete this post", 403))
       }
 
       await UserPost.findByIdAndDelete(postId)
@@ -206,8 +201,15 @@ const userPostCtrl = {
 
       res.status(200).json({ message: "Post deleted successfully" })
     } catch (error) {
-      console.error("Error deleting post:", error)
-      res.status(500).json({ message: "Failed to delete post", error })
+      next(new AppError("Error deleting post", 500, error))
+    }
+  },
+  async getCategories(req, res, next) {
+    try {
+      const categories = await PostCategory.find()
+      res.status(200).json(categories)
+    } catch (error) {
+      next(new AppError("Error fetching categories", 500, error))
     }
   },
 }

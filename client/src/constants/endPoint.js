@@ -16,6 +16,11 @@ const ADD_GUIDE_URL = GUIDE_URL + "add"
 const DELETE_GUIDE_URL = GUIDE_URL + "delete"
 const EDIT_GUIDE_URL = GUIDE_URL + "update"
 const GET_GUIDE_URL = GUIDE_URL + "get"
+const USER_POSTS_URL = BASE_URL + "users-posts/"
+const GET_USER_POSTS_URL = USER_POSTS_URL + "get"
+const ADD_USER_POST_URL = USER_POSTS_URL + "add"
+const DELETE_USER_POST_URL = USER_POSTS_URL + "delete/"
+const EDIT_USER_POST_URL = USER_POSTS_URL + "update/"
 
 export {
   SIGNUP_URL,
@@ -33,4 +38,9 @@ export {
   EDIT_GUIDE_URL,
   GET_GUIDE_URL,
   DELETE_GUIDE_URL,
+  USER_POSTS_URL,
+  GET_USER_POSTS_URL,
+  ADD_USER_POST_URL,
+  DELETE_USER_POST_URL,
+  EDIT_USER_POST_URL,
 }

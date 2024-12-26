@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useState, useRef } from "react"
 import css from "../css/header.module.css"
 import cartIcon from "../assets/cart-shopping-svgrepo-com.svg"
 import userIcon from "../assets/user-svgrepo-com.svg"
@@ -15,114 +15,111 @@ import { Category } from "./Category"
 import CartTable from "./CartTable"
 
 export const Header = () => {
-  const [rotateBox, setRotateBox] = useState(false)
+  const [activeDropdown, setActiveDropdown] = useState(null)
   const [isSignup, setIsSignup] = useState(false)
-  const [seeCart, setSeeCart] = useState(false)
-  const [seeUserBoxs, setSeeUserBox] = useState(false)
+  const headerRef = useRef(null)
   const navigate = useNavigate()
   const { user } = useContext(UserContext)
-  const { setTitle, categories, setCategory, setSubCategory } =
+  const { setTitle, categories, setCategory, setSubCategory, cart } =
     useContext(StoreContext)
-    let title
-  const categoriesGenerator = (arr) => {
-    const categoriesArr = arr.map((item) => {
-      return (
-        <Category
-          key={item._id}
-          category={item.category}
-          _id={item._id}
-          subCategory={item.subCategory}
-        />
-      )
-    })
-    return categoriesArr
+  let title
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (headerRef.current && !headerRef.current.contains(event.target)) {
+        if (
+          activeDropdown === "cart" &&
+          event.target.closest("[data-add-to-cart]")
+        ) {
+          return
+        }
+        setActiveDropdown(null)
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [activeDropdown])
+
+  const toggleDropdown = (dropdownName) => {
+    setActiveDropdown(activeDropdown === dropdownName ? null : dropdownName)
   }
 
-  // const searchFilter = (value) => {
-  //   const filteredArr = rabbis.filter((item) => {
-  //     return String(item)
-  //       .toLowerCase()
-  //       .includes(value.toLowerCase())
-  //   })
-  //   return filteredArr
-  // }
-
   return (
-    <header>
-      <div className="mycontainer flex h-[90px] justify-between">
+    <header ref={headerRef} className={css.header}>
+      <div className="mycontainer flex h-[90px] items-center justify-between">
         <img
           onClick={() => {
             navigate("/")
             setCategory([])
             setSubCategory([])
-            console.log("work")
           }}
-          className="h-[80px] rounded-md"
+          className={css.logo}
           src={logo}
-          alt=""
+          alt="Logo"
         />
 
-        <div className="flex">
-          <div className="flex h-[30px]">
+        <div className="flex items-center gap-4">
+          <div className={css.searchContainer}>
+            <input
+              onChange={(e) => (title = e.target.value)}
+              className={css.input}
+              type="text"
+              placeholder="Search products..."
+            />
             <button
               onClick={() => {
                 setTitle(title)
                 setCategory([])
                 setSubCategory([])
               }}
-              className={`${css.sBtn} ${css.icons}`}
+              className={css.sBtn}
             >
-              <img src={searchIcon} alt="" />
+              <img src={searchIcon} alt="Search" className={css.icons} />
             </button>
-            <input
-              onChange={(e) => (title = e.target.value)}
-              // onFocus={() => {
-              //   setCategory([])
-              //   setSubCategory([])
-              // }}
-              className={css.input}
-              type="text"
-              placeholder="search products"
-            />
           </div>
-          <div className="flex gap-1">
-            <div>
+
+          <div className="flex items-center gap-4">
+            <div className="relative">
               <img
-                onClick={() => setSeeCart((p) => !p)}
+                onClick={() => toggleDropdown("cart")}
                 onDoubleClick={() => {
                   navigate("/cart")
-                  setSeeCart(false)
+                  setActiveDropdown(null)
                 }}
                 className={css.icons}
                 src={cartIcon}
-                alt=""
+                alt="Cart"
               />
-              <div className={`${!seeCart ? "hidden" : "block"} absolute`}>
-                <CartTable seeCart={() => setSeeCart(false)} />
+              <div
+                className={`${activeDropdown !== "cart" ? "hidden" : ""} ${css.cartPreview}`}
+              >
+                <CartTable seeCart={() => setActiveDropdown(null)} />
               </div>
             </div>
-            <div>
-              <div className="flex flex-col">
+
+            <div className="relative">
+              <div className={css.userInfo}>
                 <img
-                  onClick={() => setSeeUserBox((p) => !p)}
+                  onClick={() => toggleDropdown("user")}
                   onDoubleClick={() => {
                     !user && navigate("/loginsingup")
                     user && navigate("/user")
-                    setSeeUserBox((p) => !p)
+                    setActiveDropdown(null)
                   }}
-                  className={`${css.icons} ${user && css.userLogIcon} m-auto`}
+                  className={`${css.icons} ${user ? css.userLogIcon : ""}`}
                   src={userIcon}
-                  alt=""
+                  alt="User"
                 />
-                {user && <p>{user.name}</p>}
+                {user && <span className={css.userName}>{user.name}</span>}
               </div>
 
               <div
-                className={`${css.userForm} ${!seeUserBoxs ? "hidden" : "block"}`}
+                className={`${activeDropdown !== "user" ? "hidden" : ""} ${css.userForm}`}
               >
                 {user ? (
                   <UserProfile
-                    onNav={() => setSeeUserBox((p) => !p)}
+                    onNav={() => setActiveDropdown(null)}
                     setIsSignup={setIsSignup}
                   />
                 ) : (
@@ -130,24 +127,30 @@ export const Header = () => {
                 )}
               </div>
             </div>
+
+            <nav className={css.navBar}>
+              <div
+                onClick={() => toggleDropdown("categories")}
+                className={`${css.linseBox} ${activeDropdown === "categories" ? css.linseBoxRotate : ""}`}
+              >
+                <div className={css.lines}></div>
+                <div className={css.lines}></div>
+                <div className={css.lines}></div>
+              </div>
+              <div
+                className={`${css.navBlock} ${activeDropdown === "categories" ? css.navBlockApear : ""}`}
+              >
+                {categories.map((item) => (
+                  <Category
+                    key={item._id}
+                    category={item.category}
+                    _id={item._id}
+                    subCategory={item.subCategory}
+                  />
+                ))}
+              </div>
+            </nav>
           </div>
-          <nav className={css.navBar}>
-            <div
-              onClick={() => {
-                setRotateBox(!rotateBox)
-              }}
-              className={`${css.linseBox} ${rotateBox && css.linseBoxRotate}`}
-            >
-              <div className={`${css.lines}`}></div>
-              <div className={`${css.lines}`}></div>
-              <div className={`${css.lines}`}></div>
-            </div>
-            <div
-              className={`${css.navBlock} ${rotateBox && css.navBlockApear}`}
-            >
-              {categoriesGenerator(categories)}
-            </div>
-          </nav>
         </div>
       </div>
     </header>

@@ -1,56 +1,63 @@
 import React, { useContext } from "react"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
 import css from "../css/header.module.css"
-import useMediaQuery from "../Hooks/useMediaQuery"
-import { useNavigate } from "react-router-dom"
 
-export const Category = (props) => {
-  const { setCategory, setSubCategory } = useContext(StoreContext)
-  const isMobile = useMediaQuery("(max-width: 768px)")
-  const navigate = useNavigate()
-  const subCategoryGenerator = (arr) => {
-    const subArr = arr.map((item, index) => {
-      return (
-        <div
-          onClick={() => {
-            setSubCategory(item)
-            setCategory(props.category)
-            navigate("/")
-          }}
-          className={css.subCategory}
-          key={props._id + index}
-        >
-          {item}
-        </div>
+export const Category = ({ category, subCategory }) => {
+  const {
+    setCategory,
+    setSubCategory,
+    setTitle,
+    activeMobileCategory,
+    setActiveMobileCategory,
+  } = useContext(StoreContext)
+
+  const isMobile = window.innerWidth <= 768
+
+  const handleCategoryClick = (e) => {
+    if (isMobile) {
+      e.preventDefault()
+      // If clicking the same category, close it. If different category, open it
+      setActiveMobileCategory(
+        activeMobileCategory === category ? null : category
       )
-    })
-    return subArr
+    } else {
+      setCategory(category)
+      setSubCategory([])
+      setTitle("")
+    }
+  }
+
+  const handleSubCategoryClick = (subCat) => {
+    setCategory(category)
+    setSubCategory(subCat)
+    setTitle("")
+    setActiveMobileCategory(null) // Close after selection
   }
 
   return (
-    <div className={css.categoryBlock}>
-      <div
-        // onDoubleClick={() => {
-        //   if (isMobile) {
-        //     setCategory(props.category)
-        //     setSubCategory([])
-        //   }
-        // }}
-        onClick={() => {
-        //   if (!isMobile) {
-            setCategory(props.category)
-            setSubCategory([])
-            navigate("/")
-        //   }
-        }}
-        key={props._id}
-        className={css.navlink}
-      >
-        {props.category}
-      </div>
-      <div className={css.subCategories}>
-        {subCategoryGenerator(props.subCategory)}
-      </div>
+    <div
+      className={`${css.categoryItem} ${activeMobileCategory === category ? css.active : ""}`}
+      onClick={handleCategoryClick}
+    >
+      {category}
+      {subCategory && subCategory.length > 0 && (
+        <div
+          className={`${css.subCategories} ${activeMobileCategory === category && isMobile ? css.showMobile : ""}`}
+        >
+          {subCategory.map((subCat, index) => (
+            <div
+              key={index}
+              className={css.subCategoryItem}
+              onClick={(e) => {
+                e.stopPropagation()
+                handleSubCategoryClick(subCat)
+              }}
+            >
+              {subCat}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
