@@ -85,95 +85,131 @@ export const AddProducts = () => {
     ))
 
   return (
-    <div className="m-auto w-[50%] p-2">
-      <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
-        <label htmlFor="title">Title</label>
-        <input
-          className="rounded-lg border border-black p-1"
-          type="text"
-          placeholder="Enter title"
-          name="title"
-          value={formValue.title}
-          onChange={(e) =>
-            setFormValue({ ...formValue, [e.target.name]: e.target.value })
-          }
-        />
-        <label htmlFor="category">Category</label>
-        <select
-          className="rounded-lg border border-black p-1"
-          onChange={(e) => {
-            const selectedIndex = e.target.selectedIndex
-            setSubIndex(selectedIndex)
-            setFormValue({
-              ...formValue,
-              category: e.target.value,
-              subCategory: categories[selectedIndex]?.subCategory?.[0] || "", // Default to first subcategory
-            })
-          }}
-          name="category"
-          value={formValue.category}
-        >
-          {categoriesGenerator(categories)}
-        </select>
-        <label htmlFor="subCategory">Subcategory</label>
-        <select
-          className="rounded-lg border border-black p-1"
-          onChange={(e) =>
-            setFormValue({ ...formValue, subCategory: e.target.value })
-          }
-          name="subCategory"
-          value={formValue.subCategory}
-        >
-          {categories[subIndex]?.subCategory ? (
-            subCategoriesGenerator(categories[subIndex].subCategory)
-          ) : (
-            <option disabled>No subcategories available</option>
-          )}
-        </select>
-        <label htmlFor="price">Price</label>
-        <input
-          className="rounded-lg border border-black p-1"
-          type="number"
-          placeholder="Enter price"
-          name="price"
-          value={formValue.price}
-          onChange={(e) =>
-            setFormValue({ ...formValue, [e.target.name]: e.target.value })
-          }
-        />
-        <label htmlFor="description">Description:</label>
-        <textarea
-          className="rounded-lg border border-black p-1"
-          name="description"
-          id="description"
-          value={formValue.description}
-          onChange={(e) =>
-            setFormValue({ ...formValue, [e.target.name]: e.target.value })
-          }
-        ></textarea>
-        <label htmlFor="image">Images</label>
-        <input
-          className="rounded-lg border border-black p-1"
-          type="file"
-          multiple
-          onChange={handleFileChange}
-        />
-        <div className="preview">
-          {images.map((image, index) => (
-            <div key={index}>
-              <img
-                src={URL.createObjectURL(image)}
-                alt={`Preview ${index}`}
-                className="preview-image"
-              />
-            </div>
-          ))}
-        </div>
+    <div className="p-4">
+      <div className="rounded-lg bg-white p-6 shadow-md">
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+          <div className="flex flex-col gap-2">
+            <label className="font-medium text-gray-700">Title</label>
+            <input
+              className="rounded-lg border border-gray-300 p-2"
+              type="text"
+              placeholder="Enter title"
+              name="title"
+              value={formValue.title}
+              onChange={(e) =>
+                setFormValue({ ...formValue, [e.target.name]: e.target.value })
+              }
+            />
+          </div>
 
-        <button className="blackBtn" type="submit">
-          Submit
-        </button>
-      </form>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="flex flex-col gap-2">
+              <label className="font-medium text-gray-700">Category</label>
+              <select
+                className="rounded-lg border border-gray-300 p-2"
+                onChange={(e) => {
+                  const selectedIndex = e.target.selectedIndex
+                  setSubIndex(selectedIndex)
+                  setFormValue({
+                    ...formValue,
+                    category: e.target.value,
+                    subCategory:
+                      categories[selectedIndex]?.subCategory?.[0] || "",
+                  })
+                }}
+                name="category"
+                value={formValue.category}
+              >
+                {categoriesGenerator(categories)}
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="font-medium text-gray-700">Subcategory</label>
+              <select
+                className="rounded-lg border border-gray-300 p-2"
+                onChange={(e) =>
+                  setFormValue({ ...formValue, subCategory: e.target.value })
+                }
+                name="subCategory"
+                value={formValue.subCategory}
+              >
+                {categories[subIndex]?.subCategory ? (
+                  subCategoriesGenerator(categories[subIndex].subCategory)
+                ) : (
+                  <option disabled>No subcategories available</option>
+                )}
+              </select>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="font-medium text-gray-700">Price</label>
+            <input
+              className="rounded-lg border border-gray-300 p-2"
+              type="number"
+              placeholder="Enter price"
+              name="price"
+              value={formValue.price}
+              onChange={(e) =>
+                setFormValue({ ...formValue, [e.target.name]: e.target.value })
+              }
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="font-medium text-gray-700">Description</label>
+            <textarea
+              className="min-h-[100px] rounded-lg border border-gray-300 p-2"
+              name="description"
+              placeholder="Enter product description"
+              value={formValue.description}
+              onChange={(e) =>
+                setFormValue({ ...formValue, [e.target.name]: e.target.value })
+              }
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="font-medium text-gray-700">Images</label>
+            <input
+              className="rounded-lg border border-gray-300 p-2"
+              type="file"
+              multiple
+              onChange={handleFileChange}
+            />
+          </div>
+
+          {images.length > 0 && (
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+              {images.map((image, index) => (
+                <div key={index} className="group relative">
+                  <img
+                    src={URL.createObjectURL(image)}
+                    alt={`Preview ${index}`}
+                    className="h-32 w-full rounded-lg object-cover"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black bg-opacity-50 opacity-0 transition-opacity group-hover:opacity-100">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setImages(images.filter((_, i) => i !== index))
+                      }
+                      className="redBtn"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <button type="submit" className="blackBtn mt-4">
+            Add Product
+          </button>
+        </form>
+      </div>
     </div>
   )
 }

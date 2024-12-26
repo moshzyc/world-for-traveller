@@ -6,7 +6,7 @@ export const Card = ({ item }) => {
   const { addToCart } = useContext(StoreContext)
 
   return (
-    <div className={css.card}>
+    <div className={`${css.card} m-auto`}>
       <div className={css.imgBox}>
         <img
           src={Array.isArray(item.images) ? item.images[0] : item.images}

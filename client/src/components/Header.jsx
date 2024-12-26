@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState, useRef } from "react"
 import css from "../css/header.module.css"
 import cartIcon from "../assets/cart-shopping-svgrepo-com.svg"
 import userIcon from "../assets/user-svgrepo-com.svg"
-import logo from "../assets/Untitled.png"
+import logo from "../assets/world-for-traveller-high-resolution-logo.png"
 import searchIcon from "../assets/search-alt-2-svgrepo-com.svg"
 import UserForm from "./UserForm"
 import { UserContext } from "../contexts/UserContextpProvider"
@@ -22,7 +22,7 @@ export const Header = () => {
   const { user } = useContext(UserContext)
   const { setTitle, categories, setCategory, setSubCategory, cart } =
     useContext(StoreContext)
-  let title
+  let title = ""
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -72,6 +72,7 @@ export const Header = () => {
                 setTitle(title)
                 setCategory([])
                 setSubCategory([])
+                navigate("/store")
               }}
               className={css.sBtn}
             >

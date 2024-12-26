@@ -4,6 +4,7 @@ import { MainPage } from "../pages/MainPage"
 import { UserContextpProvider } from "../contexts/UserContextpProvider"
 import { LoginSignup } from "../pages/LoginSignup"
 import { Home } from "../pages/Home"
+import { Store } from "../pages/Store"
 import { StoreContaxtProvider } from "../contexts/StoreContaxtProvider"
 import CartPage from "../pages/CartPage"
 import { Product } from "../pages/Product"
@@ -19,6 +20,10 @@ export const AppRoutes = () => {
         {
           path: "",
           element: <Home />,
+        },
+        {
+          path: "store",
+          element: <Store />,
         },
         {
           path: "loginsingup",
