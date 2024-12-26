@@ -228,7 +228,7 @@ const userCtrl = {
       next(new AppError("Error saving order", 500, error))
     }
   },
-  async getOrders(req, res, next) {
+ async getOrders(req, res, next) {
     try {
       const user = await User.findById(req._id).populate({
         path: "orders.cart.productId", // אכלוס המידע מהקולקשן products

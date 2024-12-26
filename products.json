@@ -5,7 +5,7 @@
     "price": 120,
     "category": "Men's Clothing",
     "subCategory": "Jackets",
-    "image": ["https://example.com/mens-jacket1.jpg"],
+    "images": ["https://tazminli.com/cdn/shop/files/eeaa94cd043204767e6c016fa3801b15_687x.png?v=1697798374"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -17,7 +17,7 @@
     "price": 150,
     "category": "Men's Clothing",
     "subCategory": "Jackets",
-    "image": ["https://example.com/mens-jacket2.jpg"],
+    "images": ["https://example.com/mens-jacket2.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -29,7 +29,7 @@
     "price": 75,
     "category": "Men's Clothing",
     "subCategory": "Jackets",
-    "image": ["https://example.com/mens-jacket3.jpg"],
+    "images": ["https://example.com/mens-jacket3.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -41,7 +41,7 @@
     "price": 100,
     "category": "Men's Clothing",
     "subCategory": "Jackets",
-    "image": ["https://example.com/mens-jacket4.jpg"],
+    "images": ["https://example.com/mens-jacket4.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -53,7 +53,7 @@
     "price": 200,
     "category": "Men's Clothing",
     "subCategory": "Jackets",
-    "image": ["https://example.com/mens-jacket5.jpg"],
+    "images": ["https://example.com/mens-jacket5.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -65,7 +65,7 @@
     "price": 85,
     "category": "Men's Clothing",
     "subCategory": "Climbing Shoes",
-    "image": ["https://example.com/mens-shoes1.jpg"],
+    "images": ["https://example.com/mens-shoes1.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -77,7 +77,7 @@
     "price": 90,
     "category": "Men's Clothing",
     "subCategory": "Climbing Shoes",
-    "image": ["https://example.com/mens-shoes2.jpg"],
+    "images": ["https://example.com/mens-shoes2.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -89,7 +89,7 @@
     "price": 110,
     "category": "Men's Clothing",
     "subCategory": "Climbing Shoes",
-    "image": ["https://example.com/mens-shoes3.jpg"],
+    "images": ["https://example.com/mens-shoes3.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -101,7 +101,7 @@
     "price": 95,
     "category": "Men's Clothing",
     "subCategory": "Climbing Shoes",
-    "image": ["https://example.com/mens-shoes4.jpg"],
+    "images": ["https://example.com/mens-shoes4.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -113,7 +113,7 @@
     "price": 250,
     "category": "Men's Clothing",
     "subCategory": "Climbing Shoes",
-    "image": ["https://example.com/mens-shoes5.jpg"],
+    "images": ["https://example.com/mens-shoes5.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -125,7 +125,7 @@
     "price": 50,
     "category": "Men's Clothing",
     "subCategory": "Thermal Wear",
-    "image": ["https://example.com/mens-thermal1.jpg"],
+    "images": ["https://example.com/mens-thermal1.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -137,7 +137,7 @@
     "price": 60,
     "category": "Men's Clothing",
     "subCategory": "Thermal Wear",
-    "image": ["https://example.com/mens-thermal2.jpg"],
+    "images": ["https://example.com/mens-thermal2.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -149,7 +149,7 @@
     "price": 55,
     "category": "Men's Clothing",
     "subCategory": "Thermal Wear",
-    "image": ["https://example.com/mens-thermal3.jpg"],
+    "images": ["https://example.com/mens-thermal3.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -161,7 +161,7 @@
     "price": 75,
     "category": "Men's Clothing",
     "subCategory": "Thermal Wear",
-    "image": ["https://example.com/mens-thermal4.jpg"],
+    "images": ["https://example.com/mens-thermal4.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -173,7 +173,7 @@
     "price": 130,
     "category": "Men's Clothing",
     "subCategory": "Thermal Wear",
-    "image": ["https://example.com/mens-thermal5.jpg"],
+    "images": ["https://example.com/mens-thermal5.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -185,7 +185,7 @@
     "price": 30,
     "category": "Men's Clothing",
     "subCategory": "Accessories",
-    "image": ["https://example.com/mens-accessory1.jpg"],
+    "images": ["https://example.com/mens-accessory1.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -197,7 +197,7 @@
     "price": 40,
     "category": "Men's Clothing",
     "subCategory": "Accessories",
-    "image": ["https://example.com/mens-accessory2.jpg"],
+    "images": ["https://example.com/mens-accessory2.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -209,7 +209,7 @@
     "price": 80,
     "category": "Men's Clothing",
     "subCategory": "Accessories",
-    "image": ["https://example.com/mens-accessory3.jpg"],
+    "images": ["https://example.com/mens-accessory3.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -221,7 +221,7 @@
     "price": 35,
     "category": "Men's Clothing",
     "subCategory": "Accessories",
-    "image": ["https://example.com/mens-accessory4.jpg"],
+    "images": ["https://example.com/mens-accessory4.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -233,7 +233,7 @@
     "price": 60,
     "category": "Men's Clothing",
     "subCategory": "Accessories",
-    "image": ["https://example.com/mens-accessory5.jpg"],
+    "images": ["https://example.com/mens-accessory5.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -245,7 +245,7 @@
     "price": 110,
     "category": "Women's Clothing",
     "subCategory": "Jackets",
-    "image": ["https://example.com/womens-jacket1.jpg"],
+    "images": ["https://example.com/womens-jacket1.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -257,7 +257,7 @@
     "price": 140,
     "category": "Women's Clothing",
     "subCategory": "Jackets",
-    "image": ["https://example.com/womens-jacket2.jpg"],
+    "images": ["https://example.com/womens-jacket2.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -269,7 +269,7 @@
     "price": 70,
     "category": "Women's Clothing",
     "subCategory": "Jackets",
-    "image": ["https://example.com/womens-jacket3.jpg"],
+    "images": ["https://example.com/womens-jacket3.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -281,7 +281,7 @@
     "price": 95,
     "category": "Women's Clothing",
     "subCategory": "Jackets",
-    "image": ["https://example.com/womens-jacket4.jpg"],
+    "images": ["https://example.com/womens-jacket4.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -293,7 +293,7 @@
     "price": 180,
     "category": "Women's Clothing",
     "subCategory": "Jackets",
-    "image": ["https://example.com/womens-jacket5.jpg"],
+    "images": ["https://images.pexels.com/photos/29734216/pexels-photo-29734216/free-photo-of-cozy-winter-embrace-of-mother-and-child.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -305,7 +305,7 @@
     "price": 90,
     "category": "Women's Clothing",
     "subCategory": "Climbing Shoes",
-    "image": ["https://example.com/womens-shoes1.jpg"],
+    "images": ["https://example.com/womens-shoes1.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
