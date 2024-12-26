@@ -6,7 +6,7 @@ body{
   max-width: 1200px;
   margin: 0 auto;
   padding: 0.5%;
-  border: solid black 2px;
+  /* border: solid black 2px; */
 }
 .blackBtn {
   padding: 2px;

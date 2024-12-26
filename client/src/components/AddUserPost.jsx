@@ -1,26 +1,46 @@
-import React, { useState } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import axios from "axios"
-import { ADD_USER_POST_URL } from "../constants/endPoint"
+import { ADD_POST_URL, GET_CATEGORIES_URL } from "../constants/endPoint"
+import { UserContext } from "../contexts/UserContextpProvider"
 
-export const AddUserPost = () => {
+export const AddPost = () => {
+  const { user } = useContext(UserContext)
+
   const [formValue, setFormValue] = useState({
     title: "",
-    content: [""], // מערך של פסקאות
-    category: [],
-    images: [], // תמונות שהוזנו (כקבצים או URLs)
-    mainImage: null, // תמונה ראשית (קובץ או URL)
+    content: [""], // מערך פסקאות
+    category: "", // קטגוריה נבחרת
+    images: [], // תמונות נוספות
+    mainImage: null, // התמונה הראשית
   })
 
-  const [files, setFiles] = useState([]) // קבצים שמועלים
-  const [mainFile, setMainFile] = useState(null) // תמונה ראשית כקובץ
+  const [files, setFiles] = useState([]) // קבצים של תמונות נוספות
+  const [categories, setCategories] = useState([]) // רשימת קטגוריות
+
+  // שליפת הקטגוריות מהשרת
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(GET_CATEGORIES_URL)
+        setCategories(response.data) // הנח שהמידע הוא מערך של קטגוריות
+      } catch (error) {
+        console.error(
+          "Error fetching categories:",
+          error.response?.data || error
+        )
+      }
+    }
+
+    fetchCategories()
+  }, [])
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files)
     setFiles((prevFiles) => [...prevFiles, ...selectedFiles])
   }
 
-  const handleMainFileChange = (e) => {
-    setMainFile(e.target.files[0])
+  const handleMainImageChange = (e) => {
+    setFormValue({ ...formValue, mainImage: e.target.files[0] })
   }
 
   const handleContentChange = (index, value) => {
@@ -39,10 +59,7 @@ export const AddUserPost = () => {
   }
 
   const handleCategoryChange = (e) => {
-    const selectedCategories = e.target.value
-      .split(",")
-      .map((cat) => cat.trim())
-    setFormValue({ ...formValue, category: selectedCategories })
+    setFormValue({ ...formValue, category: e.target.value })
   }
 
   const handleSubmit = async (e) => {
@@ -50,42 +67,32 @@ export const AddUserPost = () => {
     try {
       const formData = new FormData()
       formData.append("title", formValue.title)
-      formValue.content.forEach((para) => {
-        formData.append("content[]", para)
-      })
-      formValue.category.forEach((cat) => {
-        formData.append("category[]", cat)
-      })
+      formValue.content.forEach((para) => formData.append("content[]", para))
+      formData.append("category", formValue.category)
+      formData.append("createdBy[username]", user.name)
+      formData.append("createdBy[userId]", user.id)
 
-      // הוספת תמונה ראשית
-      if (mainFile) {
-        formData.append("mainImage", mainFile)
-      } else if (formValue.mainImage) {
+      if (formValue.mainImage) {
         formData.append("mainImage", formValue.mainImage)
       }
 
-      // הוספת קבצים שנבחרו
       if (files.length > 0) {
         files.forEach((file) => formData.append("images", file))
       }
 
-      const response = await axios.post(ADD_USER_POST_URL, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      const response = await axios.post(ADD_POST_URL, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       })
 
       console.log("Post added successfully:", response.data)
-      // איפוס הטופס
       setFormValue({
         title: "",
         content: [""],
-        category: [],
+        category: "",
         images: [],
         mainImage: null,
       })
       setFiles([])
-      setMainFile(null)
     } catch (error) {
       console.error("Error adding post:", error.response?.data || error)
     }
@@ -130,20 +137,25 @@ export const AddUserPost = () => {
           Add Paragraph
         </button>
 
-        <label htmlFor="category">Categories (comma-separated)</label>
-        <input
+        <label htmlFor="category">Category</label>
+        <select
           className="rounded-lg border border-black p-1"
-          type="text"
-          placeholder="Enter categories"
-          value={formValue.category.join(", ")}
+          value={formValue.category}
           onChange={handleCategoryChange}
-        />
+        >
+          <option value="">Select a category</option>
+          {categories.map((cat) => (
+            <option key={cat._id} value={cat.category}>
+              {cat.category}
+            </option>
+          ))}
+        </select>
 
         <label htmlFor="mainImage">Main Image</label>
         <input
           className="rounded-lg border border-black p-1"
           type="file"
-          onChange={handleMainFileChange}
+          onChange={handleMainImageChange}
         />
 
         <label htmlFor="images">Additional Images</label>
@@ -163,13 +175,6 @@ export const AddUserPost = () => {
               className="preview-image"
             />
           ))}
-          {mainFile && (
-            <img
-              src={URL.createObjectURL(mainFile)}
-              alt="Main Preview"
-              className="main-preview-image"
-            />
-          )}
         </div>
 
         <button className="blackBtn" type="submit">

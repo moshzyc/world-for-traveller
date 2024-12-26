@@ -11,19 +11,17 @@ cloudinary.config({
 })
 
 const guidesCtrl = {
-  async addGuide(req, res) {
+  async addGuide(req, res, next) {
     try {
       const { title, content } = req.body
 
       if (!title || !content) {
-        return res
-          .status(400)
-          .json({ message: "Title and content are required" })
+        return next(new AppError("Title and content are required", 400))
       }
 
       const guideData = {
         title,
-        content: Array.isArray(content) ? content : [content], // מוודא שה-content הוא מערך
+        content: Array.isArray(content) ? content : [content],
         images: [],
       }
 
@@ -34,7 +32,7 @@ const guidesCtrl = {
           })
 
           guideData.images.push(uploadResult.secure_url)
-          fs.unlinkSync(file.path) // מוחק את הקובץ מהשרת
+          fs.unlinkSync(file.path)
         }
       }
 
@@ -46,16 +44,12 @@ const guidesCtrl = {
         guide: savedGuide,
       })
     } catch (error) {
-      console.error("Error saving guide:", error)
-      res.status(500).json({ message: "Failed to create guide", error })
+      next(new AppError("Failed to create guide", 500, error))
     }
   },
 
-  async updateGuide(req, res) {
+  async updateGuide(req, res, next) {
     try {
-      console.log("Body:", req.body)
-      console.log("Files:", req.files)
-
       const guideId = req.params.id
       const { title, content } = req.body
 
@@ -63,10 +57,9 @@ const guidesCtrl = {
         ...(title && { title }),
         ...(content && {
           content: Array.isArray(content) ? content : [content],
-        }), // מוודא שה-content הוא מערך
+        }),
       }
 
-      // אם יש קבצים להעלאה, עדכן את התמונות
       if (req.files && req.files.length > 0) {
         updateData.images = []
         for (const file of req.files) {
@@ -74,15 +67,14 @@ const guidesCtrl = {
             folder: "guides",
           })
           updateData.images.push(uploadResult.secure_url)
-          fs.unlinkSync(file.path) // מוחק את הקובץ מהשרת
+          fs.unlinkSync(file.path)
         }
       }
 
       if (!updateData.images) {
-        updateData.images = [] // אתחול של updateData.images אם הוא לא קיים
+        updateData.images = []
       }
-      
-      // הוספת תמונות שמגיעות כ-URL (אם יש)
+
       if (req.body.images && req.body.images.length > 0) {
         updateData.images = [...updateData.images, ...req.body.images]
       }
@@ -92,7 +84,7 @@ const guidesCtrl = {
       })
 
       if (!updatedGuide) {
-        return res.status(404).json({ message: "Guide not found" })
+        return next(new AppError("Guide not found", 404))
       }
 
       res.status(200).json({
@@ -100,29 +92,26 @@ const guidesCtrl = {
         guide: updatedGuide,
       })
     } catch (error) {
-      console.error("Error updating guide:", error)
-      res.status(500).json({ message: "Failed to update guide", error })
+      next(new AppError("Failed to update guide", 500, error))
     }
   },
 
-  async getGuides(req, res) {
+  async getGuides(req, res, next) {
     try {
       const guides = await Guide.find()
       res.status(200).json(guides)
     } catch (error) {
-      console.error("Error fetching guides:", error)
-      res.status(500).json({ message: "Failed to fetch guides", error })
+      next(new AppError("Failed to fetch guides", 500, error))
     }
   },
 
-  // Delete Guide
-  async deleteGuide(req, res) {
+  async deleteGuide(req, res, next) {
     try {
       const guideId = req.params.id
       const deletedGuide = await Guide.findByIdAndDelete(guideId)
 
       if (!deletedGuide) {
-        return res.status(404).json({ message: "Guide not found" })
+        return next(new AppError("Guide not found", 404))
       }
 
       res.status(200).json({
@@ -130,8 +119,7 @@ const guidesCtrl = {
         guide: deletedGuide,
       })
     } catch (error) {
-      console.error("Error deleting guide:", error)
-      res.status(500).json({ message: "Failed to delete guide", error })
+      next(new AppError("Failed to delete guide", 500, error))
     }
   },
 }

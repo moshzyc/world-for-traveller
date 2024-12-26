@@ -19,6 +19,7 @@ const uploadFilesMiddleware = upload.fields([
   { name: "images", maxCount: 10 }, // עבור מערך התמונות (עד 10, אפשר לשנות את המספר)
 ])
 router.get("/get", auth, userPostCtrl.getPosts)
+router.get("/categories", auth, userPostCtrl.getCategories)
 router.post("/add", auth, uploadFilesMiddleware, userPostCtrl.addPost)
 router.put("/update/:id", auth, uploadFilesMiddleware, userPostCtrl.updatePost)
 router.delete("/delete/:id", auth, uploadFilesMiddleware, userPostCtrl.deletePost)

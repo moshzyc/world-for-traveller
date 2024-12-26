@@ -1,6 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from "react"
 import axios from "axios"
-import { CART_URL, GET_CATEGORIES_URL, PRODUCTS_URL } from "../constants/endPoint"
+import {
+  CART_URL,
+  GET_CATEGORIES_URL,
+  PRODUCTS_URL,
+} from "../constants/endPoint"
 import { UserContext } from "../contexts/UserContextpProvider"
 export const StoreContext = createContext()
 
@@ -14,6 +18,7 @@ export const StoreContaxtProvider = ({ children }) => {
   const [subCategory, setSubCategory] = useState("")
   const [title, setTitle] = useState("")
   const [categories, setCategories] = useState([])
+  const [activeMobileCategory, setActiveMobileCategory] = useState(null)
 
   useEffect(() => {
     getProductsFilterd()
@@ -21,9 +26,9 @@ export const StoreContaxtProvider = ({ children }) => {
   // useEffect(() => {
   //   getProducts()
   // }, [])
-    useEffect(() => {
-      getCategories()
-    }, [])
+  useEffect(() => {
+    getCategories()
+  }, [])
 
   // const getProducts = async () => {
   //   try {
@@ -33,13 +38,13 @@ export const StoreContaxtProvider = ({ children }) => {
   //     console.log(err)
   //   }
   // }
-    const getCategories = async () => {
-      try {
-        const { data } = await axios.get(GET_CATEGORIES_URL)
-        setCategories(data)
-        // console.log(data)
-      } catch (error) {}
-    }
+  const getCategories = async () => {
+    try {
+      const { data } = await axios.get(GET_CATEGORIES_URL)
+      setCategories(data)
+      // console.log(data)
+    } catch (error) {}
+  }
   const getProductsFilterd = async () => {
     try {
       const { data } = await axios.get(
@@ -98,22 +103,21 @@ export const StoreContaxtProvider = ({ children }) => {
   //     console.log("Error updating cart:", error)
   //   }
   // }
-const updateCart = async (updatedCart) => {
-  try {
-    if (!Array.isArray(updatedCart)) {
-      console.error(
-        "updateCart failed: updatedCart is not an array",
-        updatedCart
-      )
-      return
+  const updateCart = async (updatedCart) => {
+    try {
+      if (!Array.isArray(updatedCart)) {
+        console.error(
+          "updateCart failed: updatedCart is not an array",
+          updatedCart
+        )
+        return
+      }
+      await axios.put(CART_URL, { cart: updatedCart })
+      console.log("Cart updated successfully")
+    } catch (error) {
+      console.error("Error updating cart:", error)
     }
-    await axios.put(CART_URL, { cart: updatedCart })
-    console.log("Cart updated successfully")
-  } catch (error) {
-    console.error("Error updating cart:", error)
   }
-}
-
 
   const addItem = (item) => {
     let exist = false
@@ -152,27 +156,26 @@ const updateCart = async (updatedCart) => {
     }
   }
 
-const deletItem = (number) => {
-  const updatedCart = cart.filter((item, index) => index + 1 !== number)
-  const removedItem = cart[number - 1]
+  const deletItem = (number) => {
+    const updatedCart = cart.filter((item, index) => index + 1 !== number)
+    const removedItem = cart[number - 1]
 
-  // עדכון cartSum לפני שליחת הבקשה לשרת
-  const updatedSum = roundToTwo(cartSum - removedItem.price)
-  setCartSum(updatedSum) // עדכון הסכום
+    // עדכון cartSum לפני שליחת הבקשה לשרת
+    const updatedSum = roundToTwo(cartSum - removedItem.price)
+    setCartSum(updatedSum) // עדכון הסכום
 
-  setCart(updatedCart) // עדכון העגלה ב-state
+    setCart(updatedCart) // עדכון העגלה ב-state
 
-  if (!user) {
-    if (updatedCart.length > 0) {
-      localStorage.setItem("cart", JSON.stringify(updatedCart))
+    if (!user) {
+      if (updatedCart.length > 0) {
+        localStorage.setItem("cart", JSON.stringify(updatedCart))
+      } else {
+        localStorage.clear()
+      }
     } else {
-      localStorage.clear()
+      updateCart(updatedCart) // שליחה לשרת
     }
-  } else {
-    updateCart(updatedCart) // שליחה לשרת
   }
-}
-
 
   const minusAmount = (number) => {
     const index = number - 1
@@ -231,7 +234,6 @@ const deletItem = (number) => {
     }
   }
 
-
   return (
     <StoreContext.Provider
       value={{
@@ -248,6 +250,8 @@ const deletItem = (number) => {
         cartSum,
         clearCart,
         categories,
+        activeMobileCategory,
+        setActiveMobileCategory,
       }}
     >
       {children}
