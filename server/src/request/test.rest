@@ -1,1 +1,1 @@
-GET  http://localhost:3000/guide
+GET  http://localhost:3000/users-posts
