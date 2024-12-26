@@ -10,12 +10,15 @@ import CartPage from "../pages/CartPage"
 import { Product } from "../pages/Product"
 import { Admin } from "../pages/Admin"
 import { UserProfile } from "../components/UserProfile"
+import { TripPlanner } from "../pages/TripPlanner"
+import { ErrorBoundary } from "../components/ErrorBoundary"
 
 export const AppRoutes = () => {
   const router = createBrowserRouter([
     {
       path: "/",
       element: <MainPage />,
+      errorElement: <ErrorBoundary />,
       children: [
         {
           path: "",
@@ -44,6 +47,11 @@ export const AppRoutes = () => {
         {
           path: "user",
           element: <UserProfile fullScreen />,
+        },
+        {
+          path: "trip-planner",
+          element: <TripPlanner />,
+          errorElement: <ErrorBoundary />,
         },
       ],
     },

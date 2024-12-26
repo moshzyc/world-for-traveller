@@ -7,7 +7,7 @@ import searchIcon from "../assets/search-alt-2-svgrepo-com.svg"
 import UserForm from "./UserForm"
 import { UserContext } from "../contexts/UserContextpProvider"
 import { UserProfile } from "./UserProfile"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation, useNavigate, Link } from "react-router-dom"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
 import { GET_CATEGORIES_URL } from "../constants/endPoint"
 import axios from "axios"
@@ -154,6 +154,12 @@ export const Header = () => {
           </div>
         </div>
       </div>
+      <Link
+        to="/trip-planner"
+        className="text-white transition-colors hover:text-[#e8f5e9]"
+      >
+        Trip Planner
+      </Link>
     </header>
   )
 }

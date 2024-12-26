@@ -59,6 +59,14 @@ export const Footer = () => {
                   Cart
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="/trip-planner"
+                  className="text-[#e8f5e9] transition-colors hover:text-white"
+                >
+                  Plan Your Trip
+                </Link>
+              </li>
             </ul>
           </div>
 

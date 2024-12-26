@@ -2,7 +2,6 @@ import React, { useContext } from "react"
 import { useNavigate } from "react-router-dom"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
 
-
 export const Home = () => {
   const navigate = useNavigate()
   const { categories, setCategory, setSubCategory } = useContext(StoreContext)
@@ -34,6 +33,27 @@ export const Home = () => {
             Explore Our Categories
           </h2>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {/* Trip Planner Card */}
+            <div
+              onClick={() => navigate("/trip-planner")}
+              className="group cursor-pointer"
+            >
+              <div className="transform overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:scale-105">
+                <div className="flex h-48 items-center justify-center bg-[#e8f5e9]">
+                  <span className="text-4xl text-[#2e7d32]">🗺️</span>
+                </div>
+                <div className="p-6">
+                  <h3 className="mb-2 text-xl font-semibold text-[#2e7d32]">
+                    Trip Planner
+                  </h3>
+                  <p className="text-gray-600">
+                    Plan your journey with interactive maps
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Store Categories */}
             {categories?.map((cat) => (
               <div
                 key={cat._id}
