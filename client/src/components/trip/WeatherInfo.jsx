@@ -23,7 +23,11 @@ export const WeatherInfo = ({
                 lat: location.lat,
                 lon: location.lng,
                 appid: WEATHER_API_KEY,
-                units: "metric", // for Celsius
+                units: "metric",
+              },
+              withCredentials: false,
+              headers: {
+                "Content-Type": "application/json",
               },
             })
           )
@@ -84,6 +88,9 @@ export const WeatherInfo = ({
               key={index}
               className="flex items-center space-x-3 rounded-lg bg-gray-50 p-4"
             >
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#2e7d32] text-sm text-white">
+                {index + 1}
+              </span>
               <img
                 src={`http://openweathermap.org/img/wn/${data.icon}@2x.png`}
                 alt={data.conditions}

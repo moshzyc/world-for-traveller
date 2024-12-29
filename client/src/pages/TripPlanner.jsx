@@ -3,11 +3,19 @@ import { GoogleMap } from "../components/trip/GoogleMap"
 import { WeatherInfo } from "../components/trip/WeatherInfo"
 import { TripDetails } from "../components/trip/TripDetails"
 import { ShareTrip } from "../components/trip/ShareTrip"
+import { NearbyAttractions } from "../components/trip/NearbyAttractions"
 
 export const TripPlanner = () => {
   const [selectedLocations, setSelectedLocations] = useState([])
   const [tripDates, setTripDates] = useState({ start: null, end: null })
   const [weatherData, setWeatherData] = useState([])
+
+  const removeLocation = (indexToRemove) => {
+    setSelectedLocations((prev) =>
+      prev.filter((_, index) => index !== indexToRemove)
+    )
+    setWeatherData((prev) => prev.filter((_, index) => index !== indexToRemove))
+  }
 
   return (
     <div className="mycontainer py-8">
@@ -21,6 +29,7 @@ export const TripPlanner = () => {
             <GoogleMap
               selectedLocations={selectedLocations}
               setSelectedLocations={setSelectedLocations}
+              removeLocation={removeLocation}
             />
           </div>
         </div>
@@ -31,6 +40,7 @@ export const TripPlanner = () => {
             selectedLocations={selectedLocations}
             tripDates={tripDates}
             setTripDates={setTripDates}
+            removeLocation={removeLocation}
           />
 
           <WeatherInfo
@@ -39,6 +49,8 @@ export const TripPlanner = () => {
             weatherData={weatherData}
             setWeatherData={setWeatherData}
           />
+
+          <NearbyAttractions locations={selectedLocations} />
 
           <ShareTrip
             locations={selectedLocations}

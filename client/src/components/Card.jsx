@@ -22,7 +22,7 @@ import {
 } from "react-icons/fa"
 
 export const Card = ({ item }) => {
-  const { addToCart } = useContext(StoreContext)
+  const { addItem } = useContext(StoreContext)
   const navigate = useNavigate()
   const [showShareMenu, setShowShareMenu] = useState(false)
   const [copySuccess, setCopySuccess] = useState(false)
@@ -40,6 +40,7 @@ export const Card = ({ item }) => {
       console.error("Failed to copy link:", err)
     }
   }
+  
 
   return (
     <div className={`${css.card} m-auto`}>
@@ -64,7 +65,7 @@ export const Card = ({ item }) => {
           <div className="flex items-center gap-2">
             <button
               data-add-to-cart
-              onClick={() => addToCart(item)}
+              onClick={() => addItem(item)}
               className={css.btn}
             >
               Add to Cart

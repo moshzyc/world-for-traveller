@@ -21,6 +21,7 @@ const GET_USER_POSTS_URL = USER_POSTS_URL + "get"
 const ADD_USER_POST_URL = USER_POSTS_URL + "add"
 const DELETE_USER_POST_URL = USER_POSTS_URL + "delete/"
 const EDIT_USER_POST_URL = USER_POSTS_URL + "update/"
+const PLACES_URL = BASE_URL + "places/nearby"
 
 export {
   SIGNUP_URL,
@@ -43,4 +44,5 @@ export {
   ADD_USER_POST_URL,
   DELETE_USER_POST_URL,
   EDIT_USER_POST_URL,
+  PLACES_URL,
 }

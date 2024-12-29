@@ -13,5 +13,8 @@ const GuideSchema = new mongoose.Schema({
   images: {
     type: [String],
   },
+  mainImage: {
+    type: String,
+  },
 })
 export const Guide = mongoose.model("guide", GuideSchema)

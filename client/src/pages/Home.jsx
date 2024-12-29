@@ -26,6 +26,35 @@ export const Home = () => {
         </div>
       </section>
 
+      {/* Trip Planner Section */}
+      <section className="py-16">
+        <div className="mycontainer">
+          <div
+            onClick={() => navigate("/trip-planner")}
+            className="group cursor-pointer"
+          >
+            <div className="transform overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:scale-105">
+              <div className="relative h-64 w-full">
+                <img
+                  src="https://images.pexels.com/photos/4905089/pexels-photo-4905089.jpeg"
+                  alt="Trip Planner"
+                  className="h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-30">
+                  <div className="flex h-full flex-col items-center justify-center text-white">
+                    <h2 className="mb-4 text-4xl font-bold">Trip Planner</h2>
+                    <p className="text-xl">
+                      Plan your journey with interactive maps and weather
+                      forecasts
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Categories Section */}
       <section className="py-16">
         <div className="mycontainer">
@@ -33,26 +62,6 @@ export const Home = () => {
             Explore Our Categories
           </h2>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {/* Trip Planner Card */}
-            <div
-              onClick={() => navigate("/trip-planner")}
-              className="group cursor-pointer"
-            >
-              <div className="transform overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:scale-105">
-                <div className="flex h-48 items-center justify-center bg-[#e8f5e9]">
-                  <span className="text-4xl text-[#2e7d32]">🗺️</span>
-                </div>
-                <div className="p-6">
-                  <h3 className="mb-2 text-xl font-semibold text-[#2e7d32]">
-                    Trip Planner
-                  </h3>
-                  <p className="text-gray-600">
-                    Plan your journey with interactive maps
-                  </p>
-                </div>
-              </div>
-            </div>
-
             {/* Store Categories */}
             {categories?.map((cat) => (
               <div
@@ -61,12 +70,15 @@ export const Home = () => {
                 className="group cursor-pointer"
               >
                 <div className="transform overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:scale-105">
-                  <div className="flex h-48 items-center justify-center bg-[#e8f5e9]">
-                    <span className="text-4xl text-[#2e7d32]">
-                      {cat.category.charAt(0).toUpperCase()}
-                    </span>
+                  <div className="relative flex h-48 items-center justify-center bg-[#e8f5e9]">
+                    <img
+                      src={cat.image}
+                      alt={cat.category}
+                      className="h-full w-full select-none object-cover"
+                      draggable="false"
+                    />
                   </div>
-                  <div className="p-6">
+                  <div className="bg-white p-6">
                     <h3 className="mb-2 text-xl font-semibold text-[#2e7d32]">
                       {cat.category}
                     </h3>

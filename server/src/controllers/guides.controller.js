@@ -23,14 +23,25 @@ const guidesCtrl = {
         title,
         content: Array.isArray(content) ? content : [content],
         images: [],
+        mainImage: "",
       }
 
       if (req.files && req.files.length > 0) {
-        for (const file of req.files) {
-          const uploadResult = await cloudinary.uploader.upload(file.path, {
-            folder: "guides",
-          })
+        const mainImageFile = req.files[0]
+        const mainImageResult = await cloudinary.uploader.upload(
+          mainImageFile.path,
+          {
+            folder: "guides/main",
+          }
+        )
+        guideData.mainImage = mainImageResult.secure_url
+        fs.unlinkSync(mainImageFile.path)
 
+        for (let i = 1; i < req.files.length; i++) {
+          const file = req.files[i]
+          const uploadResult = await cloudinary.uploader.upload(file.path, {
+            folder: "guides/content",
+          })
           guideData.images.push(uploadResult.secure_url)
           fs.unlinkSync(file.path)
         }
@@ -61,22 +72,45 @@ const guidesCtrl = {
       }
 
       if (req.files && req.files.length > 0) {
-        updateData.images = []
-        for (const file of req.files) {
-          const uploadResult = await cloudinary.uploader.upload(file.path, {
-            folder: "guides",
-          })
-          updateData.images.push(uploadResult.secure_url)
-          fs.unlinkSync(file.path)
+        if (req.body.updateMainImage === "true") {
+          const mainImageFile = req.files[0]
+          const mainImageResult = await cloudinary.uploader.upload(
+            mainImageFile.path,
+            {
+              folder: "guides/main",
+            }
+          )
+          updateData.mainImage = mainImageResult.secure_url
+          fs.unlinkSync(mainImageFile.path)
+
+          updateData.images = []
+          for (let i = 1; i < req.files.length; i++) {
+            const file = req.files[i]
+            const uploadResult = await cloudinary.uploader.upload(file.path, {
+              folder: "guides/content",
+            })
+            updateData.images.push(uploadResult.secure_url)
+            fs.unlinkSync(file.path)
+          }
+        } else {
+          updateData.images = []
+          for (const file of req.files) {
+            const uploadResult = await cloudinary.uploader.upload(file.path, {
+              folder: "guides/content",
+            })
+            updateData.images.push(uploadResult.secure_url)
+            fs.unlinkSync(file.path)
+          }
         }
       }
 
-      if (!updateData.images) {
-        updateData.images = []
+      if (req.body.images && req.body.images.length > 0) {
+        updateData.images = updateData.images || []
+        updateData.images = [...updateData.images, ...req.body.images]
       }
 
-      if (req.body.images && req.body.images.length > 0) {
-        updateData.images = [...updateData.images, ...req.body.images]
+      if (req.body.mainImage) {
+        updateData.mainImage = req.body.mainImage
       }
 
       const updatedGuide = await Guide.findByIdAndUpdate(guideId, updateData, {

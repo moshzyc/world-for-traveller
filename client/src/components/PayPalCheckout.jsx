@@ -1,25 +1,31 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useRef } from "react"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
 
 const PayPalCheckout = ({ handleSubmit }) => {
   const { cartSum } = useContext(StoreContext)
+  const paypalRef = useRef(null)
+  const scriptLoaded = useRef(false)
 
   useEffect(() => {
     const loadPayPalScript = async () => {
-      if (!window.paypal) {
-        const script = document.createElement("script")
+      // Return if script is already loaded or being loaded
+      if (
+        scriptLoaded.current ||
+        document.querySelector("script[data-pp-namespace]")
+      ) {
+        return
+      }
 
-        // כאן שמים רק את ה-Client ID בלי ה-URL המלא
-        script.src =
-          "https://www.paypal.com/sdk/js?client-id=AQ1kDWf-rb55Z9J6rHasEyNSWSbnomO7h9pSv-N5QJfF4MMvBvVTI_d2Qz3NKedYXHnGtsOa2IYJJWJy&currency=ILS&debug=true"
+      scriptLoaded.current = true
+      const script = document.createElement("script")
+      script.src = `https://www.paypal.com/sdk/js?client-id=${import.meta.env.VITE_PAYPAL_CLIENT_ID}&currency=ILS`
+      script.async = true
 
-
-        script.async = true
-        script.onload = () => {
-          // יצירת כפתור PayPal לאחר טעינת ה-SDK
+      script.onload = () => {
+        if (paypalRef.current) {
           window.paypal
             .Buttons({
-              createOrder: function (data, actions) {
+              createOrder: (data, actions) => {
                 return actions.order.create({
                   purchase_units: [
                     {
@@ -31,30 +37,48 @@ const PayPalCheckout = ({ handleSubmit }) => {
                   ],
                 })
               },
-              onApprove: (data, actions) => {
-                return actions.order.capture().then((details) => {
-                  alert(
-                    `Transaction completed by ${details.payer.name.given_name}`
-                  )
-                  console.log("Calling handleSubmit...")
-                  handleSubmit()
-                })
+              onApprove: async (data, actions) => {
+                try {
+                  const details = await actions.order.capture()
+                  console.log("Payment successful:", details)
+                  await handleSubmit()
+                } catch (error) {
+                  console.error("Payment error:", error)
+                  alert("Payment failed. Please try again.")
+                }
               },
-              onError: function (err) {
+              onError: (err) => {
                 console.error("PayPal Error:", err)
                 alert("There was an error processing the payment.")
               },
             })
-            .render("#paypal-button-container") // רינדור הכפתור
+            .render(paypalRef.current)
         }
-        document.body.appendChild(script)
       }
+
+      script.onerror = (err) => {
+        console.error("Failed to load PayPal script:", err)
+        scriptLoaded.current = false
+      }
+
+      document.body.appendChild(script)
     }
 
     loadPayPalScript()
+
+    // Cleanup function
+    return () => {
+      const paypalScript = document.querySelector(
+        'script[src*="paypal.com/sdk/js"]'
+      )
+      if (paypalScript) {
+        paypalScript.remove()
+      }
+      scriptLoaded.current = false
+    }
   }, [cartSum, handleSubmit])
 
-  return <div id="paypal-button-container"></div>
+  return <div ref={paypalRef} className="mt-4" />
 }
 
 export default PayPalCheckout
