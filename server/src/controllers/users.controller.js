@@ -19,6 +19,10 @@ const userCtrl = {
     const { email, password } = req.body
     try {
       const user = await User.findOne({ email })
+      console.log(email);
+      console.log(password);
+      
+      
       if (!user || !(await bcrypt.compare(password, user.password))) {
         return next(new AppError("Invalid credentials", 401))
       }
@@ -231,7 +235,7 @@ const userCtrl = {
       next(new AppError("Error saving order", 500, error))
     }
   },
-  async getOrders(req, res, next) {
+ async getOrders(req, res, next) {
     try {
       const user = await User.findById(req._id).populate({
         path: "orders.cart.productId", // אכלוס המידע מהקולקשן products

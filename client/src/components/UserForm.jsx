@@ -26,11 +26,11 @@ export default function UserForm({ isSignup, formChenge}) {
 
   const onSubmit = async (e) => {
     e.preventDefault()
+    console.log(formValues)
 
     try {
       if (isSignup) {
         await axios.post(SIGNUP_URL, formValues)
-        console.log(formValues)
         formChenge((p) => !p)
       } else {
         const { data } = await axios.post(LOGIN_URL, formValues)
