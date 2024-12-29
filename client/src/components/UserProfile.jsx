@@ -11,9 +11,11 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
   const [seeOrders, setSeeOrders] = useState(false)
   const [orders, setOrders] = useState([])
   const navigate = useNavigate()
+
   useEffect(() => {
     user && getOrders()
   }, [user])
+
   const getOrders = async () => {
     try {
       const { data } = await axios.get(`${USER_URL}get-orders`)
@@ -24,54 +26,81 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
   }
 
   const ordersGenerator = (arr) => {
-    const ordersArr = arr.map((item) => {
-      return <PrvOrder key={item.orderDate} {...item} />
-    })
-    return ordersArr
+    return arr.map((item) => <PrvOrder key={item.orderDate} {...item} />)
   }
 
   const onLogout = async () => {
     await axios.get(LOGOUT_URL)
   }
+
   return (
     <div className={`${fullScreen ? "mycontainer" : css.form}`}>
-      {user && <p>name: {user.name}</p>}
-      {user && <p>email: {user.email}</p>}
-      {role == "admin" && (
-        <p
-          onClick={() => {
-            navigate("/admin")
-            onNav()
-          }}
-          className="w-[50px] cursor-pointer font-bold text-blue-600 hover:underline active:text-blue-500"
-        >
-          {role}
-        </p>
-      )}
-      {fullScreen && (
-        <div onClick={() => setSeeOrders((p) => !p)}>
-          {seeOrders ? "-" : "+"}
-          {seeOrders
-            ? "(click to hide your orders)"
-            : "(click to see your orders)"}
+      <div className="rounded-lg bg-white p-6 shadow-md">
+        {/* User Info Section */}
+        <div className="mb-6">
+          <h2 className="mb-4 text-xl font-semibold text-[#2e7d32]">
+            Profile Information
+          </h2>
+          {user && (
+            <div className="space-y-2">
+              <p className="text-gray-700">
+                <span className="font-medium">Name:</span> {user.name}
+              </p>
+              <p className="text-gray-700">
+                <span className="font-medium">Email:</span> {user.email}
+              </p>
+            </div>
+          )}
+          {role === "admin" && (
+            <p
+              onClick={() => {
+                navigate("/admin")
+                onNav()
+              }}
+              className="mt-4 inline-block cursor-pointer font-medium text-[#2e7d32] transition-colors hover:text-[#1b5e20] hover:underline"
+            >
+              Admin Dashboard
+            </p>
+          )}
         </div>
-      )}
-      {fullScreen && (
-        <div className={`${seeOrders ? " " : "hidden"}`}>
-          {orders.length && ordersGenerator(orders)}
+
+        {/* Orders Section */}
+        {fullScreen && (
+          <div className="mb-6">
+            <div
+              onClick={() => setSeeOrders((p) => !p)}
+              className="mb-4 flex cursor-pointer items-center gap-2 text-gray-700 transition-colors hover:text-[#2e7d32]"
+            >
+              <span className="text-xl font-medium">
+                {seeOrders ? "−" : "+"}
+              </span>
+              <span className="font-medium">
+                {seeOrders ? "Hide Orders" : "View Orders"}
+              </span>
+            </div>
+            <div className={`${seeOrders ? "block" : "hidden"} space-y-4`}>
+              {orders.length > 0 ? (
+                ordersGenerator(orders)
+              ) : (
+                <p className="text-gray-600">No orders found.</p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Logout Button */}
+        <div className="text-center">
+          <button
+            className={`${css.logoutBtn} transition-colors hover:bg-red-700`}
+            onClick={() => {
+              onLogout()
+              setUser(null)
+              setIsSignup(false)
+            }}
+          >
+            Logout
+          </button>
         </div>
-      )}
-      <div className="text-center">
-        <button
-          className={`${css.logoutBtn}`}
-          onClick={() => {
-            onLogout()
-            setUser(null)
-            setIsSignup(false)
-          }}
-        >
-          logout
-        </button>
       </div>
     </div>
   )

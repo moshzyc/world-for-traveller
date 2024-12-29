@@ -1,57 +1,89 @@
 import React, { useState } from "react"
 import { AddProducts } from "../components/AddProducts"
 import { EditProduct } from "../components/EditProduct"
-import {AddGuide} from '../components/AddGuide'
 import { EditGuide } from "../components/EditGuid"
+import { AddGuide } from "../components/AddGuide"
 
 export const Admin = () => {
   const [addProducts, setAddProducts] = useState(false)
-  const [AddGuides, setAddGuid] = useState(false)
-  const [editProducts, seteditEditProducts] = useState(false)
-  const [editGuides, seteditEditGuidss] = useState(false)
+  const [AddGuides, setAddGuides] = useState(false)
+  const [editProducts, setEditProducts] = useState(false)
+  const [editGuides, setEditGuides] = useState(false)
 
   return (
-    <main>
+    <main className="min-h-screen bg-[#f0f7f0] py-8">
       <div className="mycontainer">
-        <h2 className="ml-[5%] text-2xl">Products Management</h2>
-        <div className="m-auto w-[90%] border border-black">
-          <div onClick={() => setAddProducts((p) => !p)}>
-            <h3 className="text-lg">{addProducts ? "-" : "+"}Add Products</h3>
+        {/* Products Management Section */}
+        <h2 className="mb-6 text-2xl font-bold text-[#2e7d32]">
+          Products Management
+        </h2>
+        <div className="mb-8 overflow-hidden rounded-lg bg-white shadow-md">
+          {/* Add Products Section */}
+          <div
+            onClick={() => setAddProducts((p) => !p)}
+            className="cursor-pointer border-b p-4 transition-colors hover:bg-[#e8f5e9]"
+          >
+            <h3 className="flex items-center text-lg font-semibold">
+              <span className="mr-2 text-xl">{addProducts ? "-" : "+"}</span>
+              Add Products
+            </h3>
           </div>
-          {addProducts && (
-            <div className={`border-b border-t border-black`}>
-              <AddProducts />
-            </div>
-          )}
-          <div onClick={() => seteditEditProducts((p) => !p)}>
-            <h3 className="text-lg">{editProducts ? "-" : "+"}Edit Products</h3>
+          {addProducts && <AddProducts />}
+
+          {/* Edit Products Section */}
+          <div
+            onClick={() => setEditProducts((p) => !p)}
+            className="cursor-pointer border-b p-4 transition-colors hover:bg-[#e8f5e9]"
+          >
+            <h3 className="flex items-center text-lg font-semibold">
+              <span className="mr-2 text-xl">{editProducts ? "-" : "+"}</span>
+              Edit Products
+            </h3>
           </div>
-          {editProducts && (
-            <div className={`border-b border-t border-black`}>
-              <EditProduct />
-            </div>
-          )}
+          {editProducts && <EditProduct />}
         </div>
-        <h2 className="ml-[5%] text-2xl">Guides Management</h2>
-        <div className="m-auto w-[90%] border border-black">
-          <div onClick={() => setAddGuid((p) => !p)}>
-            <h3 className="text-lg">{AddGuides ? "-" : "+"}Add Guide</h3>
+
+        {/* Guides Management Section */}
+        <h2 className="mb-6 text-2xl font-bold text-[#2e7d32]">
+          Guides Management
+        </h2>
+        <div className="overflow-hidden rounded-lg bg-white shadow-md">
+          {/* Add Guide Section */}
+          <div
+            onClick={() => setAddGuides((p) => !p)}
+            className="cursor-pointer border-b p-4 transition-colors hover:bg-[#e8f5e9]"
+          >
+            <h3 className="flex items-center text-lg font-semibold">
+              <span className="mr-2 text-xl">{AddGuides ? "-" : "+"}</span>
+              Add Guide
+            </h3>
           </div>
-          {AddGuides && (
-            <div className={`border-b border-t border-black`}>
-              <AddGuide />
-            </div>
-          )}
-          <div onClick={() => seteditEditGuidss((p) => !p)}>
-            <h3 className="text-lg">{editGuides ? "-" : "+"}Edit Guide</h3>
+          {AddGuides && <AddGuide />}
+
+          {/* Edit Guide Section */}
+          <div
+            onClick={() => setEditGuides((p) => !p)}
+            className="cursor-pointer border-b p-4 transition-colors hover:bg-[#e8f5e9]"
+          >
+            <h3 className="flex items-center text-lg font-semibold">
+              <span className="mr-2 text-xl">{editGuides ? "-" : "+"}</span>
+              Edit Guide
+            </h3>
           </div>
-          {editGuides && (
-            <div className={`border-b border-t border-black`}>
-              <EditGuide />
-            </div>
-          )}
+          {editGuides && <EditGuide />}
         </div>
       </div>
     </main>
   )
+}
+
+// Common styles for reuse in child components
+export const adminStyles = {
+  input:
+    "rounded-lg border border-gray-300 p-2 w-full focus:border-[#2e7d32] focus:ring-1 focus:ring-[#2e7d32] outline-none",
+  select:
+    "rounded-lg border border-gray-300 p-2 w-full focus:border-[#2e7d32] focus:ring-1 focus:ring-[#2e7d32] outline-none",
+  label: "font-medium text-gray-700 block mb-1",
+  formSection: "bg-white rounded-lg p-6",
+  sectionTitle: "text-xl font-semibold text-[#2e7d32] mb-4",
 }

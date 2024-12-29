@@ -4,21 +4,29 @@ import { MainPage } from "../pages/MainPage"
 import { UserContextpProvider } from "../contexts/UserContextpProvider"
 import { LoginSignup } from "../pages/LoginSignup"
 import { Home } from "../pages/Home"
+import { Store } from "../pages/Store"
 import { StoreContaxtProvider } from "../contexts/StoreContaxtProvider"
 import CartPage from "../pages/CartPage"
 import { Product } from "../pages/Product"
 import { Admin } from "../pages/Admin"
 import { UserProfile } from "../components/UserProfile"
+import { TripPlanner } from "../pages/TripPlanner"
+import { ErrorBoundary } from "../components/ErrorBoundary"
 
 export const AppRoutes = () => {
   const router = createBrowserRouter([
     {
       path: "/",
       element: <MainPage />,
+      errorElement: <ErrorBoundary />,
       children: [
         {
           path: "",
           element: <Home />,
+        },
+        {
+          path: "store",
+          element: <Store />,
         },
         {
           path: "loginsingup",
@@ -39,6 +47,11 @@ export const AppRoutes = () => {
         {
           path: "user",
           element: <UserProfile fullScreen />,
+        },
+        {
+          path: "trip-planner",
+          element: <TripPlanner />,
+          errorElement: <ErrorBoundary />,
         },
       ],
     },

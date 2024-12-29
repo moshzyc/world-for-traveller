@@ -8,39 +8,39 @@ import { useNavigate } from "react-router-dom"
 import css from "../css/Overlay.module.css"
 import PayPalCheckout from "./PayPalCheckout"
 
-
 export const Order = ({ exit }) => {
   const { user } = useContext(UserContext)
   const { cart, clearCart } = useContext(StoreContext)
   const [address, setAddress] = useState("")
   const navigate = useNavigate()
 
-  const handleSubmit = async (e) => {
-    //   e.preventDefault()
-      
-      console.log("handleSubmit work!!!");
+  const handleSubmit = async () => {
+    if (!address.trim()) {
+      alert("Please enter a delivery address")
+      return
+    }
+
     const orderData = {
       userId: user._id,
       cart: cart.map((item) => ({
         productId: item.productId,
         quantity: item.quantity,
+        price: item.price,
+        title: item.title,
       })),
-      totalAmount: cart.reduce(
-        (total, item) => total + item.price * item.quantity,
-        0
-      ),
-      address: address,
+      totalAmount: cart.reduce((total, item) => total + item.price, 0),
+      address: address.trim(),
     }
 
     try {
+      console.log("Sending order data:", orderData) // Debug log
       const response = await axios.post(ORDER_URL, orderData)
-      //   alert("Order placed successfully!")
       clearCart()
       navigate("/")
-      
     } catch (error) {
       console.error("Error placing order", error)
-      alert("Failed to order.")
+      console.error("Server response:", error.response?.data) // Debug log
+      alert("Failed to order. Please try again.")
     }
   }
 
@@ -81,6 +81,7 @@ export const Order = ({ exit }) => {
               onChange={(e) => setAddress(e.target.value)}
               placeholder="Please enter address"
               className="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             />
           </div>
 

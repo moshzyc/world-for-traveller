@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useState, useRef } from "react"
 import css from "../css/header.module.css"
 import cartIcon from "../assets/cart-shopping-svgrepo-com.svg"
 import userIcon from "../assets/user-svgrepo-com.svg"
-import logo from "../assets/Untitled.png"
+import logo from "../assets/world-for-traveller-high-resolution-logo.png"
 import searchIcon from "../assets/search-alt-2-svgrepo-com.svg"
 import UserForm from "./UserForm"
 import { UserContext } from "../contexts/UserContextpProvider"
 import { UserProfile } from "./UserProfile"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation, useNavigate, Link } from "react-router-dom"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
 import { GET_CATEGORIES_URL } from "../constants/endPoint"
 import axios from "axios"
@@ -22,7 +22,7 @@ export const Header = () => {
   const { user } = useContext(UserContext)
   const { setTitle, categories, setCategory, setSubCategory, cart } =
     useContext(StoreContext)
-  let title
+  let title = ""
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -72,6 +72,7 @@ export const Header = () => {
                 setTitle(title)
                 setCategory([])
                 setSubCategory([])
+                navigate("/store")
               }}
               className={css.sBtn}
             >
@@ -153,6 +154,12 @@ export const Header = () => {
           </div>
         </div>
       </div>
+      <Link
+        to="/trip-planner"
+        className="text-white transition-colors hover:text-[#e8f5e9]"
+      >
+        Trip Planner
+      </Link>
     </header>
   )
 }

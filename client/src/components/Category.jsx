@@ -1,8 +1,10 @@
 import React, { useContext } from "react"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
 import css from "../css/header.module.css"
+import { useNavigate } from "react-router-dom"
 
 export const Category = ({ category, subCategory }) => {
+  const navigate = useNavigate()
   const {
     setCategory,
     setSubCategory,
@@ -24,6 +26,7 @@ export const Category = ({ category, subCategory }) => {
       setCategory(category)
       setSubCategory([])
       setTitle("")
+      navigate(`/store`)
     }
   }
 
@@ -32,6 +35,7 @@ export const Category = ({ category, subCategory }) => {
     setSubCategory(subCat)
     setTitle("")
     setActiveMobileCategory(null) // Close after selection
+    navigate(`/store`)
   }
 
   return (

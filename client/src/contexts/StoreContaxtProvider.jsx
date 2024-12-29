@@ -121,14 +121,16 @@ export const StoreContaxtProvider = ({ children }) => {
 
   const addItem = (item) => {
     let exist = false
+    const pricePerUnit = roundToTwo(item.price)
 
     const updatedCart = cart.map((element) => {
-      if (element.productId === item.productId) {
+      if (element.productId === item._id) {
         exist = true
+        const newQuantity = element.quantity + 1
         return {
           ...element,
-          price: roundToTwo(element.price + item.price),
-          quantity: element.quantity + item.quantity,
+          price: roundToTwo(pricePerUnit * newQuantity),
+          quantity: newQuantity,
         }
       }
       return element
@@ -136,11 +138,11 @@ export const StoreContaxtProvider = ({ children }) => {
 
     if (!exist) {
       updatedCart.push({
-        productId: item.productId,
+        productId: item._id,
         title: item.title,
         category: item.category,
-        price: roundToTwo(item.price),
-        quantity: item.quantity || 1,
+        price: pricePerUnit,
+        quantity: 1,
       })
     }
 
@@ -246,12 +248,14 @@ export const StoreContaxtProvider = ({ children }) => {
         deletItem,
         addAnother,
         minusAmount,
-        deletItem,
         cartSum,
         clearCart,
         categories,
         activeMobileCategory,
         setActiveMobileCategory,
+        subCategory,
+        category,
+        title,
       }}
     >
       {children}

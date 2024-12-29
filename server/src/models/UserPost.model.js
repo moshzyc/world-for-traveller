@@ -18,7 +18,6 @@ const UserPostSchema = new mongoose.Schema({
   },
   mainImage: {
     type: String,
-    required: true,
   },
 })
 

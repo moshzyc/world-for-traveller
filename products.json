@@ -118,7 +118,257 @@
       "rate": 0,
       "count": 0
     }
-  }
+  },
+
+  //  Men's Clothing Climbing Shoes
+  [
+    {
+      "title": "Men's Advanced Climbing Shoe",
+      "description": "High-performance climbing shoes designed for precision and durability on challenging routes. Features an ergonomic fit and a sticky rubber sole for superior grip.",
+      "price": 85,
+      "category": "Men's Clothing",
+      "subCategory": "Climbing Shoes",
+      "images": ["https://th.bing.com/th/id/OIP.GOxH0j8tUDOa9_0smxkoQQHaFh?rs=1&pid=ImgDetMain"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Men's Lightweight Climbing Shoes",
+      "description": "Comfortable and lightweight climbing shoes perfect for long routes and multi-pitch climbs. Made from breathable materials with a snug fit.",
+      "price": 95,
+      "category": "Men's Clothing",
+      "subCategory": "Climbing Shoes",
+      "images": ["https://th.bing.com/th/id/OIP.Yt-Tf3cRVIG3-9qkanTT4AHaEU?rs=1&pid=ImgDetMain"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Men's Versatile Climbing Shoes",
+      "description": "Versatile climbing shoes suitable for both indoor gyms and outdoor adventures. Equipped with a durable sole and flexible design for improved mobility.",
+      "price": 100,
+      "category": "Men's Clothing",
+      "subCategory": "Climbing Shoes",
+      "images": ["https://th.bing.com/th/id/OIP.6b9d56iGlYl2cC5aGx7stwHaHa?rs=1&pid=ImgDetMain"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Men's All-Terrain Climbing Shoes",
+      "description": "All-terrain climbing shoes built to handle tough rock faces and technical climbs. Features reinforced stitching and excellent edge control.",
+      "price": 110,
+      "category": "Men's Clothing",
+      "subCategory": "Climbing Shoes",
+      "images": ["https://i.pinimg.com/originals/bc/e2/1a/bce21a9b4f02b8e9b3e6c62dc5bea05e.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Men's Precision Climbing Shoes",
+      "description": "Precision-engineered climbing shoes designed for expert climbers. Delivers unmatched grip, support, and control on demanding climbs.",
+      "price": 120,
+      "category": "Men's Clothing",
+      "subCategory": "Climbing Shoes",
+      "images": ["https://th.bing.com/th/id/OIP.vMJ-x3so_RZyJRboL3BtSAHaE8?rs=1&pid=ImgDetMain"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Men's Gym Climbing Shoes",
+      "description": "Ideal climbing shoes for indoor gym sessions, offering comfort and durability. Easy to slip on and off with secure closures for a custom fit.",
+      "price": 70,
+      "category": "Men's Clothing",
+      "subCategory": "Climbing Shoes",
+      "images": ["https://www.bfgcdn.com/1500_1500_90/301-0736-0111/mad-rock-rover-hv-climbing-shoes.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Men's Outdoor Climbing Shoes",
+      "description": "Outdoor climbing shoes optimized for rugged terrains and boulder challenges. Provides excellent grip and a reinforced toe for added protection.",
+      "price": 105,
+      "category": "Men's Clothing",
+      "subCategory": "Climbing Shoes",
+      "images": ["https://th.bing.com/th/id/OIP.8CcJPqO30xw795Q02TU3RAHaJ3?rs=1&pid=ImgDetMain"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Men's Technical Climbing Shoes",
+      "description": "High-precision technical climbing shoes for steep walls and cracks. Built with advanced materials to maximize performance and longevity.",
+      "price": 130,
+      "category": "Men's Clothing",
+      "subCategory": "Climbing Shoes",
+      "images": ["https://th.bing.com/th/id/R.f9a131ad47a99b3cd3181d9510e83447?rik=I0a3tf8NmDR5DQ&pid=ImgRaw&r=0"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Men's Beginner Climbing Shoes",
+      "description": "Beginner-friendly climbing shoes that offer comfort and support. Perfect for those just starting out with climbing or bouldering activities.",
+      "price": 60,
+      "category": "Men's Clothing",
+      "subCategory": "Climbing Shoes",
+      "images": ["https://th.bing.com/th/id/OIP.S0zW7y-anQcfgkNmaJVtkAHaF-?rs=1&pid=ImgDetMain"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Men's Premium Climbing Shoes",
+      "description": "Premium climbing shoes designed for advanced climbers seeking top-notch performance. Features a breathable upper and an aggressive sole for precision.",
+      "price": 150,
+      "category": "Men's Clothing",
+      "subCategory": "Climbing Shoes",
+      "images": ["https://i.pinimg.com/originals/b6/83/27/b6832778acc39aac1037fd619414848e.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    }
+  ],
+
+// Men's Clothing Thermal Wear
+  [
+    {
+      "title": "Men's Thermal Base Layer Top",
+      "description": "A high-performance thermal base layer top designed to keep you warm in cold conditions. Made from moisture-wicking and breathable fabric for ultimate comfort.",
+      "price": 40,
+      "category": "Men's Clothing",
+      "subCategory": "Thermal Wear",
+      "images": ["https://i.pinimg.com/originals/52/4b/97/524b979ed46633d8f9390def1e98e394.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Men's Thermal Leggings",
+      "description": "Comfortable thermal leggings perfect for layering under outdoor gear. Designed with a soft, stretchable fabric to ensure a snug fit and freedom of movement.",
+      "price": 35,
+      "category": "Men's Clothing",
+      "subCategory": "Thermal Wear",
+      "images": ["https://img.kwcdn.com/thumbnail/s/ae2c4091f6a390194fa218b7d6dd53e9_233e9dfa6d87.jpg?imageView2/2/w/800/q/70/format/webp"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Men's Heavy-Duty Thermal Shirt",
+      "description": "Heavy-duty thermal shirt that provides excellent insulation for extreme weather conditions. Crafted with reinforced seams and anti-odor technology.",
+      "price": 50,
+      "category": "Men's Clothing",
+      "subCategory": "Thermal Wear",
+      "images": ["https://img.kwcdn.com/product/fancy/86bdde56-5d1f-48de-9773-6a17530c0574.jpg?imageView2/2/w/800/q/70/format/webp"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Men's Lightweight Thermal Set",
+      "description": "A lightweight thermal set that includes both top and bottom layers. Perfect for cold-weather activities, offering breathable and quick-drying properties.",
+      "price": 70,
+      "category": "Men's Clothing",
+      "subCategory": "Thermal Wear",
+      "images": ["https://img.kwcdn.com/thumbnail/s/ed875bf4b9f6626d2167e088cb42ef2f_36605a332923.jpg?imageView2/2/w/800/q/70/format/webp"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Men's Thermal Long Sleeve Shirt",
+      "description": "Long sleeve thermal shirt designed for outdoor enthusiasts. Provides warmth without adding bulk, with flatlock seams for extra comfort during movement.",
+      "price": 45,
+      "category": "Men's Clothing",
+      "subCategory": "Thermal Wear",
+      "images": ["https://img.kwcdn.com/thumbnail/s/aac10d2602ae29a77f1ea9a0bab620a3_f678f77e7559.jpg?imageView2/2/w/800/q/70/format/webp"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Men's Merino Wool Thermal Pants",
+      "description": "Premium thermal pants made from 100% merino wool, ensuring maximum warmth and moisture management. Ideal for hiking, skiing, and other winter sports.",
+      "price": 80,
+      "category": "Men's Clothing",
+      "subCategory": "Thermal Wear",
+      "images": ["https://img.kwcdn.com/thumbnail/s/a8fcc0e99f49fdb19fa0702e74feab9d_2530c57767a9.jpg?imageView2/2/w/800/q/70/format/webp"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Men's Insulated Thermal Hoodie",
+      "description": "Insulated thermal hoodie with a soft inner lining for added comfort. Features an adjustable hood and zippered pockets for practicality and style.",
+      "price": 65,
+      "category": "Men's Clothing",
+      "subCategory": "Thermal Wear",
+      "images": ["https://img.kwcdn.com/thumbnail/s/a0ef84169a370348bbf0361863fcd2bf_dfd0be03f341.jpg?imageView2/2/w/800/q/70/format/webp"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Men's Ultra-Warm Thermal Jacket",
+      "description": "Ultra-warm thermal jacket designed for sub-zero temperatures. Made with a wind-resistant outer layer and a soft thermal interior for unbeatable protection.",
+      "price": 90,
+      "category": "Men's Clothing",
+      "subCategory": "Thermal Wear",
+      "images": ["https://img.kwcdn.com/thumbnail/s/a329a04191e4406c742f6ae02fd462d0_11f466e5a3f1.jpg?imageView2/2/w/800/q/70/format/webp"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Men's Thermal Underwear Set",
+      "description": "Two-piece thermal underwear set offering warmth and flexibility. Crafted from lightweight and stretchy materials for enhanced mobility during outdoor activities.",
+      "price": 55,
+      "category": "Men's Clothing",
+      "subCategory": "Thermal Wear",
+      "images": ["https://img.kwcdn.com/thumbnail/s/0674c91e6a9e2f3f4ae52c6a1e5ff11e_994de5211c7b.jpg?imageView2/2/w/800/q/70/format/webp"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Men's Expedition Thermal Suit",
+      "description": "Full-body thermal suit designed for extreme cold conditions. Provides maximum insulation with breathable panels to prevent overheating during high-energy activities.",
+      "price": 120,
+      "category": "Men's Clothing",
+      "subCategory": "Thermal Wear",
+      "images": ["https://m.media-amazon.com/images/I/61JDdovGD1L._AC_UL1500_.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    }
+  ]
+  
+  
 ]
 
 
