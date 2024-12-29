@@ -85,17 +85,27 @@ const productsCtrl = {
   async updateProduct(req, res, next) {
     const id = req.params.id
     try {
-      const productData = req.body
       const updateData = {
-        ...(productData.title && { title: productData.title }),
-        ...(productData.description && {
-          description: productData.description,
-        }),
-        ...(productData.price && { price: productData.price }),
+        ...(req.body.title && { title: req.body.title }),
+        ...(req.body.description && { description: req.body.description }),
+        ...(req.body.price && { price: parseFloat(req.body.price) }),
       }
 
+      // Initialize images array
+      updateData.images = []
+
+      // Handle existing images if any
+      const existingImages = req.body.existingImages
+      if (existingImages) {
+        if (Array.isArray(existingImages)) {
+          updateData.images = [...existingImages]
+        } else if (typeof existingImages === "string") {
+          updateData.images = [existingImages]
+        }
+      }
+
+      // Handle file uploads if any
       if (req.files && req.files.length > 0) {
-        updateData.images = []
         for (const file of req.files) {
           const uploadResult = await cloudinary.uploader.upload(file.path, {
             folder: "products",
@@ -105,13 +115,15 @@ const productsCtrl = {
         }
       }
 
-      if (!updateData.images) {
-        updateData.images = []
+      // If no images were provided (neither existing nor new), keep the current images
+      if (updateData.images.length === 0) {
+        const currentProduct = await Product.findById(id)
+        if (currentProduct) {
+          updateData.images = currentProduct.images
+        }
       }
 
-      if (req.body.images && req.body.images.length > 0) {
-        updateData.images = [...updateData.images, ...req.body.images]
-      }
+      console.log("Update data:", updateData)
 
       const updatedProduct = await Product.findByIdAndUpdate(id, updateData, {
         new: true,
