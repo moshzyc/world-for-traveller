@@ -28,13 +28,25 @@ export const NearbyAttractions = ({ locations }) => {
             },
           })
 
+          if (!data) {
+            throw new Error("No data received from server");
+          }
+
           console.log("Response for", location.name, ":", data)
 
           if (Array.isArray(data)) {
             newAttractions[location.name] = data.slice(0, 3)
+          } else if (data.error) {
+            console.error(
+              "Server error for",
+              location.name,
+              ":",
+              data.message || "Unknown error"
+            )
+            newAttractions[location.name] = []
           } else {
             console.error(
-              "Received non-array data for",
+              "Unexpected data format for",
               location.name,
               ":",
               data
@@ -46,7 +58,7 @@ export const NearbyAttractions = ({ locations }) => {
             "Error fetching attractions for",
             location.name,
             ":",
-            error
+            error.response?.data || error.message
           )
           newAttractions[location.name] = []
         }

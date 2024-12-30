@@ -4,25 +4,43 @@ import AppError from "../utils/appError.js"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import { clearCookie } from "../utils/clearCookie.js"
+import axios from "axios"
 
 const userCtrl = {
   async signup(req, res, next) {
     try {
       const hashedPassword = await bcrypt.hash(req.body.password, 10)
-      const user = await User.create({ ...req.body, password: hashedPassword })
-      res.status(201).json({ ...user._doc, password: "*****" })
+      const user = await User.create({
+        ...req.body,
+        password: hashedPassword,
+        isVerified: false,
+      })
+
+      // Send verification email
+      try {
+        await axios.post("http://localhost:3000/email/send-verification", {
+          email: user.email,
+          name: user.name,
+        })
+      } catch (emailError) {
+        console.error("Error sending verification email:", emailError)
+      }
+
+      res.status(201).json({
+        message: "Please check your email to verify your account",
+        user: { ...user._doc, password: "*****" },
+      })
     } catch (error) {
-      next(new AppError("user alrady exists", 400, error))
+      next(new AppError("User already exists", 400, error))
     }
   },
   async login(req, res, next) {
     const { email, password } = req.body
     try {
       const user = await User.findOne({ email })
-      console.log(email);
-      console.log(password);
-      
-      
+      console.log(email)
+      console.log(password)
+
       if (!user || !(await bcrypt.compare(password, user.password))) {
         return next(new AppError("Invalid credentials", 401))
       }
@@ -154,7 +172,7 @@ const userCtrl = {
         return next(new AppError("User not found", 404))
       }
 
-      // סינון הנתונים ושמירה ב��ורמט אחיד
+      // סינון הנתונים ושמירה בורמט אחיד
       const formattedCart = cart.map((item) => ({
         productId: item.productId || item._id, // אחידות לשדה productId
         title: item.title,
@@ -235,7 +253,7 @@ const userCtrl = {
       next(new AppError("Error saving order", 500, error))
     }
   },
- async getOrders(req, res, next) {
+  async getOrders(req, res, next) {
     try {
       const user = await User.findById(req._id).populate({
         path: "orders.cart.productId", // אכלוס המידע מהקולקשן products
@@ -264,6 +282,28 @@ const userCtrl = {
       res.status(200).json(formattedOrders)
     } catch (error) {
       next(new AppError("Error fetching orders", 500, error))
+    }
+  },
+  async verifyEmail(req, res, next) {
+    try {
+      const { token } = req.params
+      const decoded = jwt.verify(token, secretKey)
+
+      const user = await User.findOneAndUpdate(
+        { email: decoded.email },
+        { isVerified: true },
+        { new: true }
+      )
+
+      if (!user) {
+        return next(new AppError("Invalid verification link", 400))
+      }
+
+      res.status(200).json({
+        message: "Email verified successfully",
+      })
+    } catch (error) {
+      next(new AppError("Invalid or expired verification link", 400, error))
     }
   },
 }

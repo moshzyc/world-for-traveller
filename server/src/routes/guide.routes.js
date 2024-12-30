@@ -13,10 +13,13 @@ const storage = multer.diskStorage({
   },
 })
 const upload = multer({ storage })
-
+const uploadFilesMiddleware = upload.fields([
+  { name: "mainImage", maxCount: 1 }, // עבור התמונה הראשית (אחת בלבד)
+  { name: "images", maxCount: 10 }, // עבור מערך התמונות (עד 10, אפשר לשנות את המספר)
+])
 router.get("/get", autAdmin,guidesCtrl.getGuides)
-router.post("/add", autAdmin,upload.array("images"), guidesCtrl.addGuide)
-router.put("/update/:id", autAdmin,upload.array("images"), guidesCtrl.updateGuide)
+router.post("/add", uploadFilesMiddleware, guidesCtrl.addGuide)
+router.put("/update/:id", uploadFilesMiddleware, guidesCtrl.updateGuide)
 router.delete("/delete/:id", autAdmin, guidesCtrl.deleteGuide)
 
 export default router

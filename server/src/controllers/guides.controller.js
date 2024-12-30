@@ -13,21 +13,42 @@ cloudinary.config({
 const guidesCtrl = {
   async addGuide(req, res, next) {
     try {
-      const { title, content } = req.body
+      console.log("Raw content received:", req.body.content)
 
-      if (!title || !content) {
-        return next(new AppError("Title and content are required", 400))
+      const { title } = req.body
+      let content = req.body.content
+      let imageUrls = req.body.imageUrls || []
+
+      // Parse JSON strings if needed
+      try {
+        // Check if content is already an array
+        content = typeof content === "string" ? JSON.parse(content) : content
+
+        // If content is still a string after parsing (single item), wrap it in array
+        if (!Array.isArray(content)) {
+          content = [content]
+        }
+
+        imageUrls =
+          typeof imageUrls === "string" ? JSON.parse(imageUrls) : imageUrls
+      } catch (e) {
+        console.error("Error parsing JSON:", e)
+        // If parsing fails, ensure content is an array
+        content = Array.isArray(content) ? content : [content]
       }
+
+      console.log("Processed content:", content)
 
       const guideData = {
         title,
-        content: Array.isArray(content) ? content : [content],
+        content, // Now properly parsed
         images: [],
         mainImage: "",
       }
 
-      if (req.files && req.files.length > 0) {
-        const mainImageFile = req.files[0]
+      // Handle main image from file upload
+      if (req.files && req.files.mainImage && req.files.mainImage[0]) {
+        const mainImageFile = req.files.mainImage[0]
         const mainImageResult = await cloudinary.uploader.upload(
           mainImageFile.path,
           {
@@ -36,9 +57,11 @@ const guidesCtrl = {
         )
         guideData.mainImage = mainImageResult.secure_url
         fs.unlinkSync(mainImageFile.path)
+      }
 
-        for (let i = 1; i < req.files.length; i++) {
-          const file = req.files[i]
+      // Handle additional images from file upload
+      if (req.files && req.files.images) {
+        for (const file of req.files.images) {
           const uploadResult = await cloudinary.uploader.upload(file.path, {
             folder: "guides/content",
           })
@@ -46,6 +69,19 @@ const guidesCtrl = {
           fs.unlinkSync(file.path)
         }
       }
+
+      // Handle image URLs
+      if (imageUrls && imageUrls.length > 0) {
+        // If no main image from file upload, use first URL as main image
+        if (!guideData.mainImage) {
+          guideData.mainImage = imageUrls[0]
+          guideData.images.push(...imageUrls.slice(1))
+        } else {
+          guideData.images.push(...imageUrls)
+        }
+      }
+
+      console.log("Final guide data:", guideData)
 
       const newGuide = new Guide(guideData)
       const savedGuide = await newGuide.save()
@@ -55,65 +91,73 @@ const guidesCtrl = {
         guide: savedGuide,
       })
     } catch (error) {
+      console.error("Error in addGuide:", error)
       next(new AppError("Failed to create guide", 500, error))
     }
   },
 
   async updateGuide(req, res, next) {
     try {
-      const guideId = req.params.id
-      const { title, content } = req.body
+      console.log("Raw content received:", req.body.content)
 
-      const updateData = {
-        ...(title && { title }),
-        ...(content && {
-          content: Array.isArray(content) ? content : [content],
-        }),
+      const { id } = req.params
+      const { title } = req.body
+      let content = req.body.content
+      let imageUrls = req.body.imageUrls || []
+
+      // Parse JSON strings if needed
+      try {
+        // Check if content is already an array
+        content = typeof content === "string" ? JSON.parse(content) : content
+
+        // If content is still a string after parsing (single item), wrap it in array
+        if (!Array.isArray(content)) {
+          content = [content]
+        }
+
+        imageUrls =
+          typeof imageUrls === "string" ? JSON.parse(imageUrls) : imageUrls
+      } catch (e) {
+        console.error("Error parsing JSON:", e)
+        // If parsing fails, ensure content is an array
+        content = Array.isArray(content) ? content : [content]
       }
 
-      if (req.files && req.files.length > 0) {
-        if (req.body.updateMainImage === "true") {
-          const mainImageFile = req.files[0]
-          const mainImageResult = await cloudinary.uploader.upload(
-            mainImageFile.path,
-            {
-              folder: "guides/main",
-            }
-          )
-          updateData.mainImage = mainImageResult.secure_url
-          fs.unlinkSync(mainImageFile.path)
+      console.log("Processed content:", content)
 
-          updateData.images = []
-          for (let i = 1; i < req.files.length; i++) {
-            const file = req.files[i]
-            const uploadResult = await cloudinary.uploader.upload(file.path, {
-              folder: "guides/content",
-            })
-            updateData.images.push(uploadResult.secure_url)
-            fs.unlinkSync(file.path)
+      const updateData = {
+        title,
+        content, // Now properly parsed
+        images: [...imageUrls],
+      }
+
+      // Handle main image from file upload
+      if (req.files && req.files.mainImage && req.files.mainImage[0]) {
+        const mainImageFile = req.files.mainImage[0]
+        const mainImageResult = await cloudinary.uploader.upload(
+          mainImageFile.path,
+          {
+            folder: "guides/main",
           }
-        } else {
-          updateData.images = []
-          for (const file of req.files) {
-            const uploadResult = await cloudinary.uploader.upload(file.path, {
-              folder: "guides/content",
-            })
-            updateData.images.push(uploadResult.secure_url)
-            fs.unlinkSync(file.path)
-          }
+        )
+        updateData.mainImage = mainImageResult.secure_url
+        fs.unlinkSync(mainImageFile.path)
+      } else if (req.body.mainImageUrl) {
+        updateData.mainImage = req.body.mainImageUrl
+      }
+
+      // Handle additional images from file upload
+      if (req.files && req.files.images) {
+        for (const file of req.files.images) {
+          const uploadResult = await cloudinary.uploader.upload(file.path, {
+            folder: "guides/content",
+          })
+          updateData.images.push(uploadResult.secure_url)
+          fs.unlinkSync(file.path)
         }
       }
 
-      if (req.body.images && req.body.images.length > 0) {
-        updateData.images = updateData.images || []
-        updateData.images = [...updateData.images, ...req.body.images]
-      }
-
-      if (req.body.mainImage) {
-        updateData.mainImage = req.body.mainImage
-      }
-
-      const updatedGuide = await Guide.findByIdAndUpdate(guideId, updateData, {
+      const updatedGuide = await Guide.findByIdAndUpdate(id, updateData, {
         new: true,
       })
 
@@ -121,11 +165,12 @@ const guidesCtrl = {
         return next(new AppError("Guide not found", 404))
       }
 
-      res.status(200).json({
+      res.json({
         message: "Guide updated successfully",
         guide: updatedGuide,
       })
     } catch (error) {
+      console.error("Error in updateGuide:", error)
       next(new AppError("Failed to update guide", 500, error))
     }
   },

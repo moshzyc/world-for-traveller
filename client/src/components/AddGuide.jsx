@@ -7,12 +7,44 @@ export const AddGuide = () => {
     title: "",
     content: [""],
     images: [],
+    imageUrls: [],
   })
   const [files, setFiles] = useState([])
+  const [mainImage, setMainImage] = useState(null)
+  const [mainImageUrl, setMainImageUrl] = useState("")
+  const [newImageUrl, setNewImageUrl] = useState("")
+
+  const handleMainImageChange = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      setMainImage(file)
+    }
+  }
+
+  const handleMainImageUrlChange = (e) => {
+    setMainImageUrl(e.target.value)
+  }
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files)
     setFiles((prevFiles) => [...prevFiles, ...selectedFiles])
+  }
+
+  const handleAddImageUrl = () => {
+    if (newImageUrl.trim()) {
+      setFormValue((prev) => ({
+        ...prev,
+        imageUrls: [...prev.imageUrls, newImageUrl.trim()],
+      }))
+      setNewImageUrl("")
+    }
+  }
+
+  const handleRemoveImageUrl = (index) => {
+    setFormValue((prev) => ({
+      ...prev,
+      imageUrls: prev.imageUrls.filter((_, i) => i !== index),
+    }))
   }
 
   const handleContentChange = (index, value) => {
@@ -35,25 +67,37 @@ export const AddGuide = () => {
     try {
       const formData = new FormData()
       formData.append("title", formValue.title)
-      formValue.content.forEach((para) => {
-        formData.append("content[]", para)
-      })
+      formData.append("content", JSON.stringify(formValue.content))
 
-      files.forEach((file) => formData.append("images", file))
-
-      if (formValue.images.length > 0) {
-        formValue.images.forEach((image) => formData.append("images", image))
+      // Append main image (file or URL)
+      if (mainImage) {
+        formData.append("mainImage", mainImage)
+      } else if (mainImageUrl) {
+        formData.append("mainImageUrl", mainImageUrl)
       }
 
-      await axios.post(ADD_GUIDE_URL, formData, {
+      // Append additional files
+      files.forEach((file) => {
+        formData.append("images", file)
+      })
+
+      // Append imageUrls
+      formData.append("imageUrls", JSON.stringify(formValue.imageUrls))
+
+      const response = await axios.post(ADD_GUIDE_URL, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
 
+      console.log("Guide added successfully:", response.data)
+
       // Reset form
-      setFormValue({ title: "", content: [""], images: [] })
+      setFormValue({ title: "", content: [""], images: [], imageUrls: [] })
       setFiles([])
+      setNewImageUrl("")
+      setMainImage(null)
+      setMainImageUrl("")
     } catch (error) {
       console.error("Error adding guide:", error.response?.data || error)
     }
@@ -69,12 +113,69 @@ export const AddGuide = () => {
               className="rounded-lg border border-gray-300 p-2"
               type="text"
               placeholder="Enter guide title"
-              name="title"
               value={formValue.title}
               onChange={(e) =>
                 setFormValue({ ...formValue, title: e.target.value })
               }
             />
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <label className="font-medium text-gray-700">Main Image</label>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-gray-600">Upload Main Image</label>
+              <input
+                className="rounded-lg border border-gray-300 p-2"
+                type="file"
+                onChange={handleMainImageChange}
+                accept="image/*"
+              />
+            </div>
+
+            <div className="flex items-center gap-4">
+              <div className="h-px flex-1 bg-gray-300"></div>
+              <span className="text-gray-500">OR</span>
+              <div className="h-px flex-1 bg-gray-300"></div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-gray-600">Main Image URL</label>
+              <input
+                className="rounded-lg border border-gray-300 p-2"
+                type="url"
+                placeholder="Enter main image URL"
+                value={mainImageUrl}
+                onChange={handleMainImageUrlChange}
+              />
+            </div>
+
+            {(mainImage || mainImageUrl) && (
+              <div className="mt-2">
+                <h3 className="mb-2 font-medium text-gray-700">
+                  Main Image Preview:
+                </h3>
+                <div className="relative inline-block">
+                  <img
+                    src={
+                      mainImage ? URL.createObjectURL(mainImage) : mainImageUrl
+                    }
+                    alt="Main image preview"
+                    className="h-48 rounded-lg object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMainImage(null)
+                      setMainImageUrl("")
+                    }}
+                    className="absolute right-2 top-2 rounded-full bg-red-500 p-1 text-white hover:bg-red-600"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="flex flex-col gap-4">
@@ -107,38 +208,97 @@ export const AddGuide = () => {
             </button>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="font-medium text-gray-700">Images</label>
-            <input
-              className="rounded-lg border border-gray-300 p-2"
-              type="file"
-              multiple
-              onChange={handleFileChange}
-            />
+          <div className="flex flex-col gap-4">
+            <label className="font-medium text-gray-700">
+              Additional Images
+            </label>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-gray-600">Upload Images</label>
+              <input
+                className="rounded-lg border border-gray-300 p-2"
+                type="file"
+                multiple
+                onChange={handleFileChange}
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-gray-600">Add Image URL</label>
+              <div className="flex gap-2">
+                <input
+                  className="flex-1 rounded-lg border border-gray-300 p-2"
+                  type="url"
+                  placeholder="Enter image URL"
+                  value={newImageUrl}
+                  onChange={(e) => setNewImageUrl(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={handleAddImageUrl}
+                  className="whiteBtn"
+                >
+                  Add URL
+                </button>
+              </div>
+            </div>
           </div>
 
           {files.length > 0 && (
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-              {files.map((file, index) => (
-                <div key={index} className="group relative">
-                  <img
-                    src={URL.createObjectURL(file)}
-                    alt={`Preview ${index}`}
-                    className="h-32 w-full rounded-lg object-cover"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black bg-opacity-50 opacity-0 transition-opacity group-hover:opacity-100">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setFiles(files.filter((_, i) => i !== index))
-                      }
-                      className="redBtn"
-                    >
-                      Remove
-                    </button>
+            <div>
+              <h3 className="mb-2 font-medium text-gray-700">
+                Additional Images:
+              </h3>
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+                {files.map((file, index) => (
+                  <div key={index} className="group relative">
+                    <img
+                      src={URL.createObjectURL(file)}
+                      alt={`Preview ${index}`}
+                      className="h-32 w-full rounded-lg object-cover"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black bg-opacity-50 opacity-0 transition-opacity group-hover:opacity-100">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setFiles(files.filter((_, i) => i !== index))
+                        }
+                        className="redBtn"
+                      >
+                        Remove
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+            </div>
+          )}
+
+          {formValue.imageUrls.length > 0 && (
+            <div>
+              <h3 className="mb-2 font-medium text-gray-700">
+                Additional URL Images:
+              </h3>
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+                {formValue.imageUrls.map((url, index) => (
+                  <div key={index} className="group relative">
+                    <img
+                      src={url}
+                      alt={`URL Preview ${index}`}
+                      className="h-32 w-full rounded-lg object-cover"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black bg-opacity-50 opacity-0 transition-opacity group-hover:opacity-100">
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveImageUrl(index)}
+                        className="redBtn"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 

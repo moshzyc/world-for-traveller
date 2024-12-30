@@ -46,12 +46,17 @@ export const getNearbyPlaces = async (req, res) => {
       message: error.message,
       response: error.response?.data,
       status: error.response?.status,
+      stack: error.stack,
     })
 
-    res.status(500).json({
+    const statusCode = error.response?.status || 500
+    const errorMessage = error.response?.data?.error_message || error.message
+
+    res.status(statusCode).json({
       error: true,
-      message: error.message,
+      message: errorMessage,
       details: error.response?.data,
+      code: error.code,
     })
   }
 }

@@ -1,8 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import UserForm from '../components/UserForm'
 
 export const LoginSignup = () => {
-  return (
-    <UserForm/>
-  )
+  const [isSignup, setIsSignup] = useState(false)
+  return <UserForm isSignup={isSignup} formChenge={setIsSignup} />
 }
