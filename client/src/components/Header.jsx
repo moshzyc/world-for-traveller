@@ -13,6 +13,7 @@ import { GET_CATEGORIES_URL } from "../constants/endPoint"
 import axios from "axios"
 import { Category } from "./Category"
 import CartTable from "./CartTable"
+import tripPlannerIcon from "../assets/trip-planner.svg"
 
 export const Header = () => {
   const [activeDropdown, setActiveDropdown] = useState(null)
@@ -78,6 +79,13 @@ export const Header = () => {
             >
               <img src={searchIcon} alt="Search" className={css.icons} />
             </button>
+            <Link to="/trip-planner">
+              <img
+                src={tripPlannerIcon}
+                alt="Trip Planner"
+                className={css.icons}
+              />
+            </Link>
           </div>
 
           <div className="flex items-center gap-4">
@@ -154,12 +162,6 @@ export const Header = () => {
           </div>
         </div>
       </div>
-      <Link
-        to="/trip-planner"
-        className="text-white transition-colors hover:text-[#e8f5e9]"
-      >
-        Trip Planner
-      </Link>
     </header>
   )
 }

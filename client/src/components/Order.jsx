@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react"
 import { UserContext } from "../contexts/UserContextpProvider"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
 import axios from "axios"
-import { ORDER_URL } from "../constants/endPoint"
+import { ORDER_URL, SEND_EMAIL_URL } from "../constants/endPoint"
 import CartTable from "./CartTable"
 import { useNavigate } from "react-router-dom"
 import css from "../css/Overlay.module.css"
@@ -13,6 +13,14 @@ export const Order = ({ exit }) => {
   const { cart, clearCart } = useContext(StoreContext)
   const [address, setAddress] = useState("")
   const navigate = useNavigate()
+
+  // Format price to ILS
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat("he-IL", {
+      style: "currency",
+      currency: "ILS",
+    }).format(price)
+  }
 
   const handleSubmit = async () => {
     if (!address.trim()) {
@@ -28,18 +36,67 @@ export const Order = ({ exit }) => {
         price: item.price,
         title: item.title,
       })),
-      totalAmount: cart.reduce((total, item) => total + item.price, 0),
+      totalAmount: cart.reduce(
+        (total, item) => total + item.price * item.quantity,
+        0
+      ),
       address: address.trim(),
     }
 
     try {
-      console.log("Sending order data:", orderData) // Debug log
-      const response = await axios.post(ORDER_URL, orderData)
+      // Send order to database
+      const orderResponse = await axios.post(ORDER_URL, orderData)
+
+      // Prepare email data
+      const emailData = {
+        to: user.email,
+        subject: "Order Confirmation",
+        html: `
+          <h2>Thank you for your order, ${user.name}!</h2>
+          <p>Order details:</p>
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="background-color: #f3f4f6;">
+                <th style="padding: 8px; border: 1px solid #e5e7eb;">Product</th>
+                <th style="padding: 8px; border: 1px solid #e5e7eb;">Quantity</th>
+                <th style="padding: 8px; border: 1px solid #e5e7eb;">Price</th>
+                <th style="padding: 8px; border: 1px solid #e5e7eb;">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${cart
+                .map(
+                  (item) => `
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #e5e7eb;">${item.title}</td>
+                  <td style="padding: 8px; border: 1px solid #e5e7eb;">${item.quantity}</td>
+                  <td style="padding: 8px; border: 1px solid #e5e7eb;">${formatPrice(item.price)}</td>
+                  <td style="padding: 8px; border: 1px solid #e5e7eb;">${formatPrice(item.price * item.quantity)}</td>
+                </tr>
+              `
+                )
+                .join("")}
+            </tbody>
+            <tfoot>
+              <tr style="background-color: #f3f4f6;">
+                <td colspan="3" style="padding: 8px; border: 1px solid #e5e7eb; text-align: right;"><strong>Total Amount:</strong></td>
+                <td style="padding: 8px; border: 1px solid #e5e7eb;"><strong>${formatPrice(orderData.totalAmount)}</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+          <p>Delivery Address: ${address}</p>
+          <p>Thank you for shopping with us!</p>
+        `,
+      }
+
+      // Send confirmation email
+      await axios.post(SEND_EMAIL_URL, emailData)
+
       clearCart()
       navigate("/")
     } catch (error) {
       console.error("Error placing order", error)
-      console.error("Server response:", error.response?.data) // Debug log
+      console.error("Server response:", error.response?.data)
       alert("Failed to order. Please try again.")
     }
   }

@@ -14,5 +14,6 @@ router.put("/cart", auth, userCtrl.saveCart)
 router.get("/cart", auth, userCtrl.getCart)
 router.post("/save-order", auth, userCtrl.saveOrder)
 router.get("/get-orders", auth, userCtrl.getOrders)
+router.get("/verify/:token", userCtrl.verifyEmail)
 
 export default router

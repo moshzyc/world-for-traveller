@@ -14,6 +14,7 @@ export const EditGuide = () => {
     try {
       const { data } = await axios.get(GET_GUIDE_URL)
       setGuides(data)
+      // console.log(data)
     } catch (error) {
       console.error(error)
     }
@@ -24,13 +25,15 @@ export const EditGuide = () => {
       return (
         <div key={item._id} className="flex border-t border-black p-2">
           <div className="flex gap-2">
-            <img className="w-[25%]" src={item.images[0]} alt="" />
+            <img className="w-[25%]" src={item.mainImage} alt="" />
             <div>
               <p>title: {item.title}</p>
-              <div className="w-[80%]">
+              <div>
                 {/* הדפס את כל הפסקאות בנפרד */}
                 {item.content.map((paragraph, index) => (
-                  <p key={index}>paragraph-{index+1} : {paragraph}</p>
+                  <p key={index}>
+                    paragraph-{index + 1} : {paragraph}
+                  </p>
                 ))}
               </div>
             </div>
