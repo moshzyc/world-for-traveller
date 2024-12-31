@@ -19,5 +19,7 @@ router.post("/toggle-favorite", auth, userCtrl.toggleFavorite)
 router.get("/favorites", auth, userCtrl.getFavorites)
 router.get("/all-orders", autAdmin, userCtrl.getAllOrders)
 router.put("/update-order-status", autAdmin, userCtrl.updateOrderStatus)
+router.get("/all-users", autAdmin, userCtrl.getAllUsers)
+router.put("/admin-update-user", autAdmin, userCtrl.adminUpdateUser)
 
 export default router

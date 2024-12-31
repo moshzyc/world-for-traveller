@@ -1,7 +1,10 @@
-import React from "react"
-import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import React, { useContext } from "react"
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom"
 import { MainPage } from "../pages/MainPage"
-import { UserContextpProvider } from "../contexts/UserContextpProvider"
+import {
+  UserContextpProvider,
+  UserContext,
+} from "../contexts/UserContextpProvider"
 import { LoginSignup } from "../pages/LoginSignup"
 import { Home } from "../pages/Home"
 import { Store } from "../pages/Store"
@@ -17,6 +20,11 @@ import { Guides } from "../pages/Guides"
 import { GuideDetails } from "../pages/GuideDetails"
 
 export const AppRoutes = () => {
+  const { user } = useContext(UserContext)
+
+  console.log("Current user:", user)
+  console.log("Is admin?:", user?.isAdmin)
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -33,7 +41,7 @@ export const AppRoutes = () => {
         },
         {
           path: "loginsingup",
-          element: <LoginSignup />,
+          element: user ? <Navigate to="/" /> : <LoginSignup />,
         },
         {
           path: "cart",
@@ -45,11 +53,15 @@ export const AppRoutes = () => {
         },
         {
           path: "admin",
-          element: <Admin />,
+          element: user?.role === "admin" ? <Admin /> : <Navigate to="/" />,
         },
         {
           path: "user",
-          element: <UserProfile fullScreen />,
+          element: user ? (
+            <UserProfile fullScreen />
+          ) : (
+            <Navigate to="/loginsingup" />
+          ),
         },
         {
           path: "trip-planner",
@@ -71,11 +83,10 @@ export const AppRoutes = () => {
       ],
     },
   ])
+
   return (
-    <UserContextpProvider>
-      <StoreContaxtProvider>
-        <RouterProvider router={router} />
-      </StoreContaxtProvider>
-    </UserContextpProvider>
+    <StoreContaxtProvider>
+      <RouterProvider router={router} />
+    </StoreContaxtProvider>
   )
 }

@@ -399,6 +399,45 @@ const userCtrl = {
       next(new AppError("Error updating order status", 500, error))
     }
   },
+  async getAllUsers(req, res, next) {
+    try {
+      const users = await User.find({}, "-password -refreshTokens")
+      res.status(200).json(users)
+    } catch (error) {
+      next(new AppError("Error fetching users", 500, error))
+    }
+  },
+  async adminUpdateUser(req, res, next) {
+    const { userId, updates, adminPassword } = req.body
+
+    try {
+      // Verify admin password
+      const admin = await User.findById(req._id)
+      if (!admin || !(await bcrypt.compare(adminPassword, admin.password))) {
+        return next(new AppError("Invalid admin credentials", 401))
+      }
+
+      // Don't allow password updates through this route
+      const { password, refreshTokens, ...allowedUpdates } = updates
+
+      const user = await User.findByIdAndUpdate(
+        userId,
+        { $set: allowedUpdates },
+        { new: true, select: "-password -refreshTokens" }
+      )
+
+      if (!user) {
+        return next(new AppError("User not found", 404))
+      }
+
+      res.status(200).json({
+        message: "User updated successfully",
+        user,
+      })
+    } catch (error) {
+      next(new AppError("Error updating user", 500, error))
+    }
+  },
 }
 
 export default userCtrl

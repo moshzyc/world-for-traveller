@@ -17,10 +17,10 @@ const uploadFilesMiddleware = upload.fields([
   { name: "mainImage", maxCount: 1 }, // עבור התמונה הראשית (אחת בלבד)
   { name: "images", maxCount: 10 }, // עבור מערך התמונות (עד 10, אפשר לשנות את המספר)
 ])
-router.get("/get", autAdmin, guidesCtrl.getGuides)
-router.post("/add", uploadFilesMiddleware, guidesCtrl.addGuide)
-router.put("/update/:id", uploadFilesMiddleware, guidesCtrl.updateGuide)
+router.get("/get", guidesCtrl.getGuides)
+router.post("/add", autAdmin, uploadFilesMiddleware, guidesCtrl.addGuide)
+router.put("/update/:id", autAdmin, uploadFilesMiddleware, guidesCtrl.updateGuide)
 router.delete("/delete/:id", autAdmin, guidesCtrl.deleteGuide)
-router.get("/get/:id", guidesCtrl.getGuideById)
+router.get("/get/:id", autAdmin,guidesCtrl.getGuideById)
 
 export default router
