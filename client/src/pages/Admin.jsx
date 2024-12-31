@@ -3,12 +3,14 @@ import { AddProducts } from "../components/AddProducts"
 import { EditProduct } from "../components/EditProduct"
 import { EditGuide } from "../components/EditGuid"
 import { AddGuide } from "../components/AddGuide"
+import { OrdersManagement } from "../components/OrdersManagement"
 
 export const Admin = () => {
   const [addProducts, setAddProducts] = useState(false)
   const [AddGuides, setAddGuides] = useState(false)
   const [editProducts, setEditProducts] = useState(false)
   const [editGuides, setEditGuides] = useState(false)
+  const [showOrders, setShowOrders] = useState(false)
 
   return (
     <main className="min-h-screen bg-[#f0f7f0] py-8">
@@ -120,6 +122,42 @@ export const Admin = () => {
             className={`transition-all ${editGuides ? "animate-fadeIn" : "hidden"}`}
           >
             <EditGuide />
+          </div>
+        </div>
+
+        {/* Orders Management Section */}
+        <h2 className="mb-6 mt-8 flex items-center gap-3 text-2xl font-bold text-[#2e7d32]">
+          <svg
+            className="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+            />
+          </svg>
+          Orders Management
+        </h2>
+        <div className="overflow-hidden rounded-lg bg-white shadow-lg">
+          <div
+            onClick={() => setShowOrders((p) => !p)}
+            className="cursor-pointer border-b border-green-100 p-4 transition-all hover:bg-[#e8f5e9]"
+          >
+            <h3 className="flex items-center text-lg font-semibold text-green-800">
+              <span className="mr-2 flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-xl text-green-600">
+                {showOrders ? "−" : "+"}
+              </span>
+              View Orders
+            </h3>
+          </div>
+          <div
+            className={`transition-all ${showOrders ? "animate-fadeIn" : "hidden"}`}
+          >
+            <OrdersManagement />
           </div>
         </div>
       </div>

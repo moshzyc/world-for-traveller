@@ -256,30 +256,16 @@ const userCtrl = {
   async getOrders(req, res, next) {
     try {
       const user = await User.findById(req._id).populate({
-        path: "orders.cart.productId", // אכלוס המידע מהקולקשן products
-        select: "title price category", // שליפת השדות הרצויים בלבד
+        path: "orders.cart.productId",
+        select: "title price category",
       })
 
       if (!user) {
         return next(new AppError("User not found", 404))
       }
 
-      // עיבוד ההזמנות למבנה אחיד
-      const formattedOrders = user.orders.map((order) => ({
-        orderDate: order.orderDate,
-        status: order.status,
-        totalAmount: order.totalAmount,
-        cart: order.cart.map((item) => ({
-          productId: item.productId._id, // שמירת ה-ID של המוצר
-          title: item.productId.title,
-          category: item.productId.category,
-          price: item.productId.price,
-          quantity: item.quantity,
-          addedAt: item.addedAt,
-        })),
-      }))
-
-      res.status(200).json(formattedOrders)
+      // Return the orders array directly
+      res.status(200).json(user.orders)
     } catch (error) {
       next(new AppError("Error fetching orders", 500, error))
     }
@@ -357,6 +343,60 @@ const userCtrl = {
       res.status(200).json(favorites)
     } catch (error) {
       next(new AppError("Error fetching favorites", 500, error))
+    }
+  },
+  async getAllOrders(req, res, next) {
+    try {
+      const users = await User.find({}, "orders name email").populate({
+        path: "orders.cart.productId",
+        select: "title price category",
+      })
+
+      const allOrders = users.reduce((acc, user) => {
+        const userOrders = user.orders.map((order) => ({
+          ...order.toObject(),
+          userName: user.name,
+          userEmail: user.email,
+          userId: user._id,
+        }))
+        return [...acc, ...userOrders]
+      }, [])
+
+      // Sort orders by date, newest first
+      allOrders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate))
+
+      res.status(200).json(allOrders)
+    } catch (error) {
+      next(new AppError("Error fetching all orders", 500, error))
+    }
+  },
+  async updateOrderStatus(req, res, next) {
+    const { orderId, userId, status } = req.body
+    try {
+      const user = await User.findById(userId)
+      if (!user) {
+        return next(new AppError("User not found", 404))
+      }
+
+      // Find the order in the user's orders array
+      const orderIndex = user.orders.findIndex(
+        (order) => order._id.toString() === orderId
+      )
+
+      if (orderIndex === -1) {
+        return next(new AppError("Order not found", 404))
+      }
+
+      // Update the order status
+      user.orders[orderIndex].status = status
+      await user.save()
+
+      res.status(200).json({
+        message: "Order status updated successfully",
+        order: user.orders[orderIndex],
+      })
+    } catch (error) {
+      next(new AppError("Error updating order status", 500, error))
     }
   },
 }

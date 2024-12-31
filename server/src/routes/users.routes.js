@@ -1,7 +1,7 @@
 import express from "express"
 import AppError from "../utils/appError.js"
 import userCtrl from "../controllers/users.controller.js"
-import { auth } from "../middlewares/auth.js"
+import { auth, autAdmin } from "../middlewares/auth.js"
 const router = express.Router()
 
 router.post("/signup", userCtrl.signup)
@@ -17,5 +17,7 @@ router.get("/get-orders", auth, userCtrl.getOrders)
 router.get("/verify/:token", userCtrl.verifyEmail)
 router.post("/toggle-favorite", auth, userCtrl.toggleFavorite)
 router.get("/favorites", auth, userCtrl.getFavorites)
+router.get("/all-orders", autAdmin, userCtrl.getAllOrders)
+router.put("/update-order-status", autAdmin, userCtrl.updateOrderStatus)
 
 export default router
