@@ -13,6 +13,8 @@ import { UserProfile } from "../components/UserProfile"
 import { TripPlanner } from "../pages/TripPlanner"
 import { ErrorBoundary } from "../components/ErrorBoundary"
 import { VerifyEmail } from "../components/VerifyEmail"
+import { Guides } from "../pages/Guides"
+import { GuideDetails } from "../pages/GuideDetails"
 
 export const AppRoutes = () => {
   const router = createBrowserRouter([
@@ -57,6 +59,14 @@ export const AppRoutes = () => {
         {
           path: "verify-email/:token",
           element: <VerifyEmail />,
+        },
+        {
+          path: "guides",
+          element: <Guides />,
+        },
+        {
+          path: "guides/:id",
+          element: <GuideDetails />,
         },
       ],
     },

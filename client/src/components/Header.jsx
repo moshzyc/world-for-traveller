@@ -14,6 +14,7 @@ import axios from "axios"
 import { Category } from "./Category"
 import CartTable from "./CartTable"
 import tripPlannerIcon from "../assets/trip-planner.svg"
+import guidesIcon from "../assets/guide.svg"
 
 export const Header = () => {
   const [activeDropdown, setActiveDropdown] = useState(null)
@@ -93,6 +94,12 @@ export const Header = () => {
                 alt="Trip Planner"
                 className={css.icons}
               />
+            </Link>
+            <Link
+              to="/guides"
+              className="text-black transition-colors hover:text-[#2e7d32]"
+            >
+              <img src={guidesIcon} alt="Guides" className={css.icons} />
             </Link>
           </div>
 

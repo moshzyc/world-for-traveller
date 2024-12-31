@@ -201,6 +201,18 @@ const guidesCtrl = {
       next(new AppError("Failed to delete guide", 500, error))
     }
   },
+
+  async getGuideById(req, res, next) {
+    try {
+      const guide = await Guide.findById(req.params.id)
+      if (!guide) {
+        return next(new AppError("Guide not found", 404))
+      }
+      res.status(200).json(guide)
+    } catch (error) {
+      next(new AppError("Failed to fetch guide", 500, error))
+    }
+  },
 }
 
 export { guidesCtrl }
