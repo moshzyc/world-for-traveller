@@ -154,5 +154,61 @@ const productsCtrl = {
       next(new AppError("Error deleting product", 500, error))
     }
   },
+  async rateProduct(req, res, next) {
+    try {
+      const { id } = req.params
+      const { rating } = req.body
+      const userId = req._id // This comes from the auth middleware
+
+      const product = await Product.findById(id)
+      if (!product) {
+        return next(new AppError("Product not found", 404))
+      }
+
+      // Find if user has already rated this product
+      const existingRatingIndex = product.rating.userRatings.findIndex(
+        (r) => r.userId.toString() === userId.toString()
+      )
+
+      if (existingRatingIndex !== -1) {
+        // Update existing rating
+        const oldRating = product.rating.userRatings[existingRatingIndex].rating
+        product.rating.userRatings[existingRatingIndex].rating = rating
+
+        // Recalculate average rating
+        const totalRating =
+          product.rating.rate * product.rating.count - oldRating + rating
+        product.rating.rate = Number(
+          (totalRating / product.rating.count).toFixed(1)
+        )
+      } else {
+        // Add new rating
+        product.rating.userRatings.push({
+          userId,
+          rating,
+        })
+
+        // Calculate new rating
+        const newCount = product.rating.count + 1
+        const newRate =
+          (product.rating.rate * product.rating.count + rating) / newCount
+
+        product.rating.count = newCount
+        product.rating.rate = Number(newRate.toFixed(1))
+      }
+
+      await product.save()
+
+      res.status(200).json({
+        message: "Rating updated successfully",
+        rating: {
+          rate: product.rating.rate,
+          count: product.rating.count,
+        },
+      })
+    } catch (error) {
+      next(new AppError("Error updating rating", 500, error))
+    }
+  },
 }
 export { productsCtrl }

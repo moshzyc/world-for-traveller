@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useState } from "react"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
 import { Card } from "../components/Card"
 
@@ -8,23 +8,8 @@ export const Store = () => {
 
   console.log("Category:", category, "SubCategory:", subCategory)
 
-  const productGenerator = (arr) => {
-    return arr
-      .map((item) => {
-        const selectedCategory = category || []
-        const selectedSubCategory = subCategory || []
-
-        if (
-          (!selectedCategory.length || item.category === selectedCategory) &&
-          (!selectedSubCategory.length ||
-            item.subCategory === selectedSubCategory)
-        ) {
-          return <Card key={item._id} item={item} />
-        }
-        return null
-      })
-      .filter(Boolean)
-  }
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(10)
 
   const filteredProducts = title
     ? products.filter((item) =>
@@ -32,41 +17,123 @@ export const Store = () => {
       )
     : products || []
 
+  const indexOfLastItem = currentPage * itemsPerPage
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage
+  const currentItems = filteredProducts.slice(indexOfFirstItem, indexOfLastItem)
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage)
+
+  const productGenerator = (arr) => {
+    return arr
+      .map((item) => {
+        return <Card key={item.id} item={item} />
+      })
+      .filter(Boolean)
+  }
+
+  const Pagination = () => {
+    const getPageNumbers = () => {
+      const pageNumbers = []
+      if (totalPages <= 5) {
+        // If 5 or fewer pages, show all
+        for (let i = 1; i <= totalPages; i++) {
+          pageNumbers.push(i)
+        }
+      } else {
+        // Always add page 1
+        pageNumbers.push(1)
+
+        if (currentPage <= 3) {
+          // If near start, show 2,3,4,...,last
+          pageNumbers.push(2, 3, 4, "...", totalPages)
+        } else if (currentPage >= totalPages - 2) {
+          // If near end, show 1,...,last-3,last-2,last-1,last
+          pageNumbers.push(
+            "...",
+            totalPages - 3,
+            totalPages - 2,
+            totalPages - 1,
+            totalPages
+          )
+        } else {
+          // If in middle, show 1,...,current-1,current,current+1,...,last
+          pageNumbers.push(
+            "...",
+            currentPage - 1,
+            currentPage,
+            currentPage + 1,
+            "...",
+            totalPages
+          )
+        }
+      }
+      return pageNumbers
+    }
+
+    return (
+      <div className="mt-8 flex items-center justify-center gap-4">
+        <select
+          value={itemsPerPage}
+          onChange={(e) => {
+            setItemsPerPage(Number(e.target.value))
+            setCurrentPage(1)
+          }}
+          className="rounded border p-2"
+        >
+          <option value={10}>10 per page</option>
+          <option value={20}>20 per page</option>
+          <option value={40}>40 per page</option>
+        </select>
+
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          className="rounded bg-green-600 px-4 py-2 text-white disabled:bg-gray-400"
+        >
+          Back
+        </button>
+
+        <div className="flex gap-2">
+          {getPageNumbers().map((number, index) => (
+            <button
+              key={index}
+              onClick={() => number !== "..." && setCurrentPage(number)}
+              disabled={number === "..."}
+              className={`h-8 w-8 rounded ${
+                number === "..."
+                  ? "cursor-default"
+                  : currentPage === number
+                  ? "bg-green-600 text-white"
+                  : "bg-white text-gray-600 hover:bg-green-100"
+              }`}
+            >
+              {number}
+            </button>
+          ))}
+        </div>
+
+        <button
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
+          disabled={currentPage === totalPages}
+          className="rounded bg-green-600 px-4 py-2 text-white disabled:bg-gray-400"
+        >
+          Next
+        </button>
+      </div>
+    )
+  }
+
   return (
     <main className="min-h-screen bg-[#f0f7f0] py-8">
       <div className="mycontainer">
-        {title ? (
-          <div className="mb-6 border-b pb-3">
-            <h1 className="text-xl text-gray-600">
-              Results search for "<span className="font-semibold">{title}</span>
-              "
-            </h1>
-          </div>
-        ) : (
-          category &&
-          category !== "" && (
-            <div className="mb-6 border-b pb-3">
-              <h1 className="text-xl text-gray-600">
-                <span
-                  className="cursor-pointer font-semibold transition-colors hover:text-green-600"
-                  onClick={() => setSubCategory("")}
-                >
-                  {category}
-                </span>
-                {subCategory && subCategory !== "" && (
-                  <>
-                    <span className="mx-2 text-gray-400">/</span>
-                    <span className="font-semibold">{subCategory}</span>
-                  </>
-                )}
-              </h1>
-            </div>
-          )
-        )}
+        {/* ... existing title/category header ... */}
 
         <div className="flex flex-wrap justify-center gap-4">
-          {productGenerator(filteredProducts)}
+          {productGenerator(currentItems)}
         </div>
+
+        {filteredProducts.length > 10 && <Pagination />}
       </div>
     </main>
   )

@@ -19,10 +19,11 @@ export const StoreContaxtProvider = ({ children }) => {
   const [title, setTitle] = useState("")
   const [categories, setCategories] = useState([])
   const [activeMobileCategory, setActiveMobileCategory] = useState(null)
+  const [rate, setRate] = useState(0)
 
   useEffect(() => {
     getProductsFilterd()
-  }, [category, subCategory, title])
+  }, [category, subCategory, title, rate])
   // useEffect(() => {
   //   getProducts()
   // }, [])
@@ -256,6 +257,7 @@ export const StoreContaxtProvider = ({ children }) => {
         subCategory,
         category,
         title,
+        setRate,
       }}
     >
       {children}

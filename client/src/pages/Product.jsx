@@ -22,6 +22,7 @@ import {
   FaArrowLeft,
   FaLink,
 } from "react-icons/fa"
+import { Rating } from "../components/Rating"
 
 export const Product = () => {
   const { addItem } = useContext(StoreContext)
@@ -254,6 +255,19 @@ export const Product = () => {
                   )}
                 </div>
               </div>
+            </div>
+
+            <div className="mb-4">
+              <Rating
+                productId={product._id}
+                rating={product.rating}
+                onRatingUpdate={(newRating) => {
+                  setProduct((prev) => ({
+                    ...prev,
+                    rating: newRating,
+                  }))
+                }}
+              />
             </div>
           </div>
         </div>

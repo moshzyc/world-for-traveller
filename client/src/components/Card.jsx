@@ -20,6 +20,7 @@ import {
   FaShare,
   FaLink,
 } from "react-icons/fa"
+import { Rating } from "./Rating"
 
 export const Card = ({ item }) => {
   const { addItem } = useContext(StoreContext)
@@ -40,7 +41,6 @@ export const Card = ({ item }) => {
       console.error("Failed to copy link:", err)
     }
   }
-  
 
   return (
     <div className={`${css.card} m-auto`}>
@@ -59,6 +59,14 @@ export const Card = ({ item }) => {
         >
           {item.title}
         </h3>
+        <Rating
+          productId={item._id}
+          rating={item.rating}
+          showUserRating={false}
+          onRatingUpdate={(newRating) => {
+            // Optional: Update the local state if needed
+          }}
+        />
         <p className={css.description}>{item.description}</p>
         <div className={css.priceBox}>
           <span className={css.price}>{item.price} ILS</span>
