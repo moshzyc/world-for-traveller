@@ -21,53 +21,70 @@ export const EditGuide = () => {
   }
 
   const guideGenerator = (arr) => {
-    const guidesArr = arr.map((item) => {
-      return (
-        <div key={item._id} className="flex border-t border-black p-2">
-          <div className="flex gap-2">
-            <img className="w-[25%]" src={item.mainImage} alt="" />
-            <div>
-              <p>title: {item.title}</p>
-              <div>
-                {/* הדפס את כל הפסקאות בנפרד */}
-                {item.content.map((paragraph, index) => (
-                  <p key={index}>
-                    paragraph-{index + 1} : {paragraph}
+    return arr.map((item) => (
+      <div
+        key={item._id}
+        className="border-t border-green-100 p-6 transition-colors hover:bg-green-50"
+      >
+        <div className="flex gap-6">
+          <img
+            className="h-48 w-48 rounded-lg object-cover shadow-md"
+            src={item.mainImage}
+            alt={item.title}
+          />
+          <div className="flex-1">
+            <h3 className="mb-4 text-xl font-semibold text-green-800">
+              {item.title}
+            </h3>
+            <div className="space-y-2">
+              {item.content.map((paragraph, index) => (
+                <div key={index} className="rounded-lg bg-green-50 p-3">
+                  <p className="text-sm font-medium text-green-600">
+                    Paragraph {index + 1}
                   </p>
-                ))}
-              </div>
+                  <p className="mt-1 line-clamp-2 text-gray-600">{paragraph}</p>
+                </div>
+              ))}
             </div>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             <button
               onClick={() => setGuidesEdited(item)}
-              className="whiteBtn w-[80px]"
+              className="rounded-lg border border-green-500 px-6 py-2 text-green-600 transition-colors hover:bg-green-50"
             >
-              edit
+              Edit
             </button>
             <button
               onClick={async () => {
                 try {
-                  if (window.confirm("are you sure?"))
+                  if (
+                    window.confirm(
+                      "Are you sure you want to delete this guide?"
+                    )
+                  ) {
                     await axios.delete(DELETE_GUIDE_URL + `/${item._id}`)
+                  }
                 } catch (error) {
                   console.error(error)
                 }
               }}
-              className="redBtn w-[80px]"
+              className="rounded-lg bg-red-500 px-6 py-2 text-white transition-colors hover:bg-red-600"
             >
-              delete
+              Delete
             </button>
           </div>
         </div>
-      )
-    })
-    return guidesArr
+      </div>
+    ))
   }
 
   return (
-    <div>
-      {guideGenerator(guides)}
+    <div className="divide-y divide-green-100">
+      {guides.length > 0 ? (
+        guideGenerator(guides)
+      ) : (
+        <div className="p-8 text-center text-gray-500">No guides available</div>
+      )}
       {guideEdited && (
         <EditGuideWin {...guideEdited} onClose={() => setGuidesEdited(null)} />
       )}

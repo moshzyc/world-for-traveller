@@ -15,6 +15,7 @@ export const AddProducts = () => {
     image: [],
   })
   const [images, setImages] = useState([])
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Update default values when categories are loaded
   useEffect(() => {
@@ -205,8 +206,14 @@ export const AddProducts = () => {
             </div>
           )}
 
-          <button type="submit" className="blackBtn mt-4">
-            Add Product
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className={`blackBtn mt-4 ${
+              isSubmitting ? "cursor-not-allowed opacity-75" : ""
+            }`}
+          >
+            {isSubmitting ? "Adding Product..." : "Add Product"}
           </button>
         </form>
       </div>

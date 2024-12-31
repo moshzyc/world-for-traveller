@@ -153,7 +153,7 @@ export const Product = () => {
 
             <div className="mt-4">
               <p className="mb-4 text-xl font-bold text-[#2e7d32] md:text-2xl">
-                ${product.price}
+                {product.price} ILS
               </p>
 
               <div className="flex items-center gap-3">

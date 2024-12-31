@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 import { EDIT_PRODUCT_URL } from "../constants/endPoint"
+import css from "../css/overlay.module.css"
 
 export const EditProductWin = (props) => {
   const [title, setTitle] = useState(props.title || "")

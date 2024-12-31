@@ -87,7 +87,7 @@ export const PrvOrder = (props) => {
                       {item.quantity}
                     </td>
                     <td className="px-4 py-3 text-center text-gray-600">
-                      ${item.price}
+                      {item.price} ILS
                     </td>
                   </tr>
                 ))}
@@ -100,7 +100,7 @@ export const PrvOrder = (props) => {
                     Total Amount:
                   </td>
                   <td className="px-4 py-3 text-center text-[#2e7d32]">
-                    ${props.totalAmount}
+                    {props.totalAmount} ILS
                   </td>
                 </tr>
               </tbody>
