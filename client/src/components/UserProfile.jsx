@@ -5,6 +5,7 @@ import css from "../css/userForm.module.css"
 import axios from "axios"
 import { LOGOUT_URL, USER_URL } from "../constants/endPoint"
 import { PrvOrder } from "./PrvOrder"
+import { Card } from "./Card"
 
 export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
   const { user, setUser, role } = useContext(UserContext)
@@ -21,15 +22,29 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
   })
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [deletePassword, setDeletePassword] = useState("")
+  const [favorites, setFavorites] = useState([])
 
   useEffect(() => {
     user && getOrders()
+  }, [user])
+
+  useEffect(() => {
+    user && getFavorites()
   }, [user])
 
   const getOrders = async () => {
     try {
       const { data } = await axios.get(`${USER_URL}get-orders`)
       setOrders(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const getFavorites = async () => {
+    try {
+      const { data } = await axios.get(`${USER_URL}favorites`)
+      setFavorites(data)
     } catch (error) {
       console.log(error)
     }
@@ -325,12 +340,22 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
               >
                 Order History
               </button>
+              <button
+                onClick={() => setActiveTab("favorites")}
+                className={`pb-4 text-sm font-medium transition-colors ${
+                  activeTab === "favorites"
+                    ? "border-b-2 border-[#2e7d32] text-[#2e7d32]"
+                    : "text-gray-500 hover:text-[#2e7d32]"
+                }`}
+              >
+                Favorites
+              </button>
             </div>
 
             {/* Content based on active tab */}
             {activeTab === "profile" ? (
               renderProfileContent()
-            ) : (
+            ) : activeTab === "orders" ? (
               <div className="space-y-4">
                 {orders.length > 0 ? (
                   orders.map((order, index) => (
@@ -344,6 +369,28 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
                     </h3>
                     <p className="text-gray-600">
                       When you make your first purchase, it will appear here.
+                    </p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {favorites.length > 0 ? (
+                  favorites.map((product) => (
+                    <Card
+                      key={product._id}
+                      item={product}
+                      onFavoriteUpdate={getFavorites}
+                    />
+                  ))
+                ) : (
+                  <div className="col-span-full rounded-lg bg-white p-8 text-center shadow-md">
+                    <div className="mb-4 text-4xl">❤️</div>
+                    <h3 className="mb-2 text-lg font-medium text-gray-800">
+                      No Favorites Yet
+                    </h3>
+                    <p className="text-gray-600">
+                      Start adding products to your favorites to see them here.
                     </p>
                   </div>
                 )}

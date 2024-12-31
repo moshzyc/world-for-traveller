@@ -306,6 +306,59 @@ const userCtrl = {
       next(new AppError("Invalid or expired verification link", 400, error))
     }
   },
+  async toggleFavorite(req, res, next) {
+    const { productId } = req.body
+    try {
+      const user = await User.findById(req._id)
+      if (!user) {
+        return next(new AppError("User not found", 404))
+      }
+
+      const favoriteIndex = user.favorites.findIndex(
+        (fav) => fav.productId.toString() === productId
+      )
+
+      if (favoriteIndex === -1) {
+        // Add to favorites
+        user.favorites.push({ productId })
+      } else {
+        // Remove from favorites
+        user.favorites.splice(favoriteIndex, 1)
+      }
+
+      await user.save()
+      res.status(200).json({
+        message:
+          favoriteIndex === -1
+            ? "Added to favorites"
+            : "Removed from favorites",
+        isFavorite: favoriteIndex === -1,
+      })
+    } catch (error) {
+      next(new AppError("Error toggling favorite", 500, error))
+    }
+  },
+  async getFavorites(req, res, next) {
+    try {
+      const user = await User.findById(req._id).populate({
+        path: "favorites.productId",
+        select: "title price category images description rating",
+      })
+
+      if (!user) {
+        return next(new AppError("User not found", 404))
+      }
+
+      const favorites = user.favorites.map((fav) => ({
+        ...fav.productId._doc,
+        addedAt: fav.addedAt,
+      }))
+
+      res.status(200).json(favorites)
+    } catch (error) {
+      next(new AppError("Error fetching favorites", 500, error))
+    }
+  },
 }
 
 export default userCtrl

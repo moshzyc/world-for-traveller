@@ -25,7 +25,7 @@ export const Store = () => {
   const productGenerator = (arr) => {
     return arr
       .map((item) => {
-        return <Card key={item.id} item={item} />
+        return <Card key={item._id} item={item} />
       })
       .filter(Boolean)
   }

@@ -90,6 +90,19 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
+    favorites: [
+      {
+        productId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "products",
+          required: true,
+        },
+        addedAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
   },
   { timestamps: true }
 )

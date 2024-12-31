@@ -21,12 +21,15 @@ import {
   FaLink,
 } from "react-icons/fa"
 import { Rating } from "./Rating"
+import axios from "axios"
+import { USER_URL } from "../constants/endPoint"
 
-export const Card = ({ item }) => {
+export const Card = ({ item, onFavoriteUpdate }) => {
   const { addItem } = useContext(StoreContext)
   const navigate = useNavigate()
   const [showShareMenu, setShowShareMenu] = useState(false)
   const [copySuccess, setCopySuccess] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false)
 
   const shareUrl = `${window.location.origin}/product/${item._id}`
   const shareTitle = `Check out ${item.title}!`
@@ -39,6 +42,19 @@ export const Card = ({ item }) => {
       setTimeout(() => setCopySuccess(false), 2000)
     } catch (err) {
       console.error("Failed to copy link:", err)
+    }
+  }
+
+  const toggleFavorite = async (e) => {
+    e.stopPropagation()
+    try {
+      const { data } = await axios.post(`${USER_URL}toggle-favorite`, {
+        productId: item._id,
+      })
+      setIsFavorite(data.isFavorite)
+      onFavoriteUpdate?.()
+    } catch (error) {
+      console.error("Error toggling favorite:", error)
     }
   }
 
@@ -136,6 +152,16 @@ export const Card = ({ item }) => {
                 </div>
               )}
             </div>
+
+            <button
+              onClick={toggleFavorite}
+              className="rounded-full bg-[#f0f7f0] p-2 text-[#2e7d32] transition-colors hover:bg-[#2e7d32] hover:text-white"
+              aria-label={
+                isFavorite ? "Remove from favorites" : "Add to favorites"
+              }
+            >
+              {isFavorite ? "❤️" : "🤍"}
+            </button>
           </div>
         </div>
       </div>
