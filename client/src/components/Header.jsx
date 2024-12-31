@@ -63,6 +63,14 @@ export const Header = () => {
         <div className="flex items-center gap-4">
           <div className={css.searchContainer}>
             <input
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  setTitle(title)
+                  setCategory([])
+                  setSubCategory([])
+                  navigate("/store")
+                }
+              }}
               onChange={(e) => (title = e.target.value)}
               className={css.input}
               type="text"

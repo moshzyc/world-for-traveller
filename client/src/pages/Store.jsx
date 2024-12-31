@@ -102,8 +102,8 @@ export const Store = () => {
                 number === "..."
                   ? "cursor-default"
                   : currentPage === number
-                  ? "bg-green-600 text-white"
-                  : "bg-white text-gray-600 hover:bg-green-100"
+                    ? "bg-green-600 text-white"
+                    : "bg-white text-gray-600 hover:bg-green-100"
               }`}
             >
               {number}
@@ -127,7 +127,38 @@ export const Store = () => {
   return (
     <main className="min-h-screen bg-[#f0f7f0] py-8">
       <div className="mycontainer">
-        {/* ... existing title/category header ... */}
+        <div className="mb-8">
+          {title ? (
+            <div>
+              <h1 className="text-xl font-medium text-green-800">
+                Search results for{" "}
+                <span className="font-semibold text-green-700">"{title}"</span>
+              </h1>
+            </div>
+          ) : category ? (
+            <div className="flex items-center gap-2">
+              <h1
+                className="cursor-pointer text-xl font-medium text-green-800 hover:text-green-700"
+                onClick={() => setSubCategory("")}
+              >
+                {category}
+              </h1>
+              {subCategory && (
+                <>
+                  <span className="text-green-600">/</span>
+                  <h2 className="text-xl font-medium text-green-700">
+                    {subCategory}
+                  </h2>
+                </>
+              )}
+            </div>
+          ) : (
+            <h1 className="text-xl font-medium text-green-800">All Products</h1>
+          )}
+          <p className="mt-1 text-sm text-green-600">
+            {filteredProducts.length} products found
+          </p>
+        </div>
 
         <div className="flex flex-wrap justify-center gap-4">
           {productGenerator(currentItems)}
