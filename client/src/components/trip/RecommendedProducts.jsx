@@ -39,7 +39,7 @@ export const RecommendedProducts = ({ products }) => {
                 </div>
                 <div className="mt-3 flex items-center justify-between">
                   <span className="font-semibold text-[#2e7d32]">
-                    ${product.price}
+                    {product.price} ILS
                   </span>
                   <button
                     className="rounded-full bg-[#2e7d32] px-4 py-1.5 text-sm text-white transition-colors hover:bg-[#1b5e20]"
