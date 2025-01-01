@@ -1,5 +1,10 @@
 import React, { useContext } from "react"
-import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom"
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+  Link,
+} from "react-router-dom"
 import { MainPage } from "../pages/MainPage"
 import {
   UserContextpProvider,
@@ -18,6 +23,7 @@ import { ErrorBoundary } from "../components/ErrorBoundary"
 import { VerifyEmail } from "../components/VerifyEmail"
 import { Guides } from "../pages/Guides"
 import { GuideDetails } from "../pages/GuideDetails"
+import { NotFound } from "../components/NotFound"
 
 export const AppRoutes = () => {
   const { user } = useContext(UserContext)
@@ -41,7 +47,7 @@ export const AppRoutes = () => {
         },
         {
           path: "loginsingup",
-          element: user ? <Navigate to="/" /> : <LoginSignup />,
+          element: user ? <Navigate to="*" /> : <LoginSignup />,
         },
         {
           path: "cart",
@@ -53,7 +59,7 @@ export const AppRoutes = () => {
         },
         {
           path: "admin",
-          element: user?.role === "admin" ? <Admin /> : <Navigate to="/" />,
+          element: user?.role === "admin" ? <Admin /> : <Navigate to="*" />,
         },
         {
           path: "user",
@@ -79,6 +85,10 @@ export const AppRoutes = () => {
         {
           path: "guides/:id",
           element: <GuideDetails />,
+        },
+        {
+          path: "*",
+          element: <NotFound />,
         },
       ],
     },
