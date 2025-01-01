@@ -26,5 +26,6 @@ router.put(
 )
 router.delete("/delete/:id", autAdmin, productsCtrl.deleteProduct)
 router.post("/rate/:id", auth, productsCtrl.rateProduct)
+router.get("/recommendations", productsCtrl.getRecommendedProducts)
 
 export default router

@@ -11,8 +11,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Men's Waterproof Hiking Jacket",
@@ -26,8 +25,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Men's Windbreaker Jacket",
@@ -41,8 +39,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Men's Fleece-Lined Jacket",
@@ -56,8 +53,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Men's Softshell Jacket",
@@ -71,8 +67,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Men's Lightweight Down Jacket",
@@ -86,8 +81,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Men's Winter Parka",
@@ -101,8 +95,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Men's Convertible Jacket",
@@ -116,8 +109,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Men's Gore-Tex Shell Jacket",
@@ -131,8 +123,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Men's Hooded Running Jacket",
@@ -146,8 +137,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Men's Advanced Climbing Shoe",
@@ -161,8 +151,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Men's Lightweight Climbing Shoes",
@@ -176,8 +165,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Men's Versatile Climbing Shoes",
@@ -191,8 +179,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Men's All-Terrain Climbing Shoes",
@@ -206,8 +193,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Men's Precision Climbing Shoes",
@@ -221,8 +207,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Men's Gym Climbing Shoes",
@@ -236,8 +221,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Men's Outdoor Climbing Shoes",
@@ -251,8 +235,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Men's Technical Climbing Shoes",
@@ -266,8 +249,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Men's Beginner Climbing Shoes",
@@ -281,8 +263,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Men's Premium Climbing Shoes",
@@ -296,8 +277,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Men's Thermal Base Layer Top",
@@ -311,8 +291,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Men's Thermal Leggings",
@@ -326,8 +305,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Men's Heavy-Duty Thermal Shirt",
@@ -341,8 +319,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Men's Lightweight Thermal Set",
@@ -356,8 +333,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Men's Thermal Long Sleeve Shirt",
@@ -371,8 +347,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Men's Merino Wool Thermal Pants",
@@ -386,8 +361,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Men's Insulated Thermal Hoodie",
@@ -401,8 +375,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Men's Ultra-Warm Thermal Jacket",
@@ -416,8 +389,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Men's Thermal Underwear Set",
@@ -431,8 +403,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Men's Expedition Thermal Suit",
@@ -446,8 +417,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Men's Waterproof Hiking Hat",
@@ -461,8 +431,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Men's Insulated Gloves",
@@ -476,8 +445,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Men's Thermal Neck Gaiter",
@@ -491,8 +459,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Men's Outdoor Belt",
@@ -506,8 +473,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Men's Lightweight Hiking Socks",
@@ -521,8 +487,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Men's Adjustable Hiking Cap",
@@ -536,8 +501,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Men's Windproof Scarf",
@@ -551,8 +515,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Men's Hiking Backpack Rain Cover",
@@ -566,8 +529,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Men's Sunglasses for Hiking",
@@ -579,8 +541,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Men's Multi-Functional Bandana",
@@ -594,8 +555,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Women's Waterproof Hiking Jacket",
@@ -609,8 +569,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Women's Insulated Down Jacket",
@@ -624,8 +583,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Women's Fleece-Lined Softshell Jacket",
@@ -639,8 +597,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Women's Lightweight Rain Jacket",
@@ -654,8 +611,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Women's Winter Parka",
@@ -669,8 +625,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Women's Activewear Running Jacket",
@@ -684,8 +639,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Women's Quilted Jacket",
@@ -699,8 +653,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Women's Convertible Hiking Jacket",
@@ -714,8 +667,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Women's Thermal Ski Jacket",
@@ -729,8 +681,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Women's Eco-Friendly Insulated Jacket",
@@ -744,8 +695,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Women's Performance Climbing Shoes",
@@ -759,8 +709,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Women's Lightweight Climbing Shoes",
@@ -774,8 +723,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Women's Advanced Climbing Shoes",
@@ -789,8 +737,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Women's Beginner Climbing Shoes",
@@ -804,8 +751,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Women's Multi-Pitch Climbing Shoes",
@@ -819,8 +765,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Women's High-Performance Climbing Shoes",
@@ -834,8 +779,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Women's All-Terrain Climbing Shoes",
@@ -849,8 +793,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Women's Flexible Climbing Shoes",
@@ -864,8 +807,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Women's Breathable Climbing Shoes",
@@ -879,8 +821,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Women's Eco-Friendly Climbing Shoes",
@@ -894,8 +835,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Women's Thermal Base Layer Set",
@@ -909,8 +849,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Women's Heavy-Duty Thermal Pants",
@@ -924,8 +863,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Women's Lightweight Thermal Shirt",
@@ -939,8 +877,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Women's Full-Body Thermal Suit",
@@ -954,8 +891,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Women's Fleece-Lined Thermal Leggings",
@@ -969,8 +905,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Women's High-Performance Thermal Top",
@@ -984,8 +919,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Women's Thermal Turtleneck Shirt",
@@ -999,8 +933,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Women's Breathable Thermal Socks",
@@ -1014,8 +947,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Women's Ultra-Soft Thermal Pajamas",
@@ -1029,8 +961,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Women's Thermal Crewneck Pullover",
@@ -1044,8 +975,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Women's Wide-Brim Sun Hat",
@@ -1059,8 +989,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Women's Insulated Winter Gloves",
@@ -1074,8 +1003,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Women's Lightweight Hiking Scarf",
@@ -1089,8 +1017,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Women's Waterproof Backpack Cover",
@@ -1104,8 +1031,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Women's Thermal Neck Warmer",
@@ -1119,8 +1045,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "Women's UV-Protective Arm Sleeves",
@@ -1134,8 +1059,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Women's Waterproof Hiking Gaiters",
@@ -1149,8 +1073,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Women's Travel Organizer Pouch",
@@ -1164,8 +1087,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Women's Moisture-Wicking Headband",
@@ -1179,8 +1101,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Women's Multi-Functional Bandana",
@@ -1194,8 +1115,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Lightweight Backpacking Tent",
@@ -1209,8 +1129,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "4-Person Dome Camping Tent",
@@ -1224,8 +1143,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "none"
+    }
   },
   {
     "title": "2-Person Pop-Up Tent",
@@ -1239,8 +1157,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "none"
+    }
   },
   {
     "title": "Family Cabin Tent",
@@ -1254,8 +1171,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "none"
+    }
   },
   {
     "title": "Ultralight 1-Person Tent",
@@ -1269,8 +1185,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "none"
+    }
   },
   {
     "title": "6-Person Waterproof Camping Tent",
@@ -1284,8 +1199,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "none"
+    }
   },
   {
     "title": "Tent with Screened Porch",
@@ -1299,8 +1213,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "All-Weather 3-Person Tent",
@@ -1314,8 +1227,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "none"
+    }
   },
   {
     "title": "Glamping Bell Tent",
@@ -1327,8 +1239,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "none"
+    }
   },
   {
     "title": "2-in-1 Tent and Hammock Set",
@@ -1342,8 +1253,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Ultralight Down Sleeping Bag",
@@ -1355,8 +1265,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "none"
+    }
   },
   {
     "title": "4-Season Mummy Sleeping Bag",
@@ -1368,8 +1277,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   },
   {
     "title": "Double Sleeping Bag for Couples",
@@ -1381,8 +1289,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "none"
+    }
   },
   {
     "title": "Lightweight Summer Sleeping Bag",
@@ -1394,8 +1301,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Extra-Wide Sleeping Bag",
@@ -1407,8 +1313,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "none"
+    }
   },
   {
     "title": "Kids' Sleeping Bag with Fun Print",
@@ -1420,8 +1325,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "none"
+    }
   },
   {
     "title": "Waterproof Sleeping Bag",
@@ -1433,8 +1337,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "none"
+    }
   },
   {
     "title": "Compact Emergency Sleeping Bag",
@@ -1446,8 +1349,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "hot"
+    }
   },
   {
     "title": "Fleece Lined Sleeping Bag",
@@ -1459,8 +1361,7 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "cold"
+    }
   },
   {
     "title": "All-Season Rectangular Sleeping Bag",
@@ -1472,7 +1373,6 @@
     "rating": {
       "rate": 0,
       "count": 0
-    },
-    "weather": "neutral"
+    }
   }
 ]

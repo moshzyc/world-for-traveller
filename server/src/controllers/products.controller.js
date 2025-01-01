@@ -21,6 +21,7 @@ const productsCtrl = {
         price: req.body.price,
         category: req.body.category,
         subCategory: req.body.subCategory,
+        weather: req.body.weather,
         images: [],
       }
 
@@ -89,6 +90,7 @@ const productsCtrl = {
         ...(req.body.title && { title: req.body.title }),
         ...(req.body.description && { description: req.body.description }),
         ...(req.body.price && { price: parseFloat(req.body.price) }),
+        ...(req.body.weather && { weather: req.body.weather }),
       }
 
       // Initialize images array
@@ -208,6 +210,42 @@ const productsCtrl = {
       })
     } catch (error) {
       next(new AppError("Error updating rating", 500, error))
+    }
+  },
+  async getRecommendedProducts(req, res, next) {
+    try {
+      const { weatherConditions } = req.query
+
+      // Convert weather conditions to an array if it's not already
+      const conditions = Array.isArray(weatherConditions)
+        ? weatherConditions
+        : [weatherConditions]
+
+      // Get products for each weather condition
+      const products = await Product.aggregate([
+        { $match: { weather: { $in: conditions } } },
+        { $sample: { size: 10 } }, // Get random products
+      ])
+
+      // Ensure we have at least 5 products but no more than 10
+      const minProducts = 5
+      const maxProducts = 10
+
+      // If we don't have enough products, we'll include some neutral weather products
+      if (products.length < minProducts) {
+        const additionalProducts = await Product.aggregate([
+          { $match: { weather: "neutral" } },
+          { $sample: { size: minProducts - products.length } },
+        ])
+        products.push(...additionalProducts)
+      }
+
+      // Limit to maximum 10 products
+      const finalProducts = products.slice(0, maxProducts)
+
+      res.status(200).json(finalProducts)
+    } catch (error) {
+      next(new AppError("Error fetching recommended products", 500, error))
     }
   },
 }

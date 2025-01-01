@@ -13,6 +13,7 @@ export const Admin = () => {
   const [editGuides, setEditGuides] = useState(false)
   const [showOrders, setShowOrders] = useState(false)
   const [showUsers, setShowUsers] = useState(false)
+  const [userSearch, setUserSearch] = useState("")
 
   return (
     <main className="min-h-screen bg-[#f0f7f0] py-8">
@@ -195,7 +196,16 @@ export const Admin = () => {
           <div
             className={`transition-all ${showUsers ? "animate-fadeIn" : "hidden"}`}
           >
-            <UsersManagement />
+            <div className="border-b border-green-100 p-4">
+              <input
+                type="text"
+                placeholder="Search users..."
+                value={userSearch}
+                onChange={(e) => setUserSearch(e.target.value)}
+                className={adminStyles.input}
+              />
+            </div>
+            <UsersManagement searchQuery={userSearch} />
           </div>
         </div>
       </div>

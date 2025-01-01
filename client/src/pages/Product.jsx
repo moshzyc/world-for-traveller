@@ -143,6 +143,12 @@ export const Product = () => {
                   <span className="text-[#2e7d32]">{product.subCategory}</span>
                 </p>
               )}
+              {product.weather && (
+                <p className="text-base font-semibold md:text-lg">
+                  Weather:{" "}
+                  <span className="text-[#2e7d32]">{product.weather}</span>
+                </p>
+              )}
             </div>
 
             <div className="flex-grow">

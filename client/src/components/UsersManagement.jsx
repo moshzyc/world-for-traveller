@@ -3,7 +3,7 @@ import axios from "axios"
 import { GET_ALL_USERS_URL, ADMIN_UPDATE_USER_URL } from "../constants/endPoint"
 import { adminStyles } from "../pages/Admin"
 
-export const UsersManagement = () => {
+export const UsersManagement = ({ searchQuery }) => {
   const [users, setUsers] = useState([])
   const [selectedUser, setSelectedUser] = useState(null)
   const [adminPassword, setAdminPassword] = useState("")
@@ -55,6 +55,14 @@ export const UsersManagement = () => {
       setError(error.response?.data?.message || "Failed to update user")
     }
   }
+
+  // Filter users based on search query
+  const filteredUsers = users.filter(
+    (user) =>
+      user.name.toLowerCase().includes(searchQuery?.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery?.toLowerCase()) ||
+      user.role.toLowerCase().includes(searchQuery?.toLowerCase())
+  )
 
   return (
     <div className="p-6">
@@ -141,7 +149,7 @@ export const UsersManagement = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
-              {users.map((user) => (
+              {filteredUsers.map((user) => (
                 <tr key={user._id}>
                   <td className="whitespace-nowrap px-6 py-4">{user.name}</td>
                   <td className="whitespace-nowrap px-6 py-4">{user.email}</td>
@@ -158,6 +166,11 @@ export const UsersManagement = () => {
               ))}
             </tbody>
           </table>
+          {filteredUsers.length === 0 && (
+            <p className="py-4 text-center text-gray-500">
+              No users found matching your search.
+            </p>
+          )}
         </div>
       )}
     </div>

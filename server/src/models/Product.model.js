@@ -21,10 +21,17 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  weather: {
+    type: String,
+    enum: ["hot", "cold", "neutral", "none"],
+    default: "none",
+    required: true,
+  },
   images: {
     type: [String],
     required: true,
   },
+
   rating: {
     type: {
       rate: {

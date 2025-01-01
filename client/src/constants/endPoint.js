@@ -27,6 +27,7 @@ const GET_ALL_ORDERS_URL = USER_URL + "all-orders"
 const UPDATE_ORDER_STATUS_URL = USER_URL + "update-order-status"
 const GET_ALL_USERS_URL = USER_URL + "all-users"
 const ADMIN_UPDATE_USER_URL = USER_URL + "admin-update-user"
+const PRODUCTS_RECOMMENDATIONS_URL = PRODUCTS_URL + "/recommendations"
 
 export {
   SIGNUP_URL,
@@ -55,4 +56,5 @@ export {
   UPDATE_ORDER_STATUS_URL,
   GET_ALL_USERS_URL,
   ADMIN_UPDATE_USER_URL,
+  PRODUCTS_RECOMMENDATIONS_URL,
 }

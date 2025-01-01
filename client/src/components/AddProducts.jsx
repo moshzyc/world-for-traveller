@@ -11,7 +11,8 @@ export const AddProducts = () => {
     category: "",
     subCategory: "",
     description: "",
-    price: "", // added price field
+    price: "",
+    weather: "none",
     image: [],
   })
   const [images, setImages] = useState([])
@@ -46,7 +47,8 @@ export const AddProducts = () => {
       formData.append("subCategory", formValue.subCategory)
       formData.append("description", formValue.description)
       formData.append("price", formValue.price)
-      images.forEach((image, index) => {
+      formData.append("weather", formValue.weather)
+      images.forEach((image) => {
         formData.append(`images`, image)
       })
 
@@ -63,6 +65,7 @@ export const AddProducts = () => {
         subCategory: categories[0].subCategory?.[0] || "",
         description: "",
         price: "",
+        weather: "none",
         image: [],
       })
       setImages([])
@@ -156,6 +159,23 @@ export const AddProducts = () => {
                 setFormValue({ ...formValue, [e.target.name]: e.target.value })
               }
             />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="font-medium text-gray-700">Weather</label>
+            <select
+              className="rounded-lg border border-gray-300 p-2"
+              name="weather"
+              value={formValue.weather}
+              onChange={(e) =>
+                setFormValue({ ...formValue, weather: e.target.value })
+              }
+            >
+              <option value="hot">Hot</option>
+              <option value="cold">Cold</option>
+              <option value="neutral">Neutral</option>
+              <option value="none">None</option>
+            </select>
           </div>
 
           <div className="flex flex-col gap-2">

@@ -7,6 +7,7 @@ export const EditProductWin = (props) => {
   const [title, setTitle] = useState(props.title || "")
   const [description, setDescription] = useState(props.description || "")
   const [price, setPrice] = useState(props.price || 0)
+  const [weather, setWeather] = useState(props.weather || "none")
   const [images, setImages] = useState(props.images || [])
   const [newImage, setNewImage] = useState("")
   const [newFiles, setNewFiles] = useState([])
@@ -15,6 +16,7 @@ export const EditProductWin = (props) => {
     setTitle(props.title)
     setDescription(props.description)
     setPrice(props.price)
+    setWeather(props.weather || "none")
     setImages(props.images || [])
   }, [props])
 
@@ -41,6 +43,7 @@ export const EditProductWin = (props) => {
     formData.append("title", title)
     formData.append("description", description)
     formData.append("price", price)
+    formData.append("weather", weather)
 
     // Append new files for upload
     newFiles.forEach((file) => {
@@ -112,6 +115,20 @@ export const EditProductWin = (props) => {
                 onChange={(e) => setPrice(parseFloat(e.target.value) || 0)}
                 className="w-full rounded-lg border border-gray-300 p-2 focus:border-[#2e7d32] focus:outline-none focus:ring-1 focus:ring-[#2e7d32]"
               />
+            </div>
+
+            <div className="space-y-2">
+              <label className="block font-medium text-gray-700">Weather:</label>
+              <select
+                value={weather}
+                onChange={(e) => setWeather(e.target.value)}
+                className="w-full rounded-lg border border-gray-300 p-2 focus:border-[#2e7d32] focus:outline-none focus:ring-1 focus:ring-[#2e7d32]"
+              >
+                <option value="hot">Hot</option>
+                <option value="cold">Cold</option>
+                <option value="neutral">Neutral</option>
+                <option value="none">None</option>
+              </select>
             </div>
 
             <div className="space-y-2">

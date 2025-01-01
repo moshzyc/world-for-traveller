@@ -4,11 +4,13 @@ import { WeatherInfo } from "../components/trip/WeatherInfo"
 import { TripDetails } from "../components/trip/TripDetails"
 import { ShareTrip } from "../components/trip/ShareTrip"
 import { NearbyAttractions } from "../components/trip/NearbyAttractions"
+import { RecommendedProducts } from "../components/trip/RecommendedProducts"
 
 export const TripPlanner = () => {
   const [selectedLocations, setSelectedLocations] = useState([])
   const [tripDates, setTripDates] = useState({ start: null, end: null })
   const [weatherData, setWeatherData] = useState([])
+  const [recommendedProducts, setRecommendedProducts] = useState([])
 
   const removeLocation = (indexToRemove) => {
     setSelectedLocations((prev) =>
@@ -22,8 +24,8 @@ export const TripPlanner = () => {
       <h1 className="mb-6 text-2xl font-bold text-[#2e7d32]">Trip Planner</h1>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {/* Map Section */}
-        <div className="lg:col-span-2">
+        {/* Left Column - Map and Recommendations */}
+        <div className="space-y-6 lg:col-span-2">
           <div className="rounded-lg bg-white p-4 shadow-md">
             <h2 className="mb-4 text-xl font-semibold">Select Destinations</h2>
             <GoogleMap
@@ -32,9 +34,16 @@ export const TripPlanner = () => {
               removeLocation={removeLocation}
             />
           </div>
+
+          {/* Recommended Products Section - Only show if there are products */}
+          {recommendedProducts.length > 0 && (
+            <div className="rounded-lg bg-white p-4 shadow-md">
+              <RecommendedProducts products={recommendedProducts} />
+            </div>
+          )}
         </div>
 
-        {/* Trip Details Section */}
+        {/* Right Column - Trip Details, Weather, Share, and Nearby Attractions */}
         <div className="space-y-6">
           <TripDetails
             selectedLocations={selectedLocations}
@@ -48,15 +57,17 @@ export const TripPlanner = () => {
             dates={tripDates}
             weatherData={weatherData}
             setWeatherData={setWeatherData}
+            setRecommendedProducts={setRecommendedProducts}
           />
-
-          <NearbyAttractions locations={selectedLocations} />
 
           <ShareTrip
             locations={selectedLocations}
             dates={tripDates}
             weatherData={weatherData}
           />
+
+          {/* Nearby Attractions moved here */}
+          <NearbyAttractions locations={selectedLocations} />
         </div>
       </div>
     </div>
