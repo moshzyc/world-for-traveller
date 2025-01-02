@@ -3,6 +3,14 @@ import AppError from "../utils/appError.js"
 import { userPostCtrl } from "../controllers/userPost.controller.js"
 import { autAdmin, auth } from "../middlewares/auth.js"
 import multer from "multer"
+import fs from "fs"
+import path from "path"
+
+// Create uploads directory if it doesn't exist
+const uploadDir = "uploads"
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true })
+}
 
 const router = express.Router()
 const storage = multer.diskStorage({
@@ -15,14 +23,27 @@ const storage = multer.diskStorage({
 })
 const upload = multer({ storage })
 const uploadFilesMiddleware = upload.fields([
-  { name: "mainImage", maxCount: 1 }, // עבור התמונה הראשית (אחת בלבד)
-  { name: "images", maxCount: 10 }, // עבור מערך התמונות (עד 10, אפשר לשנות את המספר)
+  { name: "mainImage", maxCount: 1 },
+  { name: "images", maxCount: 10 },
 ])
-router.get("/get", auth, userPostCtrl.getPosts)
+router.get("/all", userPostCtrl.getAllPosts)
+router.get("/by-user", auth, userPostCtrl.getUserPosts)
 router.get("/categories", auth, userPostCtrl.getCategories)
 router.post("/add", auth, uploadFilesMiddleware, userPostCtrl.addPost)
 router.put("/update/:id", auth, uploadFilesMiddleware, userPostCtrl.updatePost)
-router.delete("/delete/:id", auth, uploadFilesMiddleware, userPostCtrl.deletePost)
-
+router.delete(
+  "/delete/:id",
+  auth,
+  uploadFilesMiddleware,
+  userPostCtrl.deletePost
+)
+router.get("/post/:id", userPostCtrl.getPostById)
+router.put(
+  "/admin/edit/:id",
+  autAdmin,
+  uploadFilesMiddleware,
+  userPostCtrl.adminEditPost
+)
+router.delete("/admin/delete/:id", autAdmin, userPostCtrl.adminDeletePost)
 
 export default router

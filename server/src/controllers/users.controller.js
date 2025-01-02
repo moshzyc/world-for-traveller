@@ -216,6 +216,7 @@ const userCtrl = {
   },
   async saveOrder(req, res, next) {
     const { cart, totalAmount, address } = req.body
+    console.log(cart)
     try {
       if (!totalAmount || !address) {
         return next(new AppError("Total amount and address are required", 400))
@@ -257,15 +258,34 @@ const userCtrl = {
     try {
       const user = await User.findById(req._id).populate({
         path: "orders.cart.productId",
-        select: "title price category",
+        select: "title price category images",
+        match: { _id: { $ne: null } },
       })
 
       if (!user) {
         return next(new AppError("User not found", 404))
       }
 
-      // Return the orders array directly
-      res.status(200).json(user.orders)
+      // Filter out null products and format the response
+      const orders = user.orders.map((order) => ({
+        _id: order._id,
+        orderDate: order.orderDate,
+        status: order.status,
+        totalAmount: order.totalAmount,
+        cart: order.cart
+          .filter((item) => item.productId)
+          .map((item) => ({
+            productId: item.productId._id,
+            title: item.productId.title,
+            price: item.productId.price,
+            category: item.productId.category,
+            images: item.productId.images,
+            quantity: item.quantity,
+            addedAt: item.addedAt,
+          })),
+      }))
+
+      res.status(200).json(orders)
     } catch (error) {
       next(new AppError("Error fetching orders", 500, error))
     }

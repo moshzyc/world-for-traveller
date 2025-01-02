@@ -21,6 +21,6 @@ router.get("/get", guidesCtrl.getGuides)
 router.post("/add", autAdmin, uploadFilesMiddleware, guidesCtrl.addGuide)
 router.put("/update/:id", autAdmin, uploadFilesMiddleware, guidesCtrl.updateGuide)
 router.delete("/delete/:id", autAdmin, guidesCtrl.deleteGuide)
-router.get("/get/:id", autAdmin,guidesCtrl.getGuideById)
+router.get("/get/:id",guidesCtrl.getGuideById)
 
 export default router

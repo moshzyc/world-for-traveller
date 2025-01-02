@@ -4,6 +4,8 @@ import {
   RouterProvider,
   Navigate,
   Link,
+  Routes,
+  Route,
 } from "react-router-dom"
 import { MainPage } from "../pages/MainPage"
 import {
@@ -24,6 +26,11 @@ import { VerifyEmail } from "../components/VerifyEmail"
 import { Guides } from "../pages/Guides"
 import { GuideDetails } from "../pages/GuideDetails"
 import { NotFound } from "../components/NotFound"
+import { UserPosts } from "../pages/UserPosts"
+import { AddUserPost } from "../components/AddUserPost"
+import { EditUserPost } from "../components/EditUserPost"
+import { PostDetails } from "../components/PostDetails"
+import { PrivateRoute } from "./PrivateRoute"
 
 export const AppRoutes = () => {
   const { user } = useContext(UserContext)
@@ -85,6 +92,22 @@ export const AppRoutes = () => {
         {
           path: "guides/:id",
           element: <GuideDetails />,
+        },
+        {
+          path: "community",
+          element: <UserPosts />,
+        },
+        {
+          path: "community/add",
+          element: user ? <AddUserPost /> : <Navigate to="/loginsingup" />,
+        },
+        {
+          path: "community/post/:id",
+          element: <PostDetails />,
+        },
+        {
+          path: "community/edit/:id",
+          element: user ? <EditUserPost /> : <Navigate to="/loginsingup" />,
         },
         {
           path: "*",

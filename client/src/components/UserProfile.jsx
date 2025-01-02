@@ -1,9 +1,14 @@
 import React, { useContext, useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 import { UserContext } from "../contexts/UserContextpProvider"
 import css from "../css/userForm.module.css"
 import axios from "axios"
-import { LOGOUT_URL, USER_URL } from "../constants/endPoint"
+import {
+  LOGOUT_URL,
+  USER_URL,
+  POSTS_URL,
+  GET_USER_POSTS_URL,
+} from "../constants/endPoint"
 import { PrvOrder } from "./PrvOrder"
 import { Card } from "./Card"
 
@@ -24,6 +29,12 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
   const [deletePassword, setDeletePassword] = useState("")
   const [favorites, setFavorites] = useState([])
   const [statusFilter, setStatusFilter] = useState("all")
+  const [userPosts, setUserPosts] = useState([])
+  const [postsLoading, setPostsLoading] = useState(true)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [page, setPage] = useState(1)
+  const [pagination, setPagination] = useState(null)
 
   useEffect(() => {
     user && getOrders()
@@ -32,6 +43,10 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
   useEffect(() => {
     user && getFavorites()
   }, [user])
+
+  useEffect(() => {
+    fetchUserPosts()
+  }, [page])
 
   const getOrders = async () => {
     try {
@@ -97,6 +112,22 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
   const filteredOrders = orders.filter((order) =>
     statusFilter === "all" ? true : order.status === statusFilter
   )
+
+  const fetchUserPosts = async () => {
+    try {
+      setLoading(true)
+      const { data } = await axios.get(`${GET_USER_POSTS_URL}?page=${page}`, {
+        withCredentials: true,
+      })
+      setUserPosts(data.posts)
+      setPagination(data.pagination)
+    } catch (err) {
+      setError("Error fetching your posts")
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const renderProfileContent = () => (
     <div className="rounded-lg bg-white p-6 shadow-md">
@@ -358,6 +389,16 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
               >
                 Favorites
               </button>
+              <button
+                onClick={() => setActiveTab("posts")}
+                className={`pb-4 text-sm font-medium transition-colors ${
+                  activeTab === "posts"
+                    ? "border-b-2 border-[#2e7d32] text-[#2e7d32]"
+                    : "text-gray-500 hover:text-[#2e7d32]"
+                }`}
+              >
+                My Posts
+              </button>
             </div>
 
             {/* Content based on active tab */}
@@ -405,7 +446,7 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
                   </div>
                 )}
               </div>
-            ) : (
+            ) : activeTab === "favorites" ? (
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {favorites.length > 0 ? (
                   favorites.map((product) => (
@@ -427,7 +468,90 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
                   </div>
                 )}
               </div>
-            )}
+            ) : activeTab === "posts" ? (
+              <div className="space-y-4">
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-2xl font-bold text-[#2e7d32]">
+                    My Posts
+                  </h2>
+                  <Link
+                    to="/community/add"
+                    className="rounded-lg bg-[#2e7d32] px-4 py-2 text-white transition-colors hover:bg-[#1b5e20]"
+                  >
+                    Create New Post
+                  </Link>
+                </div>
+
+                {loading ? (
+                  <div className="text-center">Loading...</div>
+                ) : error ? (
+                  <div className="text-center text-red-500">{error}</div>
+                ) : (
+                  <>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                      {userPosts.map((post) => (
+                        <Link
+                          key={post._id}
+                          to={`/community/post/${post._id}`}
+                          className="group overflow-hidden rounded-lg border border-gray-200 transition-all hover:shadow-lg"
+                        >
+                          <div className="relative aspect-video">
+                            <img
+                              src={post.mainImage}
+                              alt={post.title}
+                              className="h-full w-full bg-gray-100 object-contain"
+                            />
+                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                              <span className="inline-block rounded-full bg-white/20 px-3 py-1 text-sm text-white backdrop-blur-sm">
+                                {post.category}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="p-4">
+                            <h3 className="mb-2 text-lg font-semibold">
+                              {post.title}
+                            </h3>
+                            <p className="text-sm text-gray-500">
+                              {new Date(post.createdAt).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+
+                    {pagination && pagination.pages > 1 && (
+                      <div className="mt-4 flex justify-center gap-2">
+                        {Array.from({ length: pagination.pages }, (_, i) => (
+                          <button
+                            key={i + 1}
+                            onClick={() => setPage(i + 1)}
+                            className={`rounded px-3 py-1 ${
+                              page === i + 1
+                                ? "bg-[#2e7d32] text-white"
+                                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                            }`}
+                          >
+                            {i + 1}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    {userPosts.length === 0 && (
+                      <div className="rounded-lg bg-gray-50 p-8 text-center">
+                        <div className="mb-4 text-4xl">✍️</div>
+                        <h3 className="mb-2 text-lg font-medium text-gray-800">
+                          No Posts Yet
+                        </h3>
+                        <p className="text-gray-600">
+                          Share your travel experiences with the community!
+                        </p>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            ) : null}
           </>
         )}
       </div>

@@ -15,6 +15,7 @@ import { Category } from "./Category"
 import CartTable from "./CartTable"
 import tripPlannerIcon from "../assets/trip-planner.svg"
 import guidesIcon from "../assets/guide.svg"
+import communityIcon from "../assets/community.svg"
 
 export const Header = () => {
   const [activeDropdown, setActiveDropdown] = useState(null)
@@ -95,11 +96,16 @@ export const Header = () => {
                 className={css.icons}
               />
             </Link>
-            <Link
-              to="/guides"
-              className="text-black transition-colors hover:text-[#2e7d32]"
-            >
+            <Link to="/guides">
               <img src={guidesIcon} alt="Guides" className={css.icons} />
+            </Link>
+            <Link to="/community">
+              <img
+                src={communityIcon}
+                alt="Community"
+                className={css.icons}
+                title="Travel Community"
+              />
             </Link>
           </div>
 
