@@ -84,6 +84,36 @@ export const Home = () => {
         </div>
       </section>
 
+      {/* Community Section */}
+      <section className="py-5">
+        <div className="mycontainer">
+          <div
+            onClick={() => navigate("/community")}
+            className="group cursor-pointer"
+          >
+            <div className="transform overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:scale-105">
+              <div className="relative h-64 w-full">
+                <img
+                  src="https://images.pexels.com/photos/3280130/pexels-photo-3280130.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                  alt="Travels Community"
+                  className="h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-30">
+                  <div className="flex h-full flex-col items-center justify-center text-white">
+                    <h2 className="mb-4 text-4xl font-bold">
+                      Travels Community
+                    </h2>
+                    <p className="text-xl">
+                      Connect with fellow travelers and share your experiences
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Categories Section */}
       <section className="py-16">
         <div className="mycontainer">
