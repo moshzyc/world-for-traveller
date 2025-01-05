@@ -18,6 +18,7 @@ import guidesIcon from "../assets/guide.svg"
 import communityIcon from "../assets/community.svg"
 import closeIcon from "../assets/close-icon.svg"
 import chevronIcon from "../assets/chevron-icon.svg"
+import { useNavigateWithConfirm } from "../hooks/useNavigateWithConfirm"
 
 export const Header = () => {
   const [activeDropdown, setActiveDropdown] = useState(null)
@@ -30,6 +31,7 @@ export const Header = () => {
     useContext(StoreContext)
   let title = ""
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
+  const navigateWithConfirm = useNavigateWithConfirm()
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -59,7 +61,7 @@ export const Header = () => {
   const navigateAndClose = (path) => {
     setIsMobileNavOpen(false)
     setActiveDropdown(null)
-    navigate(path)
+    navigateWithConfirm(path)
   }
 
   const handleCartClick = () => {
