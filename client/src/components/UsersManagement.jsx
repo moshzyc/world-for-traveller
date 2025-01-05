@@ -141,6 +141,9 @@ export const UsersManagement = ({ searchQuery }) => {
                   Email
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Phone
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
                   Role
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
@@ -153,6 +156,7 @@ export const UsersManagement = ({ searchQuery }) => {
                 <tr key={user._id}>
                   <td className="whitespace-nowrap px-6 py-4">{user.name}</td>
                   <td className="whitespace-nowrap px-6 py-4">{user.email}</td>
+                  <td className="whitespace-nowrap px-6 py-4">{user.phone}</td>
                   <td className="whitespace-nowrap px-6 py-4">{user.role}</td>
                   <td className="whitespace-nowrap px-6 py-4">
                     <button

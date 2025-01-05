@@ -54,7 +54,7 @@ export const AppRoutes = () => {
         },
         {
           path: "loginsingup",
-          element: user ? <Navigate to="*" /> : <LoginSignup />,
+          element: user ? <NotFound /> : <LoginSignup />,
         },
         {
           path: "cart",
@@ -66,7 +66,7 @@ export const AppRoutes = () => {
         },
         {
           path: "admin",
-          element: user?.role === "admin" ? <Admin /> : <Navigate to="*" />,
+          element: user?.role === "admin" ? <Admin /> : <NotFound />,
         },
         {
           path: "user",

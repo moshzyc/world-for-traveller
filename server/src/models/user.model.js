@@ -8,10 +8,18 @@ const userSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
+    phone: {
+      type: String,
+      // required: true,
+    },
     password: {
       type: String,
       unique: true,
       required: true,
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
     },
     role: {
       type: String,

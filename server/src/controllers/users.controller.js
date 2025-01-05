@@ -38,11 +38,16 @@ const userCtrl = {
     const { email, password } = req.body
     try {
       const user = await User.findOne({ email })
-      console.log(email)
-      console.log(password)
 
       if (!user || !(await bcrypt.compare(password, user.password))) {
         return next(new AppError("Invalid credentials", 401))
+      }
+
+      // Check if user is verified
+      if (!user.isVerified) {
+        return next(
+          new AppError("Please verify your email before logging in", 401)
+        )
       }
 
       const accessToken = jwt.sign(
@@ -128,32 +133,31 @@ const userCtrl = {
     }
   },
   async updateUser(req, res, next) {
-    const { name, email, password, newPassword } = req.body
+    const { name, email, password, newPassword, phone } = req.body
     try {
       if (email && !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
         return next(new AppError("Invalid email format", 400))
       }
-      const user = await User.findById(req._id) // מציאת המשתמש לפי ה-ID שנמצא ב-token
+      const user = await User.findById(req._id)
       if (!user) {
         return next(new AppError("User not found", 404))
       }
 
-      // אם המשתמש וצה לשנות את הסיסמה, נוודא שהסיסמה הישנה נכונה
+      // If user wants to change password, verify old password
       if (newPassword) {
         const isPasswordValid = await bcrypt.compare(password, user.password)
         if (!isPasswordValid) {
           return next(new AppError("Incorrect password", 400))
         }
-
-        // אם הסיסמה נכונה, נשנה את הסיסמה
         user.password = await bcrypt.hash(newPassword, 10)
       }
 
-      // עדכון פרטי המשתמש (שם, אימייל וכו')
+      // Update user details
       if (name) user.name = name
       if (email) user.email = email
+      if (phone) user.phone = phone // Add phone update
 
-      await user.save() // שמירת המשתמש עם הפרטים החדשים
+      await user.save()
 
       res.status(200).json({ message: "User updated successfully" })
     } catch (error) {

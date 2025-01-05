@@ -24,6 +24,7 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
     email: "",
     password: "",
     newPassword: "",
+    phone: "",
   })
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [deletePassword, setDeletePassword] = useState("")
@@ -89,6 +90,7 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
         email: "",
         password: "",
         newPassword: "",
+        phone: "",
       })
     } catch (error) {
       console.error("Error updating user:", error)
@@ -153,6 +155,10 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
               <label className="text-sm font-medium text-gray-600">Email</label>
               <p className="mt-1 text-gray-800">{user?.email}</p>
             </div>
+            <div>
+              <label className="text-sm font-medium text-gray-600">Phone</label>
+              <p className="mt-1 text-gray-800">{user?.phone}</p>
+            </div>
             <button
               onClick={() => setShowDeleteConfirm(true)}
               className="mt-4 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
@@ -215,6 +221,18 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
                 setEditForm({ ...editForm, newPassword: e.target.value })
               }
               placeholder="New password"
+              className="mt-1 w-full rounded-lg border p-2"
+            />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-gray-600">Phone</label>
+            <input
+              type="tel"
+              value={editForm.phone}
+              onChange={(e) =>
+                setEditForm({ ...editForm, phone: e.target.value })
+              }
+              placeholder="New phone number"
               className="mt-1 w-full rounded-lg border p-2"
             />
           </div>
