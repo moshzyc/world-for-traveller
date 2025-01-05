@@ -69,6 +69,36 @@ const UserPostSchema = new mongoose.Schema(
       enum: ["active", "deleted"],
       default: "active",
     },
+    rating: {
+      type: {
+        rate: {
+          type: Number,
+          default: 0,
+        },
+        count: {
+          type: Number,
+          default: 0,
+        },
+        userRatings: [
+          {
+            userId: {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "users",
+              required: true,
+            },
+            rating: {
+              type: Number,
+              required: true,
+            },
+            createdAt: {
+              type: Date,
+              default: Date.now,
+            },
+          },
+        ],
+      },
+      default: { rate: 0, count: 0, userRatings: [] },
+    },
   },
   {
     timestamps: true,

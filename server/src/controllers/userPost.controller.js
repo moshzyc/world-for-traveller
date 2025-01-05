@@ -394,6 +394,61 @@ const userPostCtrl = {
       next(new AppError("Error deleting post", 500, error))
     }
   },
+
+  async ratePost(req, res, next) {
+    try {
+      const { id } = req.params
+      const { rating } = req.body
+      const userId = req._id
+
+      const post = await UserPost.findById(id)
+      if (!post) {
+        return next(new AppError("Post not found", 404))
+      }
+
+      // Find if user has already rated this post
+      const existingRatingIndex = post.rating.userRatings.findIndex(
+        (r) => r.userId.toString() === userId.toString()
+      )
+
+      if (existingRatingIndex !== -1) {
+        // Update existing rating
+        const oldRating = post.rating.userRatings[existingRatingIndex].rating
+        post.rating.userRatings[existingRatingIndex].rating = rating
+
+        // Recalculate average rating
+        const totalRating =
+          post.rating.rate * post.rating.count - oldRating + rating
+        post.rating.rate = Number((totalRating / post.rating.count).toFixed(1))
+      } else {
+        // Add new rating
+        post.rating.userRatings.push({
+          userId,
+          rating,
+        })
+
+        // Calculate new rating
+        const newCount = post.rating.count + 1
+        const newRate =
+          (post.rating.rate * post.rating.count + rating) / newCount
+
+        post.rating.count = newCount
+        post.rating.rate = Number(newRate.toFixed(1))
+      }
+
+      await post.save()
+
+      res.status(200).json({
+        message: "Rating updated successfully",
+        rating: {
+          rate: post.rating.rate,
+          count: post.rating.count,
+        },
+      })
+    } catch (error) {
+      next(new AppError("Error updating rating", 500, error))
+    }
+  },
 }
 
 export { userPostCtrl }

@@ -4,6 +4,7 @@ import axios from "axios"
 import { GET_POST_BY_ID_URL, POSTS_URL } from "../constants/endPoint"
 import { UserContext } from "../contexts/UserContextpProvider"
 import { adminStyles } from "../pages/Admin"
+import { Rating } from "./Rating"
 
 export const PostDetails = () => {
   const { id } = useParams()
@@ -114,6 +115,21 @@ export const PostDetails = () => {
                 </button>
               </div>
             )}
+        </div>
+
+        {/* Add Rating component after the header */}
+        <div className="mb-6">
+          <Rating
+            productId={post._id}
+            rating={post.rating || { rate: 0, count: 0, userRatings: [] }}
+            onRatingUpdate={(newRating) => {
+              setPost((prev) => ({
+                ...prev,
+                rating: newRating,
+              }))
+            }}
+            isPost={true} // Add this prop to differentiate between posts and products
+          />
         </div>
 
         {/* Main Image */}

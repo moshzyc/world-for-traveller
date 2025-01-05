@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useContext } from "react"
 import { FaStar } from "react-icons/fa"
 import axios from "axios"
-import { PRODUCTS_URL } from "../constants/endPoint"
+import {
+  PRODUCTS_URL,
+  POSTS_URL,
+  GET_POST_BY_ID_URL,
+} from "../constants/endPoint"
 import { UserContext } from "../contexts/UserContextpProvider"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
 
@@ -10,6 +14,7 @@ export const Rating = ({
   rating,
   onRatingUpdate,
   showUserRating = true,
+  isPost = false,
 }) => {
   const [hover, setHover] = useState(null)
   const [userRating, setUserRating] = useState(0)
@@ -29,23 +34,32 @@ export const Rating = ({
 
   const handleRating = async (currentRating) => {
     if (!user) {
-      alert("Please login to rate products")
+      alert("Please login to rate")
       return
     }
 
     try {
-      await axios.post(`${PRODUCTS_URL}/rate/${productId}`, {
+      const endpoint = isPost
+        ? `${POSTS_URL}/rate/${productId}`
+        : `${PRODUCTS_URL}/rate/${productId}`
+
+      await axios.post(endpoint, {
         rating: currentRating,
       })
 
-      // Fetch updated product data
-      const { data } = await axios.get(`${PRODUCTS_URL}/product/${productId}`)
+      // Fetch updated data
+      const { data } = await axios.get(
+        isPost
+          ? `${GET_POST_BY_ID_URL}/${productId}`
+          : `${PRODUCTS_URL}/product/${productId}`
+      )
+
       if (onRatingUpdate) {
         onRatingUpdate(data.rating)
       }
       setUserRating(currentRating)
     } catch (error) {
-      console.error("Error rating product:", error)
+      console.error("Error rating:", error)
     }
   }
 

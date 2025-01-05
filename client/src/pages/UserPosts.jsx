@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import axios from "axios"
 import { Link } from "react-router-dom"
 import { GET_ALL_POSTS_URL } from "../constants/endPoint"
+import { Rating } from "../components/Rating"
 
 export const UserPosts = () => {
   const [posts, setPosts] = useState([])
@@ -40,7 +41,7 @@ export const UserPosts = () => {
 
   const handleSearch = (e) => {
     e.preventDefault()
-    setFilters((prev) => ({ ...prev, page: 1 })) // Reset to first page on new search
+    setFilters((prev) => ({ ...prev, page: 1 }))
   }
 
   return (
@@ -112,6 +113,27 @@ export const UserPosts = () => {
                     <p className="mb-4 line-clamp-2 text-gray-600">
                       {post.content[0]}
                     </p>
+
+                    <div className="mb-3">
+                      <Rating
+                        productId={post._id}
+                        rating={
+                          post.rating || { rate: 0, count: 0, userRatings: [] }
+                        }
+                        isPost={true}
+                        showUserRating={false}
+                        onRatingUpdate={(newRating) => {
+                          setPosts((currentPosts) =>
+                            currentPosts.map((p) =>
+                              p._id === post._id
+                                ? { ...p, rating: newRating }
+                                : p
+                            )
+                          )
+                        }}
+                      />
+                    </div>
+
                     <div className="flex items-center justify-between text-sm text-gray-500">
                       <span>{post.createdBy.username}</span>
                       <span>

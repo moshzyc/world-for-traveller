@@ -46,4 +46,7 @@ router.put(
 )
 router.delete("/admin/delete/:id", autAdmin, userPostCtrl.adminDeletePost)
 
+// Add the new rate endpoint
+router.post("/rate/:id", auth, userPostCtrl.ratePost)
+
 export default router

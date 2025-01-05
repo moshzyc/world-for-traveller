@@ -2,6 +2,7 @@ import express from "express"
 import AppError from "../utils/appError.js"
 import userCtrl from "../controllers/users.controller.js"
 import { auth, autAdmin } from "../middlewares/auth.js"
+import { userPostCtrl } from "../controllers/userPost.controller.js"
 const router = express.Router()
 
 router.post("/signup", userCtrl.signup)
@@ -21,5 +22,6 @@ router.get("/all-orders", autAdmin, userCtrl.getAllOrders)
 router.put("/update-order-status", autAdmin, userCtrl.updateOrderStatus)
 router.get("/all-users", autAdmin, userCtrl.getAllUsers)
 router.put("/admin-update-user", autAdmin, userCtrl.adminUpdateUser)
+router.post("/rate/:id", auth, userPostCtrl.ratePost)
 
 export default router
