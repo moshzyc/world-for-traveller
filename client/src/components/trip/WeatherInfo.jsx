@@ -39,7 +39,7 @@ export const WeatherInfo = ({
 
           const results = await Promise.all(weatherPromises)
           const processedData = results.map((res) => ({
-            temp: res.data.list[0].main.temp,
+            temperature: res.data.list[0].main.temp,
             conditions: res.data.list[0].weather[0].main,
             icon: res.data.list[0].weather[0].icon,
           }))
@@ -48,7 +48,7 @@ export const WeatherInfo = ({
 
           // Get weather conditions for product recommendations
           const weatherConditions = processedData.map((data) => {
-            const temp = data.temp
+            const temp = data.temperature
             if (temp >= 25) return "hot"
             if (temp <= 15) return "cold"
             return "neutral"
@@ -129,7 +129,9 @@ export const WeatherInfo = ({
                 />
                 <div>
                   <h3 className="font-medium">{locations[index].name}</h3>
-                  <p className="text-gray-600">{Math.round(data.temp)}°C</p>
+                  <p className="text-gray-600">
+                    {Math.round(data.temperature)}°C
+                  </p>
                   <p className="text-gray-600">{data.conditions}</p>
                 </div>
               </div>

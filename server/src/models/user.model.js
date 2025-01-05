@@ -111,6 +111,35 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
+    trips: [
+      {
+        name: {
+          type: String,
+          required: true,
+        },
+        locations: [
+          {
+            name: String,
+            lat: Number,
+            lng: Number,
+          },
+        ],
+        dates: {
+          start: Date,
+          end: Date,
+        },
+        weatherData: [
+          {
+            location: String,
+            forecast: Object,
+          },
+        ],
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
   },
   { timestamps: true }
 )

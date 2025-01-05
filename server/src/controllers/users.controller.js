@@ -462,6 +462,62 @@ const userCtrl = {
       next(new AppError("Error updating user", 500, error))
     }
   },
+  async saveTrip(req, res, next) {
+    try {
+      const { name, locations, dates, weatherData } = req.body
+      const userId = req._id
+
+      const user = await User.findById(userId)
+      if (!user) {
+        return next(new AppError("User not found", 404))
+      }
+
+      user.trips.push({
+        name,
+        locations,
+        dates,
+        weatherData,
+      })
+
+      await user.save()
+
+      res.status(200).json({
+        message: "Trip saved successfully",
+        trip: user.trips[user.trips.length - 1],
+      })
+    } catch (error) {
+      next(new AppError("Error saving trip", 500, error))
+    }
+  },
+  async getTrips(req, res, next) {
+    try {
+      const user = await User.findById(req._id)
+      if (!user) {
+        return next(new AppError("User not found", 404))
+      }
+
+      res.status(200).json(user.trips)
+    } catch (error) {
+      next(new AppError("Error fetching trips", 500, error))
+    }
+  },
+  async deleteTrip(req, res, next) {
+    try {
+      const { tripId } = req.params
+      const user = await User.findById(req._id)
+
+      if (!user) {
+        return next(new AppError("User not found", 404))
+      }
+
+      user.trips = user.trips.filter((trip) => trip._id.toString() !== tripId)
+      await user.save()
+
+      res.status(200).json({ message: "Trip deleted successfully" })
+    } catch (error) {
+      next(new AppError("Error deleting trip", 500, error))
+    }
+  },
 }
 
 export default userCtrl

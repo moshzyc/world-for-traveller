@@ -11,6 +11,8 @@ import {
 } from "../constants/endPoint"
 import { PrvOrder } from "./PrvOrder"
 import { Card } from "./Card"
+import { format } from "date-fns"
+import { ShareTrip } from "./trip/ShareTrip"
 
 export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
   const { user, setUser, role } = useContext(UserContext)
@@ -36,6 +38,10 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
   const [error, setError] = useState(null)
   const [page, setPage] = useState(1)
   const [pagination, setPagination] = useState(null)
+  const [trips, setTrips] = useState([])
+  const [tripsLoading, setTripsLoading] = useState(false)
+  const [showShareModal, setShowShareModal] = useState(false)
+  const [selectedTrip, setSelectedTrip] = useState(null)
 
   useEffect(() => {
     user && getOrders()
@@ -48,6 +54,12 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
   useEffect(() => {
     fetchUserPosts()
   }, [page])
+
+  useEffect(() => {
+    if (user && activeTab === "trips") {
+      fetchTrips()
+    }
+  }, [user, activeTab])
 
   const getOrders = async () => {
     try {
@@ -129,6 +141,37 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
     } finally {
       setLoading(false)
     }
+  }
+
+  const fetchTrips = async () => {
+    try {
+      setTripsLoading(true)
+      const { data } = await axios.get(`${USER_URL}trips`)
+      console.log("Fetched trips:", data)
+      setTrips(data)
+    } catch (error) {
+      console.error("Error fetching trips:", error)
+      setError("Failed to load trips")
+    } finally {
+      setTripsLoading(false)
+    }
+  }
+
+  const handleDeleteTrip = async (tripId) => {
+    if (window.confirm("Are you sure you want to delete this trip?")) {
+      try {
+        await axios.delete(`${USER_URL}trips/${tripId}`)
+        setTrips(trips.filter((trip) => trip._id !== tripId))
+      } catch (error) {
+        console.error("Error deleting trip:", error)
+        alert("Failed to delete trip")
+      }
+    }
+  }
+
+  const handleShareClick = (trip) => {
+    setSelectedTrip(trip)
+    setShowShareModal(true)
   }
 
   const renderProfileContent = () => (
@@ -417,6 +460,16 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
               >
                 My Posts
               </button>
+              <button
+                onClick={() => setActiveTab("trips")}
+                className={`pb-4 text-sm font-medium transition-colors ${
+                  activeTab === "trips"
+                    ? "border-b-2 border-[#2e7d32] text-[#2e7d32]"
+                    : "text-gray-500 hover:text-[#2e7d32]"
+                }`}
+              >
+                My Trips
+              </button>
             </div>
 
             {/* Content based on active tab */}
@@ -569,12 +622,184 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
                   </>
                 )}
               </div>
+            ) : activeTab === "trips" ? (
+              <div className="space-y-4">
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-2xl font-bold text-[#2e7d32]">
+                    My Trips
+                  </h2>
+                  <Link
+                    to="/trip-planner"
+                    className="rounded-lg bg-[#2e7d32] px-4 py-2 text-white transition-colors hover:bg-[#1b5e20]"
+                  >
+                    Plan New Trip
+                  </Link>
+                </div>
+
+                {tripsLoading ? (
+                  <div className="text-center">Loading...</div>
+                ) : trips.length > 0 ? (
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    {trips.map((trip, index) => (
+                      <div
+                        key={index}
+                        className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md"
+                      >
+                        <div className="p-4">
+                          <div className="flex items-center justify-between">
+                            <h3 className="text-lg font-semibold text-gray-900">
+                              {trip.name}
+                            </h3>
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => handleShareClick(trip)}
+                                className="text-blue-500 hover:text-blue-700"
+                                title="Share trip"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-5 w-5"
+                                  viewBox="0 0 20 20"
+                                  fill="currentColor"
+                                >
+                                  <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
+                                </svg>
+                              </button>
+                              <button
+                                onClick={() => handleDeleteTrip(trip._id)}
+                                className="text-red-500 hover:text-red-700"
+                                title="Delete trip"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-5 w-5"
+                                  viewBox="0 0 20 20"
+                                  fill="currentColor"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+                          <div className="mb-3 text-sm text-gray-500">
+                            {format(new Date(trip.dates.start), "MMM d, yyyy")}{" "}
+                            - {format(new Date(trip.dates.end), "MMM d, yyyy")}
+                          </div>
+                          <div className="space-y-2">
+                            <h4 className="font-medium text-gray-700">
+                              Locations:
+                            </h4>
+                            <ul className="ml-4 list-disc space-y-1 text-sm text-gray-600">
+                              {trip.locations.map((loc, i) => (
+                                <li key={i}>{loc.name}</li>
+                              ))}
+                            </ul>
+                          </div>
+                          {trip.weatherData && trip.weatherData.length > 0 && (
+                            <div className="mt-3 space-y-2">
+                              <h4 className="font-medium text-gray-700">
+                                Weather Forecast:
+                              </h4>
+                              <div className="grid grid-cols-1 gap-2 text-sm">
+                                {trip.weatherData.map((weather, i) => (
+                                  <div
+                                    key={i}
+                                    className="rounded-md bg-gray-50 p-2"
+                                  >
+                                    <div className="font-medium">
+                                      {weather.location}
+                                    </div>
+                                    <div className="text-gray-600">
+                                      {weather.forecast && (
+                                        <div className="grid grid-cols-2 gap-2">
+                                          <div>
+                                            <span className="font-medium">
+                                              Temperature:
+                                            </span>{" "}
+                                            {weather.forecast.temperature !==
+                                            "N/A"
+                                              ? `${weather.forecast.temperature}°C`
+                                              : "Not available"}
+                                          </div>
+                                          <div>
+                                            <span className="font-medium">
+                                              Conditions:
+                                            </span>{" "}
+                                            {weather.forecast.conditions ||
+                                              "Not available"}
+                                          </div>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                          <div className="mt-4 text-xs text-gray-400">
+                            Created:{" "}
+                            {format(new Date(trip.createdAt), "MMM d, yyyy")}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="rounded-lg bg-gray-50 p-8 text-center">
+                    <div className="mb-4 text-4xl">🗺️</div>
+                    <h3 className="mb-2 text-lg font-medium text-gray-800">
+                      No Trips Planned Yet
+                    </h3>
+                    <p className="text-gray-600">
+                      Start planning your next adventure!
+                    </p>
+                  </div>
+                )}
+              </div>
             ) : null}
           </>
         )}
       </div>
 
       {renderDeleteModal()}
+
+      {showShareModal && selectedTrip && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-full max-w-lg rounded-lg bg-white p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-xl font-semibold">
+                Share Trip: {selectedTrip.name}
+              </h2>
+              <button
+                onClick={() => setShowShareModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <ShareTrip
+              locations={selectedTrip.locations}
+              dates={selectedTrip.dates}
+              weatherData={selectedTrip.weatherData}
+              onClose={() => setShowShareModal(false)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -23,5 +23,8 @@ router.put("/update-order-status", autAdmin, userCtrl.updateOrderStatus)
 router.get("/all-users", autAdmin, userCtrl.getAllUsers)
 router.put("/admin-update-user", autAdmin, userCtrl.adminUpdateUser)
 router.post("/rate/:id", auth, userPostCtrl.ratePost)
+router.post("/save-trip", auth, userCtrl.saveTrip)
+router.get("/trips", auth, userCtrl.getTrips)
+router.delete("/trips/:tripId", auth, userCtrl.deleteTrip)
 
 export default router
