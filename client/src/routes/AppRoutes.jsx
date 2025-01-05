@@ -73,7 +73,7 @@ export const AppRoutes = () => {
           element: user ? (
             <UserProfile fullScreen />
           ) : (
-            <Navigate to="/loginsingup" />
+            <NotFound />
           ),
         },
         {
