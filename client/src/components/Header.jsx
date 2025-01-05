@@ -16,16 +16,20 @@ import CartTable from "./CartTable"
 import tripPlannerIcon from "../assets/trip-planner.svg"
 import guidesIcon from "../assets/guide.svg"
 import communityIcon from "../assets/community.svg"
+import closeIcon from "../assets/close-icon.svg"
+import chevronIcon from "../assets/chevron-icon.svg"
 
 export const Header = () => {
   const [activeDropdown, setActiveDropdown] = useState(null)
   const [isSignup, setIsSignup] = useState(false)
+  const [showInMobile, setShowInMobile] = useState(false)
   const headerRef = useRef(null)
   const navigate = useNavigate()
   const { user } = useContext(UserContext)
   const { setTitle, categories, setCategory, setSubCategory, cart } =
     useContext(StoreContext)
   let title = ""
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -48,117 +52,170 @@ export const Header = () => {
     setActiveDropdown(activeDropdown === dropdownName ? null : dropdownName)
   }
 
+  const toggleMobileNav = () => {
+    setIsMobileNavOpen(!isMobileNavOpen)
+  }
+
+  const navigateAndClose = (path) => {
+    setIsMobileNavOpen(false)
+    setActiveDropdown(null)
+    navigate(path)
+  }
+
+  const handleCartClick = () => {
+    navigateAndClose("/cart")
+  }
+
+  const handleUserClick = () => {
+    if (!user) {
+      navigateAndClose("/loginsingup")
+    } else {
+      navigateAndClose("/user")
+    }
+  }
+
   return (
     <header ref={headerRef} className={css.header}>
       <div className="mycontainer flex h-[90px] items-center justify-between">
         <img
-          onClick={() => {
-            navigate("/")
-            setCategory([])
-            setSubCategory([])
-          }}
+          onClick={() => navigateAndClose("/")}
           className={css.logo}
           src={logo}
           alt="Logo"
         />
-
-        <div className="flex items-center gap-4">
-          <div className={css.searchContainer}>
-            <input
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
+        <div className="flex items-center">
+          <div className="flex items-center gap-4 sm:flex-row-reverse md:flex-row lg:flex-row">
+            <div className={css.searchContainer}>
+              <input
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    setTitle(title)
+                    setCategory([])
+                    setSubCategory([])
+                    navigate("/store")
+                  }
+                }}
+                onChange={(e) => (title = e.target.value)}
+                className={css.input}
+                type="text"
+                placeholder="Search products..."
+              />
+              <button
+                onClick={() => {
                   setTitle(title)
                   setCategory([])
                   setSubCategory([])
                   navigate("/store")
-                }
-              }}
-              onChange={(e) => (title = e.target.value)}
-              className={css.input}
-              type="text"
-              placeholder="Search products..."
-            />
-            <button
-              onClick={() => {
-                setTitle(title)
-                setCategory([])
-                setSubCategory([])
-                navigate("/store")
-              }}
-              className={css.sBtn}
-            >
-              <img src={searchIcon} alt="Search" className={css.icons} />
-            </button>
-            <Link to="/trip-planner">
-              <img
-                src={tripPlannerIcon}
-                alt="Trip Planner"
-                className={css.icons}
-              />
-            </Link>
-            <Link to="/guides">
-              <img src={guidesIcon} alt="Guides" className={css.icons} />
-            </Link>
-            <Link to="/community">
-              <img
-                src={communityIcon}
-                alt="Community"
-                className={css.icons}
-                title="Travel Community"
-              />
-            </Link>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <img
-                onClick={() => toggleDropdown("cart")}
-                onDoubleClick={() => {
-                  navigate("/cart")
-                  setActiveDropdown(null)
                 }}
-                className={css.icons}
-                src={cartIcon}
-                alt="Cart"
-              />
-              <div
-                className={`${activeDropdown !== "cart" ? "hidden" : ""} ${css.cartPreview}`}
+                className={css.sBtn}
               >
-                <CartTable seeCart={() => setActiveDropdown(null)} />
-              </div>
+                <img src={searchIcon} alt="Search" className={css.icons} />
+              </button>
             </div>
-
-            <div className="relative">
-              <div className={css.userInfo}>
-                <img
-                  onClick={() => toggleDropdown("user")}
-                  onDoubleClick={() => {
-                    !user && navigate("/loginsingup")
-                    user && navigate("/user")
-                    setActiveDropdown(null)
-                  }}
-                  className={`${css.icons} ${user ? css.userLogIcon : ""}`}
-                  src={userIcon}
-                  alt="User"
-                />
-                {user && <span className={css.userName}>{user.name}</span>}
-              </div>
-
-              <div
-                className={`${activeDropdown !== "user" ? "hidden" : ""} ${css.userForm}`}
-              >
-                {user ? (
-                  <UserProfile
-                    onNav={() => setActiveDropdown(null)}
-                    setIsSignup={setIsSignup}
+            <div className="flex items-center">
+              <div className={css.iconsNavStrip}>
+                <nav
+                  className={`${css.iconsNav} ${isMobileNavOpen ? css.iconsNavOpen : ""}`}
+                >
+                  <Link
+                    to="/trip-planner"
+                    onClick={() => navigateAndClose("/trip-planner")}
+                  >
+                    <img
+                      src={tripPlannerIcon}
+                      alt="Trip Planner"
+                      className={css.icons}
+                    />
+                  </Link>
+                  <Link
+                    to="/guides"
+                    onClick={() => navigateAndClose("/guides")}
+                  >
+                    <img src={guidesIcon} alt="Guides" className={css.icons} />
+                  </Link>
+                  <Link
+                    to="/community"
+                    onClick={() => navigateAndClose("/community")}
+                  >
+                    <img
+                      src={communityIcon}
+                      alt="Community"
+                      className={css.icons}
+                      title="Travel Community"
+                    />
+                  </Link>
+                </nav>
+                <button
+                  onClick={toggleMobileNav}
+                  className={`${css.mobileMenuButton} ${isMobileNavOpen ? css.open : ""}`}
+                >
+                  <img
+                    src={isMobileNavOpen ? closeIcon : chevronIcon}
+                    alt={isMobileNavOpen ? "Close menu" : "Open menu"}
+                    className={css.menuIcon}
                   />
-                ) : (
-                  <UserForm formChenge={setIsSignup} isSignup={isSignup} />
-                )}
+                </button>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <img
+                    onClick={(e) => {
+                      const isMobile = window.innerWidth < 768
+                      if (isMobile) {
+                        handleCartClick() // Direct navigation on mobile
+                      } else {
+                        toggleDropdown("cart") // Keep dropdown toggle on desktop
+                        if (e.detail === 2) handleCartClick() // Double click navigation on desktop
+                      }
+                    }}
+                    className={css.icons}
+                    src={cartIcon}
+                    alt="Cart"
+                  />
+                  <div
+                    className={`${activeDropdown !== "cart" ? "hidden" : ""} ${css.cartPreview}`}
+                  >
+                    <CartTable seeCart={() => setActiveDropdown(null)} />
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <div className={css.userInfo}>
+                    <img
+                      onClick={(e) => {
+                        const isMobile = window.innerWidth < 768
+                        if (isMobile) {
+                          handleUserClick() // Direct navigation on mobile
+                        } else {
+                          toggleDropdown("user") // Keep dropdown toggle on desktop
+                          if (e.detail === 2) handleUserClick() // Double click navigation on desktop
+                        }
+                      }}
+                      className={`${css.icons} ${user ? css.userLogIcon : ""}`}
+                      src={userIcon}
+                      alt="User"
+                    />
+                    {user && <span className={css.userName}>{user.name}</span>}
+                  </div>
+
+                  <div
+                    className={`${activeDropdown !== "user" ? "hidden" : ""} ${css.userForm}`}
+                  >
+                    {user ? (
+                      <UserProfile
+                        onNav={() => setActiveDropdown(null)}
+                        setIsSignup={setIsSignup}
+                      />
+                    ) : (
+                      <UserForm formChenge={setIsSignup} isSignup={isSignup} />
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
-
-            <nav className={css.navBar}>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className={css.catBar}>
               <div
                 onClick={() => toggleDropdown("categories")}
                 className={`${css.linseBox} ${activeDropdown === "categories" ? css.linseBoxRotate : ""}`}
@@ -179,7 +236,7 @@ export const Header = () => {
                   />
                 ))}
               </div>
-            </nav>
+            </div>
           </div>
         </div>
       </div>

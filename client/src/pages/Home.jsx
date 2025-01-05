@@ -118,7 +118,7 @@ export const Home = () => {
       <section className="py-16">
         <div className="mycontainer">
           <h2 className="mb-12 text-center text-3xl font-bold text-[#2e7d32]">
-            Explore Our Categories
+            Explore Our Products
           </h2>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-2">
             {/* Store Categories */}

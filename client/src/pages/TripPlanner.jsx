@@ -24,7 +24,7 @@ export const TripPlanner = () => {
       <h1 className="mb-6 text-2xl font-bold text-[#2e7d32]">Trip Planner</h1>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {/* Left Column - Map and Recommendations */}
+        {/* Left Column - Map and Recommended Products */}
         <div className="space-y-6 lg:col-span-2">
           <div className="rounded-lg bg-white p-4 shadow-md">
             <h2 className="mb-4 text-xl font-semibold">Select Destinations</h2>
@@ -35,12 +35,14 @@ export const TripPlanner = () => {
             />
           </div>
 
-          {/* Recommended Products Section - Only show if there are products */}
-          {recommendedProducts.length > 0 && (
-            <div className="rounded-lg bg-white p-4 shadow-md">
-              <RecommendedProducts products={recommendedProducts} />
-            </div>
-          )}
+          {/* Recommended Products - Desktop Position */}
+          <div className="hidden lg:block">
+            {recommendedProducts.length > 0 && (
+              <div className="rounded-lg bg-white p-4 shadow-md">
+                <RecommendedProducts products={recommendedProducts} />
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Right Column - Trip Details, Weather, Share, and Nearby Attractions */}
@@ -66,8 +68,16 @@ export const TripPlanner = () => {
             weatherData={weatherData}
           />
 
-          {/* Nearby Attractions moved here */}
           <NearbyAttractions locations={selectedLocations} />
+        </div>
+
+        {/* Recommended Products - Mobile Position */}
+        <div className="mx-auto w-[80%] lg:hidden">
+          {recommendedProducts.length > 0 && (
+            <div className="rounded-lg bg-white p-4 shadow-md">
+              <RecommendedProducts products={recommendedProducts} />
+            </div>
+          )}
         </div>
       </div>
     </div>

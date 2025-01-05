@@ -82,7 +82,7 @@ export const Rating = ({
       <div className="flex items-center gap-2">
         <span className="text-sm font-medium">{rating.rate.toFixed(1)}</span>
         <span className="text-sm text-gray-600">
-          ({rating.count} {rating.count === 1 ? "review" : "reviews"})
+          ({rating.count} {rating.count === 1 ? "rating" : "ratings"})
         </span>
         {showUserRating && userRating > 0 && (
           <span className="text-sm text-green-600">

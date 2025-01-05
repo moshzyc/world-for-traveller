@@ -71,12 +71,12 @@ export const OrdersManagement = () => {
 
   return (
     <div className="p-4">
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-lg font-semibold text-gray-700">Orders List</h2>
         <div className="flex items-center gap-2">
           <label className="text-sm text-gray-600">Filter by status:</label>
           <select
-            className={adminStyles.select}
+            className={`${adminStyles.select} w-full sm:w-auto`}
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >
@@ -87,7 +87,53 @@ export const OrdersManagement = () => {
           </select>
         </div>
       </div>
-      <div className="overflow-x-auto">
+
+      <div className="block lg:hidden">
+        {filteredOrders.map((order) => (
+          <div
+            key={order._id}
+            className="mb-4 rounded-lg border bg-white p-4 shadow"
+          >
+            <div className="mb-2 flex justify-between">
+              <div className="font-medium">{order.userName}</div>
+              <div className="text-sm text-gray-500">
+                {new Date(order.orderDate).toLocaleDateString()}
+              </div>
+            </div>
+            <div className="mb-2 text-sm text-gray-500">{order.userEmail}</div>
+            <div className="mb-2">{formatItems(order.cart)}</div>
+            <div className="mb-2 font-medium">
+              Total: {order.totalAmount} ILS
+            </div>
+            <div className="mb-3 flex items-center gap-2">
+              <span
+                className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
+                  order.status === "completed"
+                    ? "bg-green-100 text-green-800"
+                    : order.status === "cancelled"
+                      ? "bg-red-100 text-red-800"
+                      : "bg-yellow-100 text-yellow-800"
+                }`}
+              >
+                {order.status}
+              </span>
+            </div>
+            <select
+              className={`${adminStyles.select} w-full`}
+              value={order.status}
+              onChange={(e) =>
+                updateOrderStatus(order.userId, order._id, e.target.value)
+              }
+            >
+              <option value="pending">Pending</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+        ))}
+      </div>
+
+      <div className="hidden overflow-x-auto lg:block">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
