@@ -24,13 +24,25 @@ export const TripPlanner = () => {
   const [isDirty, setIsDirty] = useState(false)
 
   useEffect(() => {
-    if (selectedLocations.length > 0 || tripDates.start || tripDates.end) {
+    if (selectedLocations.length > 0 || (tripDates.start && tripDates.end)) {
       setIsDirty(true)
+      window.localStorage.setItem("tripPlannerIsDirty", "true")
+    } else {
+      setIsDirty(false)
+      window.localStorage.setItem("tripPlannerIsDirty", "false")
     }
   }, [selectedLocations, tripDates])
 
   useEffect(() => {
+    return () => {
+      window.localStorage.removeItem("tripPlannerIsDirty")
+    }
+  }, [])
+
+  useEffect(() => {
     if (isDirty) {
+      console.log("Setting up navigation handlers, isDirty:", isDirty)
+
       const handleBeforeUnload = (e) => {
         const message =
           "You have unsaved changes. Do you want to leave without saving?"
@@ -129,7 +141,12 @@ export const TripPlanner = () => {
 
       setShowSaveModal(false)
       setIsDirty(false)
+      setTripName("")
+      setSelectedLocations([])
+      setTripDates({ start: null, end: null })
+      setWeatherData([])
       alert("Trip saved successfully!")
+      window.localStorage.setItem("tripPlannerIsDirty", "false")
     } catch (error) {
       console.error("Error saving trip:", error)
       alert("Error saving trip. Please try again.")

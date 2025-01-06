@@ -26,5 +26,6 @@ router.post("/rate/:id", auth, userPostCtrl.ratePost)
 router.post("/save-trip", auth, userCtrl.saveTrip)
 router.get("/trips", auth, userCtrl.getTrips)
 router.delete("/trips/:tripId", auth, userCtrl.deleteTrip)
+router.put("/trips/:tripId", auth, userCtrl.updateTrip)
 
 export default router

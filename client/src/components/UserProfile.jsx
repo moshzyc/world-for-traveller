@@ -13,6 +13,11 @@ import { PrvOrder } from "./PrvOrder"
 import { Card } from "./Card"
 import { format } from "date-fns"
 import { ShareTrip } from "./trip/ShareTrip"
+import { GoogleMap } from "./trip/GoogleMap"
+import { WeatherInfo } from "./trip/WeatherInfo"
+import { TripDetails } from "./trip/TripDetails"
+import { NearbyAttractions } from "./trip/NearbyAttractions"
+import { RecommendedProducts } from "./trip/RecommendedProducts"
 
 export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
   const { user, setUser, role } = useContext(UserContext)
@@ -42,6 +47,14 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
   const [tripsLoading, setTripsLoading] = useState(false)
   const [showShareModal, setShowShareModal] = useState(false)
   const [selectedTrip, setSelectedTrip] = useState(null)
+  const [editingTrip, setEditingTrip] = useState(null)
+  const [editTripForm, setEditTripForm] = useState({
+    name: "",
+    locations: [],
+    dates: { start: null, end: null },
+    weatherData: [],
+  })
+  const [recommendedProducts, setRecommendedProducts] = useState([])
 
   useEffect(() => {
     user && getOrders()
@@ -172,6 +185,68 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
   const handleShareClick = (trip) => {
     setSelectedTrip(trip)
     setShowShareModal(true)
+  }
+
+  const handleEditClick = (trip) => {
+    setEditingTrip(trip)
+    setEditTripForm({
+      name: trip.name,
+      locations: trip.locations,
+      dates: {
+        start: trip.dates.start ? new Date(trip.dates.start) : null,
+        end: trip.dates.end ? new Date(trip.dates.end) : null,
+      },
+      weatherData: trip.weatherData || [],
+    })
+  }
+
+  const handleUpdateTrip = async (e) => {
+    e.preventDefault()
+    try {
+      const formattedWeatherData = editTripForm.locations.map(
+        (location, index) => {
+          const weather = editTripForm.weatherData[index]
+          return {
+            location: location.name,
+            forecast: {
+              temperature: weather?.temperature || "N/A",
+              conditions: weather?.conditions || "No forecast available",
+            },
+          }
+        }
+      )
+
+      await axios.put(`${USER_URL}trips/${editingTrip._id}`, {
+        name: editTripForm.name,
+        locations: editTripForm.locations,
+        dates: {
+          start: editTripForm.dates.start,
+          end: editTripForm.dates.end,
+        },
+        weatherData: formattedWeatherData,
+      })
+
+      // Update the trips list
+      setTrips(
+        trips.map((trip) =>
+          trip._id === editingTrip._id
+            ? {
+                ...trip,
+                name: editTripForm.name,
+                locations: editTripForm.locations,
+                dates: editTripForm.dates,
+                weatherData: formattedWeatherData,
+              }
+            : trip
+        )
+      )
+
+      setEditingTrip(null)
+      alert("Trip updated successfully!")
+    } catch (error) {
+      console.error("Error updating trip:", error)
+      alert("Failed to update trip")
+    }
   }
 
   const renderProfileContent = () => (
@@ -332,6 +407,139 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
             >
               Delete Account
             </button>
+          </div>
+        </div>
+      </div>
+    )
+
+  const renderEditTripModal = () =>
+    editingTrip && (
+      <div className="fixed inset-0 z-[9999] overflow-y-auto bg-black bg-opacity-50">
+        <div className="modal-content mx-auto my-20 w-full max-w-6xl rounded-lg bg-white p-6">
+          <div className="mb-4 flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-semibold">Edit Trip</h2>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  value={editTripForm.name}
+                  onChange={(e) =>
+                    setEditTripForm({ ...editTripForm, name: e.target.value })
+                  }
+                  placeholder="Trip Name"
+                  className="rounded-lg border border-gray-300 px-3 py-2 focus:border-green-500 focus:outline-none focus:ring-green-500"
+                  required
+                />
+              </div>
+            </div>
+            <button
+              onClick={() => setEditingTrip(null)}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            <div className="space-y-6 lg:col-span-2">
+              <div className="rounded-lg bg-white p-4 shadow-md">
+                <h2 className="mb-4 text-xl font-semibold">
+                  Select Destinations
+                </h2>
+                <GoogleMap
+                  selectedLocations={editTripForm.locations}
+                  setSelectedLocations={(locations) => {
+                    setEditTripForm({
+                      ...editTripForm,
+                      locations,
+                      weatherData: [],
+                    })
+                  }}
+                  removeLocation={(index) => {
+                    const newLocations = [...editTripForm.locations]
+                    const newWeatherData = [...editTripForm.weatherData]
+                    newLocations.splice(index, 1)
+                    newWeatherData.splice(index, 1)
+                    setEditTripForm({
+                      ...editTripForm,
+                      locations: newLocations,
+                      weatherData: newWeatherData,
+                    })
+                  }}
+                />
+              </div>
+
+              <div className="hidden lg:block">
+                {recommendedProducts.length > 0 && (
+                  <div className="rounded-lg bg-white p-4 shadow-md">
+                    <RecommendedProducts products={recommendedProducts} />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <TripDetails
+                selectedLocations={editTripForm.locations}
+                tripDates={editTripForm.dates}
+                setTripDates={(dates) =>
+                  setEditTripForm({ ...editTripForm, dates })
+                }
+                removeLocation={(index) => {
+                  const newLocations = [...editTripForm.locations]
+                  newLocations.splice(index, 1)
+                  setEditTripForm({
+                    ...editTripForm,
+                    locations: newLocations,
+                  })
+                }}
+              />
+
+              <WeatherInfo
+                locations={editTripForm.locations}
+                dates={editTripForm.dates}
+                weatherData={editTripForm.weatherData}
+                setWeatherData={(weatherData) =>
+                  setEditTripForm({ ...editTripForm, weatherData })
+                }
+                setRecommendedProducts={setRecommendedProducts}
+              />
+
+              <NearbyAttractions locations={editTripForm.locations} />
+
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setEditingTrip(null)}
+                  className="rounded-lg bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleUpdateTrip}
+                  className="rounded-lg bg-[#2e7d32] px-4 py-2 text-sm font-medium text-white hover:bg-[#1b5e20]"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </div>
+
+            <div className="mx-auto w-[80%] lg:hidden">
+              {recommendedProducts.length > 0 && (
+                <div className="rounded-lg bg-white p-4 shadow-md">
+                  <RecommendedProducts products={recommendedProducts} />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -666,6 +874,20 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
                                 </svg>
                               </button>
                               <button
+                                onClick={() => handleEditClick(trip)}
+                                className="text-blue-500 hover:text-blue-700"
+                                title="Edit trip"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-5 w-5"
+                                  viewBox="0 0 20 20"
+                                  fill="currentColor"
+                                >
+                                  <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                </svg>
+                              </button>
+                              <button
                                 onClick={() => handleDeleteTrip(trip._id)}
                                 className="text-red-500 hover:text-red-700"
                                 title="Delete trip"
@@ -800,6 +1022,8 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
           </div>
         </div>
       )}
+
+      {renderEditTripModal()}
     </div>
   )
 }

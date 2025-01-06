@@ -70,11 +70,7 @@ export const AppRoutes = () => {
         },
         {
           path: "user",
-          element: user ? (
-            <UserProfile fullScreen />
-          ) : (
-            <NotFound />
-          ),
+          element: user ? <UserProfile fullScreen /> : <NotFound />,
         },
         {
           path: "trip-planner",

@@ -518,6 +518,43 @@ const userCtrl = {
       next(new AppError("Error deleting trip", 500, error))
     }
   },
+  async updateTrip(req, res, next) {
+    try {
+      const { tripId } = req.params
+      const { name, locations, dates, weatherData } = req.body
+      const userId = req._id
+
+      const user = await User.findById(userId)
+      if (!user) {
+        return next(new AppError("User not found", 404))
+      }
+
+      const tripIndex = user.trips.findIndex(
+        (trip) => trip._id.toString() === tripId
+      )
+      if (tripIndex === -1) {
+        return next(new AppError("Trip not found", 404))
+      }
+
+      user.trips[tripIndex] = {
+        ...user.trips[tripIndex],
+        name,
+        locations,
+        dates,
+        weatherData,
+        _id: user.trips[tripIndex]._id, // Preserve the original ID
+      }
+
+      await user.save()
+
+      res.status(200).json({
+        message: "Trip updated successfully",
+        trip: user.trips[tripIndex],
+      })
+    } catch (error) {
+      next(new AppError("Error updating trip", 500, error))
+    }
+  },
 }
 
 export default userCtrl

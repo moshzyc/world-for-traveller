@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom"
 export const useNavigateWithConfirm = () => {
   const originalNavigate = useNavigate()
 
-  // Override navigate to include confirmation
   const navigate = (...args) => {
     // Check if we're on the TripPlanner page
     if (window.location.pathname === "/trip-planner") {
-      // Check for unsaved changes using isDirty indicator
-      const warningBanner = document.querySelector(".bg-yellow-50")
+      // Check for isDirty state instead of the banner
+      const isDirty =
+        window.localStorage.getItem("tripPlannerIsDirty") === "true"
 
-      if (warningBanner) {
+      if (isDirty) {
         const confirmLeave = window.confirm(
           "You have unsaved changes. Are you sure you want to leave without saving your trip?"
         )
@@ -20,7 +20,6 @@ export const useNavigateWithConfirm = () => {
         }
       }
     }
-    // Use the original navigate function with all arguments
     return originalNavigate(...args)
   }
 
