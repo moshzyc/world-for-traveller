@@ -1,10 +1,12 @@
 import React, { useContext } from "react"
 import { Link } from "react-router-dom"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
+import { UserContext } from "../contexts/UserContextpProvider"
 
 export const Footer = () => {
   const { categories, setCategory, setSubCategory, setTitle } =
     useContext(StoreContext)
+  const { user } = useContext(UserContext)
 
   const handleCategoryClick = (categoryName) => {
     setCategory(categoryName)
@@ -67,6 +69,14 @@ export const Footer = () => {
                   Plan Your Trip
                 </Link>
               </li>
+              <li>
+                <Link
+                  to={user ? "user" : "/loginsingup"}
+                  className="text-[#e8f5e9] transition-colors hover:text-white"
+                >
+                  {user ? "User" : "Login/Signup"}
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -92,9 +102,9 @@ export const Footer = () => {
           <div>
             <h3 className="mb-4 text-lg font-semibold">Contact</h3>
             <ul className="space-y-2 text-[#e8f5e9]">
-              <li>Email: info@worldfortraveler.com</li>
-              <li>Phone: (123) 456-7890</li>
-              <li>Location: Your Location</li>
+              <li>Email: worldfortraveler770@gmail.com</li>
+              <li>Phone: (518) 478-6421</li>
+              <li>Location: Ort Singalovski, Israel</li>
             </ul>
           </div>
         </div>
@@ -108,7 +118,7 @@ export const Footer = () => {
             </p>
             <div className="mt-4 md:mt-0">
               <ul className="flex space-x-4 text-sm">
-                <li>
+                {/* <li>
                   <Link
                     to="/privacy"
                     className="text-[#e8f5e9] transition-colors hover:text-white"
@@ -123,7 +133,7 @@ export const Footer = () => {
                   >
                     Terms of Service
                   </Link>
-                </li>
+                </li> */}
               </ul>
             </div>
           </div>

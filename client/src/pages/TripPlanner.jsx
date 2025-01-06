@@ -105,11 +105,6 @@ export const TripPlanner = () => {
       return
     }
 
-    if (!tripDates.start || !tripDates.end) {
-      alert("Please select trip dates")
-      return
-    }
-
     try {
       const formattedWeatherData = selectedLocations.map((location, index) => {
         const weather = weatherData[index]
@@ -125,7 +120,10 @@ export const TripPlanner = () => {
       await axios.post(`${USER_URL}save-trip`, {
         name: tripName,
         locations: selectedLocations,
-        dates: tripDates,
+        dates: {
+          start: tripDates.start || null,
+          end: tripDates.end || null,
+        },
         weatherData: formattedWeatherData,
       })
 
@@ -256,6 +254,16 @@ export const TripPlanner = () => {
         </div>
 
         <div className="space-y-6">
+          {(!tripDates.start || !tripDates.end) && (
+            <div className="rounded-lg bg-yellow-50 p-4 text-yellow-800">
+              <p className="text-sm">
+                <span className="font-medium">Note:</span> The start trip dates{" "}
+                <span className="text-red-500">*</span> are required for viewing
+                weather details.
+              </p>
+            </div>
+          )}
+
           <TripDetails
             selectedLocations={selectedLocations}
             tripDates={tripDates}
