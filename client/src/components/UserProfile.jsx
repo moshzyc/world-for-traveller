@@ -18,9 +18,11 @@ import { WeatherInfo } from "./trip/WeatherInfo"
 import { TripDetails } from "./trip/TripDetails"
 import { NearbyAttractions } from "./trip/NearbyAttractions"
 import { RecommendedProducts } from "./trip/RecommendedProducts"
+import { StoreContext } from "../contexts/StoreContaxtProvider"
 
 export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
   const { user, setUser, role } = useContext(UserContext)
+  const { setError, setSuccess } = useContext(StoreContext)
   const [seeOrders, setSeeOrders] = useState(false)
   const [orders, setOrders] = useState([])
   const [activeTab, setActiveTab] = useState("profile")
@@ -40,7 +42,6 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
   const [userPosts, setUserPosts] = useState([])
   const [postsLoading, setPostsLoading] = useState(true)
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
   const [page, setPage] = useState(1)
   const [pagination, setPagination] = useState(null)
   const [trips, setTrips] = useState([])
@@ -79,9 +80,9 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
       const { data } = await axios.get(`${USER_URL}get-orders`, {
         withCredentials: true,
       })
-      console.log("Orders received:", data)
       setOrders(data)
     } catch (error) {
+      setError("Failed to fetch orders. Please try again.")
       console.error("Error fetching orders:", error)
     }
   }
@@ -91,7 +92,8 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
       const { data } = await axios.get(`${USER_URL}favorites`)
       setFavorites(data)
     } catch (error) {
-      console.log(error)
+      setError("Failed to fetch favorites. Please try again.")
+      console.error("Error fetching favorites:", error)
     }
   }
 
@@ -105,11 +107,9 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
     e.preventDefault()
     try {
       await axios.put(`${USER_URL}update`, editForm)
-      // Update the user context with new information
       const { data } = await axios.get(`${USER_URL}info`)
       setUser(data)
       setIsEditing(false)
-      // Reset form
       setEditForm({
         name: "",
         email: "",
@@ -117,9 +117,10 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
         newPassword: "",
         phone: "",
       })
+      setSuccess("Profile updated successfully!")
     } catch (error) {
+      setError(error.response?.data?.message || "Failed to update profile")
       console.error("Error updating user:", error)
-      alert(error.response?.data?.message || "Error updating profile")
     }
   }
 
@@ -129,10 +130,11 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
         data: { password: deletePassword },
       })
       setUser(null)
+      setSuccess("Account deleted successfully")
       navigate("/")
     } catch (error) {
+      setError(error.response?.data?.message || "Failed to delete account")
       console.error("Error deleting account:", error)
-      alert(error.response?.data?.message || "Error deleting account")
     }
   }
 
@@ -175,9 +177,10 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
       try {
         await axios.delete(`${USER_URL}trips/${tripId}`)
         setTrips(trips.filter((trip) => trip._id !== tripId))
+        setSuccess("Trip deleted successfully")
       } catch (error) {
+        setError("Failed to delete trip")
         console.error("Error deleting trip:", error)
-        alert("Failed to delete trip")
       }
     }
   }
@@ -204,29 +207,24 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
     e.preventDefault()
     try {
       const formattedWeatherData = editTripForm.locations.map(
-        (location, index) => {
-          const weather = editTripForm.weatherData[index]
-          return {
-            location: location.name,
-            forecast: {
-              temperature: weather?.temperature || "N/A",
-              conditions: weather?.conditions || "No forecast available",
-            },
-          }
-        }
+        (location, index) => ({
+          location: location.name,
+          forecast: {
+            temperature: editTripForm.weatherData[index]?.temperature || "N/A",
+            conditions:
+              editTripForm.weatherData[index]?.conditions ||
+              "No forecast available",
+          },
+        })
       )
 
       await axios.put(`${USER_URL}trips/${editingTrip._id}`, {
         name: editTripForm.name,
         locations: editTripForm.locations,
-        dates: {
-          start: editTripForm.dates.start,
-          end: editTripForm.dates.end,
-        },
+        dates: editTripForm.dates,
         weatherData: formattedWeatherData,
       })
 
-      // Update the trips list
       setTrips(
         trips.map((trip) =>
           trip._id === editingTrip._id
@@ -242,10 +240,10 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
       )
 
       setEditingTrip(null)
-      alert("Trip updated successfully!")
+      setSuccess("Trip updated successfully!")
     } catch (error) {
+      setError("Failed to update trip")
       console.error("Error updating trip:", error)
-      alert("Failed to update trip")
     }
   }
 

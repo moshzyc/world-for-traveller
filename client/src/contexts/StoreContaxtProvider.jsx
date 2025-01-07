@@ -20,6 +20,8 @@ export const StoreContaxtProvider = ({ children }) => {
   const [categories, setCategories] = useState([])
   const [activeMobileCategory, setActiveMobileCategory] = useState(null)
   const [rate, setRate] = useState(0)
+  const [error, setError] = useState(null)
+  const [success, setSuccess] = useState(null)
 
   useEffect(() => {
     getProductsFilterd()
@@ -44,7 +46,11 @@ export const StoreContaxtProvider = ({ children }) => {
       const { data } = await axios.get(GET_CATEGORIES_URL)
       setCategories(data)
       // console.log(data)
-    } catch (error) {}
+      setError(null)
+    } catch (error) {
+      setError("Failed to fetch categories")
+      console.error(error)
+    }
   }
   const getProductsFilterd = async () => {
     try {
@@ -52,9 +58,11 @@ export const StoreContaxtProvider = ({ children }) => {
         `${PRODUCTS_URL}?cat=${category}&sCat=${subCategory}&title=${title}`
       )
       setProducts(data)
-      console.log(data)
+      setError(null)
+      // console.log(data)
     } catch (err) {
-      console.log(err)
+      setError("Failed to fetch products")
+      console.error(err)
     }
   }
 
@@ -107,15 +115,15 @@ export const StoreContaxtProvider = ({ children }) => {
   const updateCart = async (updatedCart) => {
     try {
       if (!Array.isArray(updatedCart)) {
-        console.error(
-          "updateCart failed: updatedCart is not an array",
-          updatedCart
-        )
-        return
+        throw new Error("updatedCart is not an array")
       }
       await axios.put(CART_URL, { cart: updatedCart })
-      console.log("Cart updated successfully")
+      setSuccess("Cart updated successfully")
+      setError(null)
+      // Clear success message after 3 seconds
+      setTimeout(() => setSuccess(null), 3000)
     } catch (error) {
+      setError("Failed to update cart")
       console.error("Error updating cart:", error)
     }
   }
@@ -258,6 +266,10 @@ export const StoreContaxtProvider = ({ children }) => {
         category,
         title,
         setRate,
+        error,
+        success,
+        setError,
+        setSuccess,
       }}
     >
       {children}

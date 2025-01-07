@@ -229,11 +229,15 @@
 
 .iconsNav {
   display: flex;
+  align-items: center;
+  height: 40px;
   background-color: rgba(42, 207, 42, 0.518);
   border-radius: 50px 0px 0px 50px;
   transform-origin: right center;
   -webkit-animation: slide-close 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
   animation: slide-close 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  padding-left: 10px;
+  gap: 5px;
 }
 
 .iconsNavOpen {
@@ -298,6 +302,8 @@
 
 .iconsNavStrip {
   display: flex;
+  align-items: center;
+  height: 40px;
 }
 
 .showMobile {

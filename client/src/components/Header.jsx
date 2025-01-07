@@ -114,7 +114,7 @@ export const Header = () => {
                 <img src={searchIcon} alt="Search" className={css.icons} />
               </button>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center ml-1">
               <div className={css.iconsNavStrip}>
                 <nav
                   className={`${css.iconsNav} ${isMobileNavOpen ? css.iconsNavOpen : ""}`}

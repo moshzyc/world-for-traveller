@@ -31,12 +31,13 @@ import { AddUserPost } from "../components/AddUserPost"
 import { EditUserPost } from "../components/EditUserPost"
 import { PostDetails } from "../components/PostDetails"
 import { PrivateRoute } from "./PrivateRoute"
+import { Notifications } from "../components/Notifications"
 
 export const AppRoutes = () => {
   const { user } = useContext(UserContext)
 
-  console.log("Current user:", user)
-  console.log("Is admin?:", user?.isAdmin)
+  // console.log("Current user:", user)
+  // console.log("Is admin?:", user?.isAdmin)
 
   const router = createBrowserRouter([
     {
@@ -115,6 +116,7 @@ export const AppRoutes = () => {
 
   return (
     <StoreContaxtProvider>
+      <Notifications />
       <RouterProvider router={router} />
     </StoreContaxtProvider>
   )

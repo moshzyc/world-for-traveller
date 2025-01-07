@@ -8,9 +8,9 @@ export const UserContextpProvider = ({ children }) => {
   let [user, setUser] = useState(null)
   const [role, setRole] = useState("")
 
-  useEffect(() => {
-    console.log(user)
-  }, [user])
+  // useEffect(() => {
+  //   console.log(user)
+  // }, [user])
 
   useEffect(() => {
     checkIfUserConnected()
