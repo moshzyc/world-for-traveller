@@ -15,7 +15,9 @@ export const TripDetails = ({
       <div className="space-y-4">
         {/* Date Selection */}
         <div className="space-y-2">
-          <label className="block text-gray-700">Start Date</label>
+          <label className="block text-gray-700">
+            Start Date<span className="text-red-500">*</span>{" "}
+          </label>
           <DatePicker
             selected={tripDates.start}
             onChange={(date) => setTripDates({ ...tripDates, start: date })}

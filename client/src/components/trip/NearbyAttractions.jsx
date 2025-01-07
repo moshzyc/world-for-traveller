@@ -29,7 +29,7 @@ export const NearbyAttractions = ({ locations }) => {
           })
 
           if (!data) {
-            throw new Error("No data received from server");
+            throw new Error("No data received from server")
           }
 
           console.log("Response for", location.name, ":", data)
@@ -77,7 +77,7 @@ export const NearbyAttractions = ({ locations }) => {
   if (!locations.length) return null
 
   return (
-    <div className="rounded-lg bg-white p-4 shadow-md">
+    <div className="rounded-lg border-2 border-[#2e7d32] bg-white p-4 shadow-md">
       <h2 className="mb-4 text-xl font-semibold">Nearby Attractions</h2>
 
       {loading ? (

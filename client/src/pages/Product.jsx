@@ -22,6 +22,7 @@ import {
   FaArrowLeft,
   FaLink,
 } from "react-icons/fa"
+import { Rating } from "../components/Rating"
 
 export const Product = () => {
   const { addItem } = useContext(StoreContext)
@@ -142,6 +143,12 @@ export const Product = () => {
                   <span className="text-[#2e7d32]">{product.subCategory}</span>
                 </p>
               )}
+              {product.weather && (
+                <p className="text-base font-semibold md:text-lg">
+                  Weather:{" "}
+                  <span className="text-[#2e7d32]">{product.weather}</span>
+                </p>
+              )}
             </div>
 
             <div className="flex-grow">
@@ -152,7 +159,7 @@ export const Product = () => {
 
             <div className="mt-4">
               <p className="mb-4 text-xl font-bold text-[#2e7d32] md:text-2xl">
-                ${product.price}
+                {product.price} ILS
               </p>
 
               <div className="flex items-center gap-3">
@@ -254,6 +261,19 @@ export const Product = () => {
                   )}
                 </div>
               </div>
+            </div>
+
+            <div className="mb-4">
+              <Rating
+                productId={product._id}
+                rating={product.rating}
+                onRatingUpdate={(newRating) => {
+                  setProduct((prev) => ({
+                    ...prev,
+                    rating: newRating,
+                  }))
+                }}
+              />
             </div>
           </div>
         </div>

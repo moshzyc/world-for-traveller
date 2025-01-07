@@ -27,7 +27,7 @@ export const Home = () => {
       </section>
 
       {/* Trip Planner Section */}
-      <section className="py-16">
+      <section className="pb-8 pt-5">
         <div className="mycontainer">
           <div
             onClick={() => navigate("/trip-planner")}
@@ -55,13 +55,72 @@ export const Home = () => {
         </div>
       </section>
 
+      {/* Travel Guides Section */}
+      <section className="bg-[#e8f5e9] py-5">
+        <div className="mycontainer">
+          <div
+            onClick={() => navigate("/guides")}
+            className="group cursor-pointer"
+          >
+            <div className="transform overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:scale-105">
+              <div className="relative h-64 w-full">
+                <img
+                  src="https://images.pexels.com/photos/7412069/pexels-photo-7412069.jpeg"
+                  alt="Travel Guides"
+                  className="h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-30">
+                  <div className="flex h-full flex-col items-center justify-center text-white">
+                    <h2 className="mb-4 text-4xl font-bold">Travel Guides</h2>
+                    <p className="text-xl">
+                      Explore our collection of travel tips and destination
+                      guides
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Community Section */}
+      <section className="py-5">
+        <div className="mycontainer">
+          <div
+            onClick={() => navigate("/community")}
+            className="group cursor-pointer"
+          >
+            <div className="transform overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:scale-105">
+              <div className="relative h-64 w-full">
+                <img
+                  src="https://images.pexels.com/photos/3280130/pexels-photo-3280130.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                  alt="Travels Community"
+                  className="h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-30">
+                  <div className="flex h-full flex-col items-center justify-center text-white">
+                    <h2 className="mb-4 text-4xl font-bold">
+                      Travels Community
+                    </h2>
+                    <p className="text-xl">
+                      Connect with fellow travelers and share your experiences
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Categories Section */}
       <section className="py-16">
         <div className="mycontainer">
           <h2 className="mb-12 text-center text-3xl font-bold text-[#2e7d32]">
-            Explore Our Categories
+            Explore Our Products
           </h2>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-2">
             {/* Store Categories */}
             {categories?.map((cat) => (
               <div

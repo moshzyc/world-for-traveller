@@ -1,38 +1,61 @@
 import React, { useState, useEffect, useContext } from "react"
 import axios from "axios"
-import { ADD_POST_URL, GET_CATEGORIES_URL } from "../constants/endPoint"
+import { ADD_POST_URL, POST_CATEGORIES_URL } from "../constants/endPoint"
 import { UserContext } from "../contexts/UserContextpProvider"
+import { LocationSearchInput } from "./GooglePlacesAutocomplete"
+import { ProductSelector } from "./ProductSelector"
+import { adminStyles } from "../pages/Admin"
+import { useNavigate } from "react-router-dom"
 
-export const AddPost = () => {
+export const AddUserPost = () => {
   const { user } = useContext(UserContext)
-
   const [formValue, setFormValue] = useState({
     title: "",
-    content: [""], // מערך פסקאות
-    category: "", // קטגוריה נבחרת
-    images: [], // תמונות נוספות
-    mainImage: null, // התמונה הראשית
+    content: [""],
+    category: "",
+    location: null,
+    product: null,
+    images: [],
+    mainImage: null,
   })
 
-  const [files, setFiles] = useState([]) // קבצים של תמונות נוספות
-  const [categories, setCategories] = useState([]) // רשימת קטגוריות
+  const [files, setFiles] = useState([])
+  const [categories, setCategories] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const navigate = useNavigate()
 
-  // שליפת הקטגוריות מהשרת
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(GET_CATEGORIES_URL)
-        setCategories(response.data) // הנח שהמידע הוא מערך של קטגוריות
-      } catch (error) {
-        console.error(
-          "Error fetching categories:",
-          error.response?.data || error
-        )
-      }
-    }
-
     fetchCategories()
   }, [])
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(POST_CATEGORIES_URL)
+      setCategories(response.data)
+    } catch (error) {
+      setError("Error fetching categories")
+      console.error("Error fetching categories:", error)
+    }
+  }
+
+  const handleLocationSelect = (place) => {
+    setFormValue({
+      ...formValue,
+      location: {
+        name: place.formatted_address,
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng(),
+      },
+    })
+  }
+
+  const handleProductSelect = (product) => {
+    setFormValue({
+      ...formValue,
+      product: product._id,
+    })
+  }
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files)
@@ -58,127 +81,208 @@ export const AddPost = () => {
     setFormValue({ ...formValue, content: updatedContent })
   }
 
-  const handleCategoryChange = (e) => {
-    setFormValue({ ...formValue, category: e.target.value })
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setLoading(true)
+    setError(null)
+
     try {
       const formData = new FormData()
       formData.append("title", formValue.title)
       formValue.content.forEach((para) => formData.append("content[]", para))
       formData.append("category", formValue.category)
-      formData.append("createdBy[username]", user.name)
-      formData.append("createdBy[userId]", user.id)
+
+      // Debug log
+      console.log("Sending data:", {
+        title: formValue.title,
+        content: formValue.content,
+        category: formValue.category,
+        location: formValue.location,
+        product: formValue.product,
+        files: files.length,
+        mainImage: formValue.mainImage,
+        userId: user._id,
+      })
+
+      if (formValue.location) {
+        formData.append("location[name]", formValue.location.name)
+        formData.append("location[lat]", formValue.location.lat)
+        formData.append("location[lng]", formValue.location.lng)
+      }
+
+      if (formValue.product) {
+        formData.append("product", formValue.product)
+      }
 
       if (formValue.mainImage) {
         formData.append("mainImage", formValue.mainImage)
       }
 
-      if (files.length > 0) {
-        files.forEach((file) => formData.append("images", file))
-      }
-
-      const response = await axios.post(ADD_POST_URL, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+      files.forEach((file) => {
+        formData.append("images", file)
       })
 
-      console.log("Post added successfully:", response.data)
-      setFormValue({
-        title: "",
-        content: [""],
-        category: "",
-        images: [],
-        mainImage: null,
+      const { data } = await axios.post(ADD_POST_URL, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
       })
-      setFiles([])
-    } catch (error) {
-      console.error("Error adding post:", error.response?.data || error)
+
+      navigate(`/community`)
+    } catch (err) {
+      console.error("Error adding post:", err.response?.data || err)
+      setError(err.response?.data?.message || "Error creating post")
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
-    <div className="m-auto w-[50%] p-2">
-      <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
-        <label htmlFor="title">Title</label>
-        <input
-          className="rounded-lg border border-black p-1"
-          type="text"
-          placeholder="Enter title"
-          name="title"
-          value={formValue.title}
-          onChange={(e) =>
-            setFormValue({ ...formValue, title: e.target.value })
-          }
-        />
+    <div className="mx-auto max-w-3xl p-6">
+      <h2 className={adminStyles.sectionTitle}>Create New Post</h2>
+      {error && (
+        <div className="mb-4 rounded-lg bg-red-100 p-4 text-red-700">
+          {error}
+        </div>
+      )}
 
-        <label htmlFor="content">Content</label>
-        {formValue.content.map((paragraph, index) => (
-          <div key={index} className="flex items-center gap-2">
-            <textarea
-              className="flex-1 rounded-lg border border-black p-1"
-              placeholder={`Paragraph ${index + 1}`}
-              value={paragraph}
-              onChange={(e) => handleContentChange(index, e.target.value)}
-            ></textarea>
-            {formValue.content.length > 1 && (
-              <button
-                type="button"
-                onClick={() => handleRemoveParagraph(index)}
-                className="redBtn"
-              >
-                Remove
-              </button>
-            )}
-          </div>
-        ))}
-        <button type="button" onClick={handleAddParagraph} className="greenBtn">
-          Add Paragraph
-        </button>
-
-        <label htmlFor="category">Category</label>
-        <select
-          className="rounded-lg border border-black p-1"
-          value={formValue.category}
-          onChange={handleCategoryChange}
-        >
-          <option value="">Select a category</option>
-          {categories.map((cat) => (
-            <option key={cat._id} value={cat.category}>
-              {cat.category}
-            </option>
-          ))}
-        </select>
-
-        <label htmlFor="mainImage">Main Image</label>
-        <input
-          className="rounded-lg border border-black p-1"
-          type="file"
-          onChange={handleMainImageChange}
-        />
-
-        <label htmlFor="images">Additional Images</label>
-        <input
-          className="rounded-lg border border-black p-1"
-          type="file"
-          multiple
-          onChange={handleFileChange}
-        />
-
-        <div className="preview">
-          {files.map((file, index) => (
-            <img
-              key={index}
-              src={URL.createObjectURL(file)}
-              alt={`Preview ${index}`}
-              className="preview-image"
-            />
-          ))}
+      <form className="space-y-6" onSubmit={handleSubmit}>
+        {/* Title Input */}
+        <div>
+          <label className={adminStyles.label}>Title</label>
+          <input
+            type="text"
+            className={adminStyles.input}
+            value={formValue.title}
+            onChange={(e) =>
+              setFormValue({ ...formValue, title: e.target.value })
+            }
+            required
+          />
         </div>
 
-        <button className="blackBtn" type="submit">
-          Submit
+        {/* Category Selection */}
+        <div>
+          <label className={adminStyles.label}>Category</label>
+          <select
+            className={adminStyles.select}
+            value={formValue.category}
+            onChange={(e) =>
+              setFormValue({ ...formValue, category: e.target.value })
+            }
+            required
+          >
+            <option value="">Select a category</option>
+            {categories.map((cat) => (
+              <option key={cat._id} value={cat.category}>
+                {cat.category}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Conditional Location Input */}
+        {formValue.category === "locations" && (
+          <div>
+            <label className={adminStyles.label}>Location</label>
+            <LocationSearchInput
+              onPlaceSelect={handleLocationSelect}
+              className="mb-4"
+            />
+            {formValue.location && (
+              <div className="mt-2 text-sm text-gray-600">
+                Selected: {formValue.location.name}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Conditional Product Selection */}
+        {formValue.category === "products reviews" && (
+          <div>
+            <label className={adminStyles.label}>Product</label>
+            <ProductSelector
+              onProductSelect={handleProductSelect}
+              className={adminStyles.input}
+            />
+          </div>
+        )}
+
+        {/* Content Paragraphs */}
+        <div>
+          <label className={adminStyles.label}>Content</label>
+          {formValue.content.map((paragraph, index) => (
+            <div key={index} className="mb-2 flex gap-2">
+              <textarea
+                className={adminStyles.input}
+                value={paragraph}
+                onChange={(e) => handleContentChange(index, e.target.value)}
+                rows="3"
+                required
+              />
+              {formValue.content.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => handleRemoveParagraph(index)}
+                  className={adminStyles.deleteButton}
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={handleAddParagraph}
+            className={adminStyles.button}
+          >
+            Add Paragraph
+          </button>
+        </div>
+
+        {/* Image Uploads */}
+        <div>
+          <label className={adminStyles.label}>Main Image</label>
+          <input
+            type="file"
+            onChange={handleMainImageChange}
+            className={adminStyles.input}
+            required
+          />
+        </div>
+
+        <div>
+          <label className={adminStyles.label}>Additional Images</label>
+          <input
+            type="file"
+            multiple
+            onChange={handleFileChange}
+            className={adminStyles.input}
+          />
+        </div>
+
+        {/* Image Previews */}
+        {files.length > 0 && (
+          <div className="grid grid-cols-3 gap-4">
+            {files.map((file, index) => (
+              <img
+                key={index}
+                src={URL.createObjectURL(file)}
+                alt={`Preview ${index + 1}`}
+                className="h-32 w-full rounded-lg object-cover"
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className={`${adminStyles.button} w-full`}
+          disabled={loading}
+        >
+          {loading ? "Creating Post..." : "Create Post"}
         </button>
       </form>
     </div>

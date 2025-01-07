@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useState, useEffect } from "react"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
 import css from "../css/store.module.css"
 import { useNavigate } from "react-router-dom"
@@ -20,12 +20,30 @@ import {
   FaShare,
   FaLink,
 } from "react-icons/fa"
+import { Rating } from "./Rating"
+import axios from "axios"
+import { USER_URL } from "../constants/endPoint"
 
-export const Card = ({ item }) => {
+export const Card = ({ item, onFavoriteUpdate }) => {
   const { addItem } = useContext(StoreContext)
   const navigate = useNavigate()
   const [showShareMenu, setShowShareMenu] = useState(false)
   const [copySuccess, setCopySuccess] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false)
+
+  useEffect(() => {
+    const checkFavoriteStatus = async () => {
+      try {
+        const { data } = await axios.get(`${USER_URL}favorites`)
+        const isFavorited = data.some((fav) => fav._id === item._id)
+        setIsFavorite(isFavorited)
+      } catch (error) {
+        console.error("Error checking favorite status:", error)
+      }
+    }
+
+    checkFavoriteStatus()
+  }, [item._id])
 
   const shareUrl = `${window.location.origin}/product/${item._id}`
   const shareTitle = `Check out ${item.title}!`
@@ -40,7 +58,19 @@ export const Card = ({ item }) => {
       console.error("Failed to copy link:", err)
     }
   }
-  
+
+  const toggleFavorite = async (e) => {
+    e.stopPropagation()
+    try {
+      const { data } = await axios.post(`${USER_URL}toggle-favorite`, {
+        productId: item._id,
+      })
+      setIsFavorite(data.isFavorite)
+      onFavoriteUpdate?.()
+    } catch (error) {
+      console.error("Error toggling favorite:", error)
+    }
+  }
 
   return (
     <div className={`${css.card} m-auto`}>
@@ -59,6 +89,14 @@ export const Card = ({ item }) => {
         >
           {item.title}
         </h3>
+        <Rating
+          productId={item._id}
+          rating={item.rating}
+          showUserRating={false}
+          onRatingUpdate={(newRating) => {
+            // Optional: Update the local state if needed
+          }}
+        />
         <p className={css.description}>{item.description}</p>
         <div className={css.priceBox}>
           <span className={css.price}>{item.price} ILS</span>
@@ -128,6 +166,20 @@ export const Card = ({ item }) => {
                 </div>
               )}
             </div>
+
+            <button
+              onClick={toggleFavorite}
+              className={`rounded-full p-2 transition-colors ${
+                isFavorite
+                  ? "bg-red-100 text-red-500 hover:bg-red-200"
+                  : "bg-[#f0f7f0] text-[#2e7d32] hover:bg-[#2e7d32] hover:text-white"
+              }`}
+              aria-label={
+                isFavorite ? "Remove from favorites" : "Add to favorites"
+              }
+            >
+              {isFavorite ? "❤️" : "🤍"}
+            </button>
           </div>
         </div>
       </div>

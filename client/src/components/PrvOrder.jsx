@@ -1,5 +1,52 @@
 import React, { useState } from "react"
 
+export const OrdersList = ({ orders }) => {
+  const [statusFilter, setStatusFilter] = useState("all")
+
+  const filteredOrders = orders.filter((order) =>
+    statusFilter === "all" ? true : order.status === statusFilter
+  )
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-semibold text-gray-700">Order History</h2>
+        <div className="flex items-center gap-2">
+          <label className="text-sm text-gray-600">Filter by status:</label>
+          <select
+            className="rounded-lg border border-gray-300 p-2 text-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="all">All Orders</option>
+            <option value="pending">Pending</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+
+      {filteredOrders.length > 0 ? (
+        filteredOrders.map((order, index) => (
+          <PrvOrder key={order.orderDate + index} {...order} />
+        ))
+      ) : (
+        <div className="rounded-lg bg-white p-8 text-center shadow-md">
+          <div className="mb-4 text-4xl">🛍️</div>
+          <h3 className="mb-2 text-lg font-medium text-gray-800">
+            No {statusFilter !== "all" ? statusFilter : ""} Orders Found
+          </h3>
+          <p className="text-gray-600">
+            {statusFilter === "all"
+              ? "When you make your first purchase, it will appear here."
+              : `You don't have any ${statusFilter} orders yet.`}
+          </p>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export const PrvOrder = (props) => {
   const [seeOrder, setSeeOrder] = useState(false)
 
@@ -87,7 +134,7 @@ export const PrvOrder = (props) => {
                       {item.quantity}
                     </td>
                     <td className="px-4 py-3 text-center text-gray-600">
-                      ${item.price}
+                      {item.price} ILS
                     </td>
                   </tr>
                 ))}
@@ -100,7 +147,7 @@ export const PrvOrder = (props) => {
                     Total Amount:
                   </td>
                   <td className="px-4 py-3 text-center text-[#2e7d32]">
-                    ${props.totalAmount}
+                    {props.totalAmount} ILS
                   </td>
                 </tr>
               </tbody>

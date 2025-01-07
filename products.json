@@ -5,11 +5,14 @@
     "price": 120,
     "category": "Men's Clothing",
     "subCategory": "Jackets",
-    "images": ["https://tazminli.com/cdn/shop/files/eeaa94cd043204767e6c016fa3801b15_341x.png?v=1697798374"],
+    "images": [
+      "https://tazminli.com/cdn/shop/files/eeaa94cd043204767e6c016fa3801b15_341x.png?v=1697798374"
+    ],
     "rating": {
       "rate": 0,
       "count": 0
-    }
+    },
+    "weather": "cold"
   },
   {
     "title": "Men's Waterproof Hiking Jacket",
@@ -21,7 +24,8 @@
     "rating": {
       "rate": 0,
       "count": 0
-    }
+    },
+    "weather": "hot"
   },
   {
     "title": "Men's Windbreaker Jacket",
@@ -33,7 +37,8 @@
     "rating": {
       "rate": 0,
       "count": 0
-    }
+    },
+    "weather": "hot"
   },
   {
     "title": "Men's Fleece-Lined Jacket",
@@ -41,11 +46,14 @@
     "price": 110,
     "category": "Men's Clothing",
     "subCategory": "Jackets",
-    "images": ["https://contents.mediadecathlon.com/p2607152/k$c08f94d54f4516deabfde444ada5634f/%D7%9E%D7%A2%D7%99%D7%9C-%D7%A4%D7%9C%D7%99%D7%96-%D7%97%D7%9D-%D7%9C%D7%92%D7%91%D7%A8%D7%99%D7%9D-%D7%9C%D7%98%D7%99%D7%95%D7%9C%D7%99%D7%9D-sh100.jpg?format=auto&quality=40&f=800x800"],
+    "images": [
+      "https://contents.mediadecathlon.com/p2607152/k$c08f94d54f4516deabfde444ada5634f/%D7%9E%D7%A2%D7%99%D7%9C-%D7%A4%D7%9C%D7%99%D7%96-%D7%97%D7%9D-%D7%9C%D7%92%D7%91%D7%A8%D7%99%D7%9D-%D7%9C%D7%98%D7%99%D7%95%D7%9C%D7%99%D7%9D-sh100.jpg?format=auto&quality=40&f=800x800"
+    ],
     "rating": {
       "rate": 0,
       "count": 0
-    }
+    },
+    "weather": "cold"
   },
   {
     "title": "Men's Softshell Jacket",
@@ -53,11 +61,14 @@
     "price": 100,
     "category": "Men's Clothing",
     "subCategory": "Jackets",
-    "images": ["https://contents.mediadecathlon.com/p2084288/k$93272000ab9933049f305158fc791e70/mens-hiking-fleece-jacket-mh120.jpg?format=auto&quality=40&f=800x800"],
+    "images": [
+      "https://contents.mediadecathlon.com/p2084288/k$93272000ab9933049f305158fc791e70/mens-hiking-fleece-jacket-mh120.jpg?format=auto&quality=40&f=800x800"
+    ],
     "rating": {
       "rate": 0,
       "count": 0
-    }
+    },
+    "weather": "hot"
   },
   {
     "title": "Men's Lightweight Down Jacket",
@@ -65,11 +76,14 @@
     "price": 140,
     "category": "Men's Clothing",
     "subCategory": "Jackets",
-    "images": ["https://tse1.mm.bing.net/th?id=OIP.2JpKyUtZTVMWJhrLcRQUNwHaLH&pid=Api"],
+    "images": [
+      "https://tse1.mm.bing.net/th?id=OIP.2JpKyUtZTVMWJhrLcRQUNwHaLH&pid=Api"
+    ],
     "rating": {
       "rate": 0,
       "count": 0
-    }
+    },
+    "weather": "hot"
   },
   {
     "title": "Men's Winter Parka",
@@ -77,11 +91,14 @@
     "price": 200,
     "category": "Men's Clothing",
     "subCategory": "Jackets",
-    "images": ["https://tse4.mm.bing.net/th?id=OIP.vuPznxVvvBaovOphkWyYOAHaKQ&pid=Api"],
+    "images": [
+      "https://tse4.mm.bing.net/th?id=OIP.vuPznxVvvBaovOphkWyYOAHaKQ&pid=Api"
+    ],
     "rating": {
       "rate": 0,
       "count": 0
-    }
+    },
+    "weather": "cold"
   },
   {
     "title": "Men's Convertible Jacket",
@@ -89,11 +106,14 @@
     "price": 130,
     "category": "Men's Clothing",
     "subCategory": "Jackets",
-    "images": ["https://m.media-amazon.com/images/I/81oa3TmTOGL._AC_SL1500_.jpg"],
+    "images": [
+      "https://m.media-amazon.com/images/I/81oa3TmTOGL._AC_SL1500_.jpg"
+    ],
     "rating": {
       "rate": 0,
       "count": 0
-    }
+    },
+    "weather": "neutral"
   },
   {
     "title": "Men's Gore-Tex Shell Jacket",
@@ -101,11 +121,14 @@
     "price": 220,
     "category": "Men's Clothing",
     "subCategory": "Jackets",
-    "images": ["https://contents.mediadecathlon.com/p1740091/k%24628aa42f8c8ba144daeab64a88d82d2d/men-s-country-walking-rain-coat-nh100-raincut-full-zip.jpg?f=800x800&format=auto&quality=40"],
+    "images": [
+      "https://contents.mediadecathlon.com/p1740091/k%24628aa42f8c8ba144daeab64a88d82d2d/men-s-country-walking-rain-coat-nh100-raincut-full-zip.jpg?f=800x800&format=auto&quality=40"
+    ],
     "rating": {
       "rate": 0,
       "count": 0
-    }
+    },
+    "weather": "neutral"
   },
   {
     "title": "Men's Hooded Running Jacket",
@@ -113,7 +136,9 @@
     "price": 85,
     "category": "Men's Clothing",
     "subCategory": "Jackets",
-    "images": ["https://litb-cgis.rightinthebox.com/images/640x640/202107/bps/product/inc/xaypyj1625631633913.jpg"],
+    "images": [
+      "https://litb-cgis.rightinthebox.com/images/640x640/202107/bps/product/inc/xaypyj1625631633913.jpg"
+    ],
     "rating": {
       "rate": 0,
       "count": 0

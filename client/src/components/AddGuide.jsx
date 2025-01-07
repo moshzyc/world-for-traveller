@@ -13,6 +13,7 @@ export const AddGuide = () => {
   const [mainImage, setMainImage] = useState(null)
   const [mainImageUrl, setMainImageUrl] = useState("")
   const [newImageUrl, setNewImageUrl] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleMainImageChange = (e) => {
     const file = e.target.files[0]
@@ -302,8 +303,14 @@ export const AddGuide = () => {
             </div>
           )}
 
-          <button type="submit" className="blackBtn mt-4">
-            Add Guide
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className={`blackBtn mt-4 ${
+              isSubmitting ? "cursor-not-allowed opacity-75" : ""
+            }`}
+          >
+            {isSubmitting ? "Adding Guide..." : "Add Guide"}
           </button>
         </form>
       </div>

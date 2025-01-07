@@ -8,10 +8,18 @@ const userSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
+    phone: {
+      type: String,
+      // required: true,
+    },
     password: {
       type: String,
       unique: true,
       required: true,
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
     },
     role: {
       type: String,
@@ -85,6 +93,48 @@ const userSchema = new mongoose.Schema(
           required: true,
         },
         addedAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+    favorites: [
+      {
+        productId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "products",
+          required: true,
+        },
+        addedAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+    trips: [
+      {
+        name: {
+          type: String,
+          required: true,
+        },
+        locations: [
+          {
+            name: String,
+            lat: Number,
+            lng: Number,
+          },
+        ],
+        dates: {
+          start: Date,
+          end: Date,
+        },
+        weatherData: [
+          {
+            location: String,
+            forecast: Object,
+          },
+        ],
+        createdAt: {
           type: Date,
           default: Date.now,
         },
