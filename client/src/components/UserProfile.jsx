@@ -23,6 +23,7 @@ import { StoreContext } from "../contexts/StoreContaxtProvider"
 export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
   const { user, setUser, role } = useContext(UserContext)
   const { setError, setSuccess } = useContext(StoreContext)
+  const [error, setLocalError] = useState(null)
   const [seeOrders, setSeeOrders] = useState(false)
   const [orders, setOrders] = useState([])
   const [activeTab, setActiveTab] = useState("profile")
@@ -56,6 +57,7 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
     weatherData: [],
   })
   const [recommendedProducts, setRecommendedProducts] = useState([])
+  const [postStatusFilter, setPostStatusFilter] = useState("active")
 
   useEffect(() => {
     user && getOrders()
@@ -74,6 +76,12 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
       fetchTrips()
     }
   }, [user, activeTab])
+
+  useEffect(() => {
+    if (activeTab === "posts") {
+      fetchUserPosts()
+    }
+  }, [activeTab, page, postStatusFilter])
 
   const getOrders = async () => {
     try {
@@ -145,13 +153,18 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
   const fetchUserPosts = async () => {
     try {
       setLoading(true)
-      const { data } = await axios.get(`${GET_USER_POSTS_URL}?page=${page}`, {
-        withCredentials: true,
-      })
+      const { data } = await axios.get(
+        `${GET_USER_POSTS_URL}?page=${page}&status=${postStatusFilter}`,
+        {
+          withCredentials: true,
+        }
+      )
       setUserPosts(data.posts)
       setPagination(data.pagination)
+      setLocalError(null)
     } catch (err) {
       setError("Error fetching your posts")
+      setLocalError("Error fetching your posts")
       console.error(err)
     } finally {
       setLoading(false)
@@ -747,86 +760,162 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
               </div>
             ) : activeTab === "posts" ? (
               <div className="space-y-4">
-                <div className="mb-4 flex items-center justify-between">
-                  <h2 className="text-2xl font-bold text-[#2e7d32]">
-                    My Posts
-                  </h2>
-                  <Link
-                    to="/community/add"
-                    className="rounded-lg bg-[#2e7d32] px-4 py-2 text-white transition-colors hover:bg-[#1b5e20]"
-                  >
-                    Create New Post
-                  </Link>
-                </div>
-
-                {loading ? (
-                  <div className="text-center">Loading...</div>
-                ) : error ? (
-                  <div className="text-center text-red-500">{error}</div>
-                ) : (
-                  <>
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                      {userPosts.map((post) => (
-                        <Link
-                          key={post._id}
-                          to={`/community/post/${post._id}`}
-                          className="group overflow-hidden rounded-lg border border-gray-200 transition-all hover:shadow-lg"
+                <div>
+                  <div className="mb-4 flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <h2 className="text-2xl font-bold text-[#2e7d32]">
+                        My Posts
+                      </h2>
+                      <Link
+                        to="/community/add"
+                        className="inline-flex items-center rounded-lg bg-[#2e7d32] px-4 py-2 text-white transition-colors hover:bg-[#1b5e20]"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="mr-2 h-5 w-5"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
                         >
-                          <div className="relative aspect-video">
-                            <img
-                              src={post.mainImage}
-                              alt={post.title}
-                              className="h-full w-full bg-gray-100 object-contain"
-                            />
-                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
-                              <span className="inline-block rounded-full bg-white/20 px-3 py-1 text-sm text-white backdrop-blur-sm">
-                                {post.category}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="p-4">
-                            <h3 className="mb-2 text-lg font-semibold">
-                              {post.title}
-                            </h3>
-                            <p className="text-sm text-gray-500">
-                              {new Date(post.createdAt).toLocaleDateString()}
-                            </p>
-                          </div>
-                        </Link>
-                      ))}
+                          <path
+                            fillRule="evenodd"
+                            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        Create New Post
+                      </Link>
                     </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setPostStatusFilter("active")}
+                        className={`rounded-lg px-4 py-2 ${
+                          postStatusFilter === "active"
+                            ? "bg-[#2e7d32] text-white"
+                            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                        }`}
+                      >
+                        Active Posts
+                      </button>
+                      <button
+                        onClick={() => setPostStatusFilter("deleted")}
+                        className={`rounded-lg px-4 py-2 ${
+                          postStatusFilter === "deleted"
+                            ? "bg-red-600 text-white"
+                            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                        }`}
+                      >
+                        Posts Deleted By Admin
+                      </button>
+                    </div>
+                  </div>
 
-                    {pagination && pagination.pages > 1 && (
-                      <div className="mt-4 flex justify-center gap-2">
-                        {Array.from({ length: pagination.pages }, (_, i) => (
-                          <button
-                            key={i + 1}
-                            onClick={() => setPage(i + 1)}
-                            className={`rounded px-3 py-1 ${
-                              page === i + 1
-                                ? "bg-[#2e7d32] text-white"
-                                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  {loading ? (
+                    <div className="text-center">Loading...</div>
+                  ) : error ? (
+                    <div className="text-center text-red-500">{error}</div>
+                  ) : (
+                    <>
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                        {userPosts.map((post) => (
+                          <div
+                            key={post._id}
+                            className={`group overflow-hidden rounded-lg border transition-all hover:shadow-lg ${
+                              post.status === "deleted"
+                                ? "border-red-200 bg-red-50"
+                                : "border-gray-200"
                             }`}
                           >
-                            {i + 1}
-                          </button>
+                            <div className="relative aspect-video">
+                              <img
+                                src={post.mainImage}
+                                alt={post.title}
+                                className="h-full w-full bg-gray-100 object-contain"
+                              />
+                              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                                <span className="inline-block rounded-full bg-white/20 px-3 py-1 text-sm text-white backdrop-blur-sm">
+                                  {post.category}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="p-4">
+                              <h3 className="mb-2 text-lg font-semibold">
+                                {post.title}
+                              </h3>
+                              <p className="text-sm text-gray-500">
+                                {new Date(post.createdAt).toLocaleDateString()}
+                              </p>
+                              {post.status === "deleted" &&
+                                post.adminEdits?.length > 0 && (
+                                  <div className="mt-2 text-sm text-red-600">
+                                    <p>
+                                      Deleted by:{" "}
+                                      {
+                                        post.adminEdits[
+                                          post.adminEdits.length - 1
+                                        ].editedBy
+                                      }
+                                    </p>
+                                    <p>
+                                      Reason:{" "}
+                                      {
+                                        post.adminEdits[
+                                          post.adminEdits.length - 1
+                                        ].reason
+                                      }
+                                    </p>
+                                    <p>
+                                      Date:{" "}
+                                      {new Date(
+                                        post.adminEdits[
+                                          post.adminEdits.length - 1
+                                        ].editedAt
+                                      ).toLocaleDateString()}
+                                    </p>
+                                  </div>
+                                )}
+                            </div>
+                          </div>
                         ))}
                       </div>
-                    )}
 
-                    {userPosts.length === 0 && (
-                      <div className="rounded-lg bg-gray-50 p-8 text-center">
-                        <div className="mb-4 text-4xl">✍️</div>
-                        <h3 className="mb-2 text-lg font-medium text-gray-800">
-                          No Posts Yet
-                        </h3>
-                        <p className="text-gray-600">
-                          Share your travel experiences with the community!
-                        </p>
-                      </div>
-                    )}
-                  </>
-                )}
+                      {pagination && pagination.pages > 1 && (
+                        <div className="mt-4 flex justify-center gap-2">
+                          {Array.from({ length: pagination.pages }, (_, i) => (
+                            <button
+                              key={i + 1}
+                              onClick={() => setPage(i + 1)}
+                              className={`rounded px-3 py-1 ${
+                                page === i + 1
+                                  ? "bg-[#2e7d32] text-white"
+                                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                              }`}
+                            >
+                              {i + 1}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {userPosts.length === 0 && (
+                        <div className="rounded-lg bg-gray-50 p-8 text-center">
+                          <div className="mb-4 text-4xl">
+                            {postStatusFilter === "deleted" ? "📭" : "✍️"}
+                          </div>
+                          <h3 className="mb-2 text-lg font-medium text-gray-800">
+                            No{" "}
+                            {postStatusFilter === "deleted" ? "Deleted " : ""}
+                            Posts
+                          </h3>
+                          <p className="text-gray-600">
+                            {postStatusFilter === "deleted"
+                              ? "You don't have any deleted posts"
+                              : "Share your travel experiences with the community!"}
+                          </p>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
               </div>
             ) : activeTab === "trips" ? (
               <div className="space-y-4">

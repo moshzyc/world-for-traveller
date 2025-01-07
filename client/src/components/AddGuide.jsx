@@ -51,7 +51,7 @@ export const AddGuide = () => {
   const handleContentChange = (value) => {
     setFormValue({
       ...formValue,
-      content: value.replace(/\n/g, "<br>"),
+      content: value,
     })
   }
 

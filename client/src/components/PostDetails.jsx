@@ -174,11 +174,9 @@ export const PostDetails = () => {
 
         {/* Content */}
         <div className="prose max-w-none">
-          {post.content.map((paragraph, index) => (
-            <p key={index} className="mb-4 text-gray-700">
-              {paragraph}
-            </p>
-          ))}
+          <p className="mb-4 whitespace-pre-line text-gray-700">
+            {post.content}
+          </p>
         </div>
 
         {/* Additional Images */}

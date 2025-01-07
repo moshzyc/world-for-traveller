@@ -38,7 +38,7 @@ export const EditGuide = () => {
             </h3>
             <div className="rounded-lg bg-green-50 p-3">
               <p className="whitespace-pre-line text-gray-600">
-                {(item.content || "").replace(/<br>/g, "\n")}
+                {item.content || ""}
               </p>
             </div>
           </div>

@@ -11,7 +11,7 @@ export const AddUserPost = () => {
   const { user } = useContext(UserContext)
   const [formValue, setFormValue] = useState({
     title: "",
-    content: [""],
+    content: "",
     category: "",
     location: null,
     product: null,
@@ -66,19 +66,8 @@ export const AddUserPost = () => {
     setFormValue({ ...formValue, mainImage: e.target.files[0] })
   }
 
-  const handleContentChange = (index, value) => {
-    const updatedContent = [...formValue.content]
-    updatedContent[index] = value
-    setFormValue({ ...formValue, content: updatedContent })
-  }
-
-  const handleAddParagraph = () => {
-    setFormValue({ ...formValue, content: [...formValue.content, ""] })
-  }
-
-  const handleRemoveParagraph = (index) => {
-    const updatedContent = formValue.content.filter((_, i) => i !== index)
-    setFormValue({ ...formValue, content: updatedContent })
+  const handleContentChange = (e) => {
+    setFormValue({ ...formValue, content: e.target.value })
   }
 
   const handleSubmit = async (e) => {
@@ -89,7 +78,7 @@ export const AddUserPost = () => {
     try {
       const formData = new FormData()
       formData.append("title", formValue.title)
-      formValue.content.forEach((para) => formData.append("content[]", para))
+      formData.append("content", formValue.content)
       formData.append("category", formValue.category)
 
       // Debug log
@@ -212,33 +201,13 @@ export const AddUserPost = () => {
         {/* Content Paragraphs */}
         <div>
           <label className={adminStyles.label}>Content</label>
-          {formValue.content.map((paragraph, index) => (
-            <div key={index} className="mb-2 flex gap-2">
-              <textarea
-                className={adminStyles.input}
-                value={paragraph}
-                onChange={(e) => handleContentChange(index, e.target.value)}
-                rows="3"
-                required
-              />
-              {formValue.content.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => handleRemoveParagraph(index)}
-                  className={adminStyles.deleteButton}
-                >
-                  Remove
-                </button>
-              )}
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={handleAddParagraph}
-            className={adminStyles.button}
-          >
-            Add Paragraph
-          </button>
+          <textarea
+            className={adminStyles.input}
+            value={formValue.content}
+            onChange={handleContentChange}
+            rows="6"
+            required
+          />
         </div>
 
         {/* Image Uploads */}

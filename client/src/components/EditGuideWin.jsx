@@ -4,9 +4,7 @@ import { EDIT_GUIDE_URL } from "../constants/endPoint"
 
 export const EditGuideWin = (props) => {
   const [title, setTitle] = useState(props.title || "")
-  const [content, setContent] = useState(
-    (props.content || "").replace(/<br>/g, "\n")
-  )
+  const [content, setContent] = useState(props.content || "")
   const [mainImage, setMainImage] = useState(null)
   const [mainImageUrl, setMainImageUrl] = useState(props.mainImage || "")
   const [images, setImages] = useState(props.images || [])
@@ -62,7 +60,7 @@ export const EditGuideWin = (props) => {
 
   const handleContentChange = (index, value) => {
     const updatedContent = [...content]
-    updatedContent[index] = value.replace(/\n/g, "<br>")
+    updatedContent[index] = value
     setContent(updatedContent)
   }
 
@@ -71,7 +69,7 @@ export const EditGuideWin = (props) => {
     const formData = new FormData()
 
     formData.append("title", title)
-    formData.append("content", content.replace(/\n/g, "<br>"))
+    formData.append("content", content)
 
     // Handle main image
     if (mainImage) {

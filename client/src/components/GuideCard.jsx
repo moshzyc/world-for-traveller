@@ -5,10 +5,7 @@ export const GuideCard = ({ guide }) => {
   const navigate = useNavigate()
 
   const renderContent = (content) => {
-    return (
-      content.replace(/<br>/g, "\n").substring(0, 150) +
-      (content.length > 150 ? "..." : "")
-    )
+    return content.substring(0, 150) + (content.length > 150 ? "..." : "")
   }
 
   return (

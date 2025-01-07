@@ -15,7 +15,7 @@ export const EditUserPost = () => {
   const [error, setError] = useState(null)
   const [formValue, setFormValue] = useState({
     title: "",
-    content: [""],
+    content: "",
     category: "",
     location: null,
     product: null,
@@ -80,10 +80,8 @@ export const EditUserPost = () => {
     setFormValue({ ...formValue, mainImage: e.target.files[0] })
   }
 
-  const handleContentChange = (index, value) => {
-    const updatedContent = [...formValue.content]
-    updatedContent[index] = value
-    setFormValue({ ...formValue, content: updatedContent })
+  const handleContentChange = (e) => {
+    setFormValue({ ...formValue, content: e.target.value })
   }
 
   const handleAddParagraph = () => {
@@ -100,7 +98,7 @@ export const EditUserPost = () => {
     try {
       const formData = new FormData()
       formData.append("title", formValue.title)
-      formValue.content.forEach((para) => formData.append("content[]", para))
+      formData.append("content", formValue.content)
       formData.append("category", formValue.category)
 
       if (formValue.location) {
@@ -205,33 +203,13 @@ export const EditUserPost = () => {
           {/* Content Paragraphs */}
           <div>
             <label className={adminStyles.label}>Content</label>
-            {formValue.content.map((paragraph, index) => (
-              <div key={index} className="mb-2 flex gap-2">
-                <textarea
-                  className={adminStyles.input}
-                  value={paragraph}
-                  onChange={(e) => handleContentChange(index, e.target.value)}
-                  rows="3"
-                  required
-                />
-                {formValue.content.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveParagraph(index)}
-                    className={adminStyles.deleteButton}
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={handleAddParagraph}
-              className={adminStyles.button}
-            >
-              Add Paragraph
-            </button>
+            <textarea
+              className={adminStyles.input}
+              value={formValue.content}
+              onChange={handleContentChange}
+              rows="6"
+              required
+            />
           </div>
 
           {/* Current Images */}

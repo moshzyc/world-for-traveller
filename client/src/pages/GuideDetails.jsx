@@ -58,7 +58,7 @@ export const GuideDetails = () => {
 
         <div className="space-y-6">
           <p className="whitespace-pre-line text-lg leading-relaxed text-gray-700">
-            {guide.content.replace(/<br>/g, "\n")}
+            {guide.content}
           </p>
         </div>
 

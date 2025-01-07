@@ -68,7 +68,7 @@ const userPostCtrl = {
       // Create post
       const newPost = new UserPost({
         title,
-        content: Array.isArray(content) ? content : [content],
+        content: content || "",
         category,
         ...(location && { location }),
         ...(product && { product }),
@@ -98,28 +98,29 @@ const userPostCtrl = {
   // Get user's own posts
   async getUserPosts(req, res, next) {
     try {
+      const userId = req._id
       const { page = 1, limit = 10, status = "active" } = req.query
 
+      // Create query object
       const query = {
-        "createdBy.userId": req._id,
-        status,
+        "createdBy.userId": userId,
+        status: status, // This will match 'active' or 'deleted' posts
       }
 
       const posts = await UserPost.find(query)
-        .populate("product", "title images price")
         .sort({ createdAt: -1 })
         .skip((page - 1) * limit)
         .limit(parseInt(limit))
+        .populate("product", "title images price")
 
       const total = await UserPost.countDocuments(query)
 
       res.status(200).json({
         posts,
         pagination: {
-          total,
-          pages: Math.ceil(total / limit),
           currentPage: parseInt(page),
-          limit: parseInt(limit),
+          pages: Math.ceil(total / parseInt(limit)),
+          total,
         },
       })
     } catch (error) {
@@ -185,7 +186,7 @@ const userPostCtrl = {
       // Handle image updates
       let updateData = {
         title,
-        content: Array.isArray(content) ? content : [content],
+        content: content || "",
         category,
         ...(location && { location }),
         ...(product && { product }),
@@ -296,53 +297,44 @@ const userPostCtrl = {
   async adminEditPost(req, res, next) {
     try {
       const postId = req.params.id
-      const { title, content, category, location, product, editReason } =
-        req.body
+      const { title, content, category, location, product } = req.body
 
-      const post = await UserPost.findById(postId)
-      if (!post) {
-        return next(new AppError("Post not found", 404))
-      }
-
+      // Create update data object
       let updateData = {
         title,
-        content: Array.isArray(content) ? content : [content],
+        content: content || "",
         category,
         ...(location && { location }),
         ...(product && { product }),
-        $push: {
-          adminEdits: {
-            editedBy: "Admin",
-            editedAt: new Date(),
-            reason: editReason || "Administrative update",
-          },
-        },
       }
 
+      // Handle image uploads
       if (req.files?.mainImage) {
-        const result = await cloudinary.uploader.upload(
+        const mainImageResult = await cloudinary.uploader.upload(
           req.files.mainImage[0].path,
           { folder: "user-posts/main-images" }
         )
-        updateData.mainImage = result.secure_url
+        updateData.mainImage = mainImageResult.secure_url
         fs.unlinkSync(req.files.mainImage[0].path)
       }
 
-      if (req.files?.images) {
-        const newImages = []
-        for (const file of req.files.images) {
-          const result = await cloudinary.uploader.upload(file.path, {
-            folder: "user-posts/additional-images",
-          })
-          newImages.push(result.secure_url)
-          fs.unlinkSync(file.path)
-        }
-        updateData.images = newImages
+      // Add the admin edit record with correct action type
+      updateData.$push = {
+        adminEdits: {
+          editedBy: "Admin",
+          editedAt: new Date(),
+          action: "edit",
+          reason: "Administrative update",
+        },
       }
 
       const updatedPost = await UserPost.findByIdAndUpdate(postId, updateData, {
         new: true,
       })
+
+      if (!updatedPost) {
+        return next(new AppError("Post not found", 404))
+      }
 
       res.status(200).json({
         message: "Post updated successfully by admin",
@@ -359,31 +351,20 @@ const userPostCtrl = {
       const postId = req.params.id
       const { deleteReason } = req.body
 
-      if (!deleteReason) {
-        return next(
-          new AppError("Delete reason is required for admin deletion", 400)
-        )
-      }
-
       const post = await UserPost.findById(postId)
       if (!post) {
         return next(new AppError("Post not found", 404))
       }
 
-      // Record the deletion in admin actions before deleting
-      await UserPost.findByIdAndUpdate(postId, {
-        $push: {
-          adminEdits: {
-            editedBy: "Admin",
-            editedAt: new Date(),
-            action: "delete",
-            reason: deleteReason,
-          },
-        },
+      post.status = "deleted"
+      post.adminEdits.push({
+        editedBy: "Admin",
+        action: "delete",
+        reason: deleteReason || "Administrative action",
+        editedAt: new Date(),
       })
 
-      // Then delete the post
-      await UserPost.findByIdAndDelete(postId)
+      await post.save()
 
       res.status(200).json({
         message: "Post deleted successfully by admin",
