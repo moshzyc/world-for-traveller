@@ -17,7 +17,7 @@
     "price": 150,
     "category": "Men's Clothing",
     "subCategory": "Jackets",
-    "images": ["https://files.oaiusercontent.com/file-4pdaedCumMZYQd3JruoEiH?se=2024-12-26T11%3A30%3A15Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3Dceab6ef0-5bb5-434a-93d7-dba04564cd02.webp&sig=02Z9gXI44hkto3EERihYLbvJPyelFAawjgV7GFPjvCU%3D"],
+    "images": ["https://www.gearassistant.com/wp-content/uploads/2017/04/Marmot-Exum-Ridge-Lightweight-Waterproof-Jacket-1024x1024.jpg"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -29,7 +29,7 @@
     "price": 90,
     "category": "Men's Clothing",
     "subCategory": "Jackets",
-    "images": ["https://files.oaiusercontent.com/file-PDArH3X6AQbzEYgQziq3DA?se=2024-12-26T11%3A31%3A22Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D877036c7-7f41-4964-8f09-ab4690302fb8.webp&sig=krMgFCQqnfzSmP0CWXsNpuTViO6z0ba3dlfMieTEWBU%3D"],
+    "images": ["https://th.bing.com/th/id/R.be86cd1116caeadeaaa1a4f423ef317f?rik=2cILriZY4A0%2bKQ&riu=http%3a%2f%2fs3-eu-west-1.amazonaws.com%2fmegaimage%2fmega-lutid369.jpg&ehk=ZiM%2fGbonsjhJ4vpjiDJp8nA%2bktUVdZUsHrdVce67cYk%3d&risl=&pid=ImgRaw&r=0"],
     "rating": {
       "rate": 0,
       "count": 0
@@ -120,8 +120,6 @@
     }
   },
 
-  //  Men's Clothing Climbing Shoes
-  [
     {
       "title": "Men's Advanced Climbing Shoe",
       "description": "High-performance climbing shoes designed for precision and durability on challenging routes. Features an ergonomic fit and a sticky rubber sole for superior grip.",
@@ -241,11 +239,7 @@
         "rate": 0,
         "count": 0
       }
-    }
-  ],
-
-// Men's Clothing Thermal Wear
-  [
+    },
     {
       "title": "Men's Thermal Base Layer Top",
       "description": "A high-performance thermal base layer top designed to keep you warm in cold conditions. Made from moisture-wicking and breathable fabric for ultimate comfort.",
@@ -365,12 +359,7 @@
         "rate": 0,
         "count": 0
       }
-    }
-  ],
-
-
-  // Men's Clothing Accessories
-  [
+    },
     {
       "title": "Men's Waterproof Hiking Hat",
       "description": "A lightweight waterproof hiking hat designed to keep you dry and protected from the sun. Made with breathable materials for all-day comfort during outdoor adventures.",
@@ -490,10 +479,7 @@
         "rate": 0,
         "count": 0
       }
-    }
-  ]
-  // Women's Clothing Jackets
-  [
+    },
     {
       "title": "Women's Waterproof Hiking Jacket",
       "description": "A stylish waterproof hiking jacket designed for ultimate protection against rain and wind. Made with breathable fabric to keep you comfortable on all your adventures.",
@@ -613,12 +599,7 @@
         "rate": 0,
         "count": 0
       }
-    }
-  ],
-
-  // Women's Clothing Climbing Shoes
-  
-  [
+    },
     {
       "title": "Women's Performance Climbing Shoes",
       "description": "These women's performance climbing shoes are designed to provide precision, comfort, and grip on both indoor and outdoor climbing surfaces. The ergonomic fit and durable construction ensure reliability for intense climbing sessions.",
@@ -738,11 +719,7 @@
         "rate": 0,
         "count": 0
       }
-    }
-  ],
-  
-  // Women's Clothing Thermal Wear
-  [
+    },
     {
       "title": "Women's Thermal Base Layer Set",
       "description": "A soft and lightweight thermal base layer set designed for women. Perfect for cold weather adventures, it provides excellent insulation and moisture-wicking properties for optimal comfort.",
@@ -862,12 +839,7 @@
         "rate": 0,
         "count": 0
       }
-    }
-  ],
-  
-// Women's Clothing Accessorie
-
-  [
+    },
     {
       "title": "Women's Wide-Brim Sun Hat",
       "description": "A stylish wide-brim sun hat designed to protect you from harsh UV rays. Made with breathable and lightweight materials, perfect for hiking, camping, or beach outings.",
@@ -987,12 +959,7 @@
         "rate": 0,
         "count": 0
       }
-    }
-  ],
-  
-  // Camping Gear, Tents
-
-  [
+    },
     {
       "title": "Lightweight Backpacking Tent",
       "description": "A lightweight and compact backpacking tent designed for solo adventurers. This tent is easy to set up, highly durable, and provides excellent protection against the elements.",
@@ -1112,17 +1079,14 @@
         "rate": 0,
         "count": 0
       }
-    }
-  ],
-  // Camping Gear, Sleeping Bags
-  [
+    },
     {
       "title": "Ultralight Down Sleeping Bag",
       "description": "This ultralight down sleeping bag offers exceptional warmth while remaining compact and easy to pack. Perfect for backpacking trips where every ounce matters.",
       "price": 180,
       "category": "Camping Gear",
       "subCategory": "Sleeping Bags",
-      "images": ["https://example.com/ultralight-down-sleeping-bag.jpg"],
+      "images": ["https://th.bing.com/th/id/OIP.UwSCaqyhsK4XpJxgCqkdXQHaHa?rs=1&pid=ImgDetMain"],
       "rating": {
         "rate": 0,
         "count": 0
@@ -1134,7 +1098,7 @@
       "price": 220,
       "category": "Camping Gear",
       "subCategory": "Sleeping Bags",
-      "images": ["https://example.com/4-season-mummy-sleeping-bag.jpg"],
+      "images": ["https://hometreatsuk.com/wp-content/uploads/2023/02/KA1153_3-4__Season_Sleeping_Bag-_Black_white-background_220822133447578-jpg.webp"],
       "rating": {
         "rate": 0,
         "count": 0
@@ -1146,7 +1110,7 @@
       "price": 150,
       "category": "Camping Gear",
       "subCategory": "Sleeping Bags",
-      "images": ["https://example.com/double-sleeping-bag.jpg"],
+      "images": ["https://th.bing.com/th/id/OIP.Uh6qsJtYlv0yirmnKOEWxwHaEu?rs=1&pid=ImgDetMain"],
       "rating": {
         "rate": 0,
         "count": 0
@@ -1158,7 +1122,7 @@
       "price": 80,
       "category": "Camping Gear",
       "subCategory": "Sleeping Bags",
-      "images": ["https://example.com/lightweight-summer-sleeping-bag.jpg"],
+      "images": ["https://i5.walmartimages.com/seo/Sleeping-Bag-Lightweight-Spring-Summer-Weather-Sleep-Bags-Kids-Adults-Girls-Women-Microfiber-Filled-15-25-Degree-Backpacking-Hiking-Camping-Mountaine_a92ea564-8066-4518-bda7-3b0c8b678bd7.3fe5c6e28c9ea53db1b9c8c4982a822e.jpeg?odnHeight=640&odnWidth=640&odnBg=FFFFFF"],
       "rating": {
         "rate": 0,
         "count": 0
@@ -1170,7 +1134,7 @@
       "price": 140,
       "category": "Camping Gear",
       "subCategory": "Sleeping Bags",
-      "images": ["https://example.com/extra-wide-sleeping-bag.jpg"],
+      "images": ["https://th.bing.com/th/id/R.25ba1ddc18571f043b61dc9e17a4ccec?rik=dbm%2b4C1C6TwFLg&pid=ImgRaw&r=0"],
       "rating": {
         "rate": 0,
         "count": 0
@@ -1182,7 +1146,7 @@
       "price": 60,
       "category": "Camping Gear",
       "subCategory": "Sleeping Bags",
-      "images": ["https://example.com/kids-sleeping-bag.jpg"],
+      "images": ["https://th.bing.com/th/id/OIP.NO5IyV_4Sztjgf5j4q527QAAAA?rs=1&pid=ImgDetMain"],
       "rating": {
         "rate": 0,
         "count": 0
@@ -1194,7 +1158,7 @@
       "price": 200,
       "category": "Camping Gear",
       "subCategory": "Sleeping Bags",
-      "images": ["https://example.com/waterproof-sleeping-bag.jpg"],
+      "images": ["https://s.ecrater.com/stores/379210/5ff67266e9f56_379210b.jpg"],
       "rating": {
         "rate": 0,
         "count": 0
@@ -1206,7 +1170,7 @@
       "price": 25,
       "category": "Camping Gear",
       "subCategory": "Sleeping Bags",
-      "images": ["https://example.com/emergency-sleeping-bag.jpg"],
+      "images": ["https://emergencygearbackpack.com/cdn/shop/products/947773BE-88FB-4942-A0E6-81B6375132A2_1024x1024.jpeg?v=1549195651"],
       "rating": {
         "rate": 0,
         "count": 0
@@ -1218,7 +1182,7 @@
       "price": 120,
       "category": "Camping Gear",
       "subCategory": "Sleeping Bags",
-      "images": ["https://example.com/fleece-lined-sleeping-bag.jpg"],
+      "images": ["https://th.bing.com/th/id/OIP.2yj36-GnakyQWoLGSwNUuwHaHa?rs=1&pid=ImgDetMain"],
       "rating": {
         "rate": 0,
         "count": 0
@@ -1230,15 +1194,733 @@
       "price": 100,
       "category": "Camping Gear",
       "subCategory": "Sleeping Bags",
-      "images": ["https://example.com/all-season-rectangular-sleeping-bag.jpg"],
+      "images": ["https://th.bing.com/th/id/OIP.13okmLNdJr2Dqy3H7Ui4kgHaE0?rs=1&pid=ImgDetMain"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+      {
+        "title": "Ultralight Hiking Backpack",
+        "description": "A durable and ultralight hiking backpack designed for extended outdoor adventures, featuring ample storage compartments and ergonomic support for ultimate comfort.",
+        "price": 150,
+        "category": "Camping Gear",
+        "subCategory": "Backpacks",
+        "images": ["https://i.pinimg.com/originals/41/1f/2b/411f2be2ad3b2a500607351f7af5fcad.jpg"],
+        "rating": {
+          "rate": 0,
+          "count": 0
+        }
+      },
+      {
+        "title": "Waterproof Travel Backpack",
+        "description": "A rugged and waterproof travel backpack ideal for hiking and camping. It comes with a rain cover, padded straps, and compartments for all your essentials.",
+        "price": 95,
+        "category": "Camping Gear",
+        "subCategory": "Backpacks",
+        "images": ["https://m.media-amazon.com/images/I/41ySLmVKdbL.jpg"],
+        "rating": {
+          "rate": 0,
+          "count": 0
+        }
+      },
+      {
+        "title": "Expandable Camping Backpack",
+        "description": "A versatile camping backpack with expandable compartments, perfect for carrying heavy loads. It is equipped with adjustable straps for maximum comfort.",
+        "price": 110,
+        "category": "Camping Gear",
+        "subCategory": "Backpacks",
+        "images": ["https://th.bing.com/th/id/OIP.P8IszHx2TwW12ndvWpCPWQHaHa?rs=1&pid=ImgDetMain"],
+        "rating": {
+          "rate": 0,
+          "count": 0
+        }
+      },
+      {
+        "title": "Lightweight Daypack",
+        "description": "A compact and lightweight daypack designed for short hikes or day trips. Features a minimalist design with multiple storage pockets and durable materials.",
+        "price": 60,
+        "category": "Camping Gear",
+        "subCategory": "Backpacks",
+        "images": ["https://th.bing.com/th/id/OIP.jO5xb0bujjpEmxRRFjaQ0wHaHa?rs=1&pid=ImgDetMain"],
+        "rating": {
+          "rate": 0,
+          "count": 0
+        }
+      },
+      {
+        "title": "50L Hiking Backpack",
+        "description": "A 50L hiking backpack with a spacious main compartment, hydration system compatibility, and a built-in rain cover for all-weather adventures.",
+        "price": 135,
+        "category": "Camping Gear",
+        "subCategory": "Backpacks",
+        "images": ["https://th.bing.com/th/id/R.4a3331ed7f4a425ef9f9c3d38cac61c4?rik=jq69xYEdXAZ5Mg&pid=ImgRaw&r=0"],
+        "rating": {
+          "rate": 0,
+          "count": 0
+        }
+      },
+      {
+        "title": "Roll-Top Adventure Backpack",
+        "description": "A roll-top adventure backpack with waterproof fabric, adjustable straps, and a sleek design, perfect for multi-day outdoor trips.",
+        "price": 120,
+        "category": "Camping Gear",
+        "subCategory": "Backpacks",
+        "images": ["https://cdn.shopify.com/s/files/1/0007/0814/9363/products/novello-rolltop-backpack-15_-navy-159-402-threequater_6ac92ecb-1609-46e3-b092-83f3ec7332db_1024x1024.jpg?v=1534441843"],
+        "rating": {
+          "rate": 0,
+          "count": 0
+        }
+      },
+      {
+        "title": "Heavy-Duty Trekking Backpack",
+        "description": "A heavy-duty trekking backpack with reinforced stitching, extra padding for comfort, and an external frame for better weight distribution.",
+        "price": 200,
+        "category": "Camping Gear",
+        "subCategory": "Backpacks",
+        "images": ["https://5.imimg.com/data5/SELLER/Default/2020/10/KD/MK/XK/92514177/heavy-duty-trekking-backpack-500x500.jpg"],
+        "rating": {
+          "rate": 0,
+          "count": 0
+        }
+      },
+      {
+        "title": "Hydration Backpack",
+        "description": "A compact hydration backpack featuring a built-in water reservoir, breathable back panel, and secure pockets for small essentials.",
+        "price": 80,
+        "category": "Camping Gear",
+        "subCategory": "Backpacks",
+        "images": ["https://th.bing.com/th/id/OIP.-jucSoouY1tMNWv40s-V1wHaHa?rs=1&pid=ImgDetMain"],
+        "rating": {
+          "rate": 0,
+          "count": 0
+        }
+      },
+      {
+        "title": "Multi-Compartment Travel Backpack",
+        "description": "A travel backpack with multiple compartments, a durable exterior, and a comfortable carrying system designed for camping and outdoor exploration.",
+        "price": 140,
+        "category": "Camping Gear",
+        "subCategory": "Backpacks",
+        "images": ["https://cdnd.lystit.com/photos/farfetch/f5931b5d/dsquared-Brown-Multi-compartment-Backpack.jpeg"],
+        "rating": {
+          "rate": 0,
+          "count": 0
+        }
+      },
+      {
+        "title": "Compact Foldable Backpack",
+        "description": "A lightweight and compact foldable backpack that can be stored in its own pocket, making it perfect as a secondary bag for short hikes or trips.",
+        "price": 45,
+        "category": "Camping Gear",
+        "subCategory": "Backpacks",
+        "images": ["https://i5.walmartimages.com/asr/5d0cc171-4831-4d20-9267-da7e15f25902_1.6a0a6564dd9ef97401c7cd3691bd5427.jpeg"],
+        "rating": {
+          "rate": 0,
+          "count": 0
+        }
+      },
+    {
+      "title": "Self-Inflating Camping Mat",
+      "description": "A comfortable self-inflating camping mat designed for easy setup and portability. Provides excellent insulation and cushioning for restful sleep during outdoor adventures.",
+      "price": 75,
+      "category": "Camping Gear",
+      "subCategory": "Mats",
+      "images": ["https://m.media-amazon.com/images/I/71b5FYUd0qL._AC_SX522_.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Lightweight Foam Sleeping Pad",
+      "description": "A durable and lightweight foam sleeping pad offering reliable support and insulation, perfect for backpacking, hiking, and camping trips.",
+      "price": 40,
+      "category": "Camping Gear",
+      "subCategory": "Mats",
+      "images": ["https://m.media-amazon.com/images/I/710FSXg104L._AC_SL1500_.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Ultralight Air Camping Mat",
+      "description": "An ultralight air camping mat featuring a compact design, quick inflation, and advanced cushioning for maximum comfort in rugged outdoor environments.",
+      "price": 95,
+      "category": "Camping Gear",
+      "subCategory": "Mats",
+      "images": ["vhttps://m.media-amazon.com/images/I/41TldeBAfVL.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Double-Sized Camping Mat",
+      "description": "A spacious double-sized camping mat with high-density foam padding, ideal for couples or individuals seeking extra sleeping space and comfort outdoors.",
+      "price": 120,
+      "category": "Camping Gear",
+      "subCategory": "Mats",
+      "images": ["https://m.media-amazon.com/images/I/61Exkc+EpgL._AC_SL1500_.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Insulated Sleeping Pad",
+      "description": "An insulated sleeping pad with a thermal layer that retains body heat, ensuring a warm and cozy sleep even in cold weather conditions.",
+      "price": 85,
+      "category": "Camping Gear",
+      "subCategory": "Mats",
+      "images": ["https://i5.walmartimages.com/asr/f22486bc-801c-428b-8f42-8223fcae638b.35cc54414c283945b63843c1587ac4f3.jpeg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Compact Foldable Camping Mat",
+      "description": "A compact and foldable camping mat that is easy to pack and carry, making it an excellent choice for hikers and minimalist campers.",
+      "price": 60,
+      "category": "Camping Gear",
+      "subCategory": "Mats",
+      "images": ["https://th.bing.com/th/id/OIP.SPExxgf98XMhMKNch5r3JAHaHa?rs=1&pid=ImgDetMain"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Waterproof Camping Mat",
+      "description": "A waterproof camping mat that protects against ground moisture and provides a reliable surface for sleeping or sitting during outdoor activities.",
+      "price": 70,
+      "category": "Camping Gear",
+      "subCategory": "Mats",
+      "images": ["https://lzd-img-global.slatic.net/g/p/42b6f8197a395434b6e47cf7db671fcc.jpg_720x720q80.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Luxury Camping Mattress",
+      "description": "A premium luxury camping mattress featuring thick padding, advanced materials, and superior durability for a top-tier outdoor sleeping experience.",
+      "price": 150,
+      "category": "Camping Gear",
+      "subCategory": "Mats",
+      "images": ["https://th.bing.com/th/id/R.843bab17e2ed7ce0a9d9114fc95c7e5d?rik=0XqW94FFozobKA&riu=http%3a%2f%2fmommyhighfive.com%2fwp-content%2fuploads%2f2016%2f05%2fCamp-Pad-1024x944.jpg&ehk=NTwnlRg247w8aGuu7XLxPfURFt1iOg%2b0Ozm51Z1i%2fBw%3d&risl=&pid=ImgRaw&r=0"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Thermal Reflective Camping Mat",
+      "description": "A thermal reflective camping mat designed to enhance insulation by reflecting body heat, ensuring warmth and comfort during colder nights.",
+      "price": 55,
+      "category": "Camping Gear",
+      "subCategory": "Mats",
+      "images": ["https://m.media-amazon.com/images/I/6147KLnYymL._AC_SL1500_.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "High-Density Foam Camping Mat",
+      "description": "A high-density foam camping mat that offers excellent durability and support, suitable for rugged terrain and extended outdoor use.",
+      "price": 80,
+      "category": "Camping Gear",
+      "subCategory": "Mats",
+      "images": ["https://th.bing.com/th/id/OIP.kqnq1apCQaUcwrM6Swb1fAHaHa?rs=1&pid=ImgDetMain"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Compact Camping Stove",
+      "description": "A lightweight and compact camping stove designed for easy portability and quick setup. Ideal for outdoor cooking, providing consistent heat for meals.",
+      "price": 60,
+      "category": "Cooking Gear",
+      "subCategory": "Stoves",
+      "images": ["https://th.bing.com/th/id/OIP.FSXzUnCawWvTz5CFAKUx0wHaHa?rs=1&pid=ImgDetMain"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Dual-Burner Camping Stove",
+      "description": "A high-performance dual-burner camping stove that allows you to cook multiple dishes simultaneously. Durable and easy to operate for outdoor enthusiasts.",
+      "price": 150,
+      "category": "Cooking Gear",
+      "subCategory": "Stoves",
+      "images": ["https://th.bing.com/th/id/OIP.G77ejEam1UG8cg6dY8GSPQHaHa?rs=1&pid=ImgDetMain"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Portable Gas Stove",
+      "description": "A portable gas stove featuring a robust build and efficient fuel consumption. Perfect for camping trips and outdoor cooking adventures.",
+      "price": 85,
+      "category": "Cooking Gear",
+      "subCategory": "Stoves",
+      "images": ["https://th.bing.com/th/id/OIP.L_8rbrvdmEOPZpMRndsHRQHaHa?rs=1&pid=ImgDetMain"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Backpacking Stove with Wind Guard",
+      "description": "A compact backpacking stove with a built-in wind guard for consistent flame performance. Lightweight and efficient, perfect for remote locations.",
+      "price": 70,
+      "category": "Cooking Gear",
+      "subCategory": "Stoves",
+      "images": ["https://i.pinimg.com/736x/7a/27/94/7a2794d4171b07dc27c81a10f26517fe.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Multi-Fuel Camping Stove",
+      "description": "A versatile multi-fuel camping stove compatible with various fuel types, ensuring you can cook meals regardless of the conditions or location.",
+      "price": 120,
+      "category": "Cooking Gear",
+      "subCategory": "Stoves",
+      "images": ["https://th.bing.com/th/id/OIP.Tlwriw_xZYRRi8JOTt6h1wHaHa?rs=1&pid=ImgDetMain"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Ultralight Titanium Stove",
+      "description": "An ultralight titanium camping stove offering superior durability and portability. Ideal for minimalist campers and backpackers who prioritize weight.",
+      "price": 95,
+      "category": "Cooking Gear",
+      "subCategory": "Stoves",
+      "images": ["https://ae01.alicdn.com/kf/HTB10crYtkCWBuNjy0Faq6xUlXXaw/Ultralight-Titanium-Wood-Stove-Outdoor-Camping-Compact-Folding-Titanium-Wood-Stove-for-Outdoor-Camping-Cooking-BBQ.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Wood-Burning Camping Stove",
+      "description": "A wood-burning camping stove that eliminates the need for fuel canisters. Environmentally friendly and perfect for off-grid cooking adventures.",
+      "price": 65,
+      "category": "Cooking Gear",
+      "subCategory": "Stoves",
+      "images": ["https://thetenthub.com/wp-content/uploads/2020/07/10-Best-Camping-Wood-Stoves-for-Log-Burning-Cooking.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Foldable Camping Stove",
+      "description": "A foldable camping stove that is easy to pack and carry. Designed for quick assembly and efficient cooking during outdoor trips.",
+      "price": 50,
+      "category": "Cooking Gear",
+      "subCategory": "Stoves",
+      "images": ["https://www.overlanded.com/wp-content/uploads/2022/01/camp-chef-rainier-2x-two-burner-camping-stove-griddle-msggx.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "High-Capacity Cooking Stove",
+      "description": "A high-capacity cooking stove built for group camping, featuring a sturdy frame and large burners for preparing meals for multiple people.",
+      "price": 140,
+      "category": "Cooking Gear",
+      "subCategory": "Stoves",
+      "images": ["https://th.bing.com/th/id/R.f00eee0af8c3044caf3e18c2f534bea3?rik=eV4M%2f8Okse8vDQ&riu=http%3a%2f%2fimg.banggood.com%2fimages%2foaupload%2fbanggood%2fimages%2f31%2fB4%2fdbe0cdf5-5286-4560-ab3a-e19c06bfaa34.jpg&ehk=FESVjN1rfhzWWurqY4xOmllqYtuvTYaoxYjUJWAwwWM%3d&risl=&pid=ImgRaw&r=0"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Eco-Friendly Biofuel Stove",
+      "description": "An eco-friendly biofuel stove designed to use natural materials like twigs and leaves. Lightweight and sustainable for environmentally conscious campers.",
+      "price": 80,
+      "category": "Cooking Gear",
+      "subCategory": "Stoves",
+      "images": ["https://th.bing.com/th/id/R.5b53ac458e8c84b22616846c5ee1c544?rik=6mK2R9qmaRVxbQ&riu=http%3a%2f%2fwww.yankodesign.com%2fimages%2fdesign_news%2f2016%2f08%2fauto-draft%2fbiofuel_stove_1.jpg&ehk=w2hxmHBxDQooSaG8moRHfqZ2Fa9NedLnYkYBQ7z9AT8%3d&risl=&pid=ImgRaw&r=0"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Lightweight Backpacking Pot",
+      "description": "A durable and lightweight cooking pot designed for backpacking and camping. Perfect for boiling water, cooking meals, and easy to pack in your gear.",
+      "price": 35,
+      "category": "Cooking Gear",
+      "subCategory": "Pots",
+      "images": ["https://momgoescamping.com/wp-content/uploads/2021/12/sea-to-summit-alpha-pot-1.9l.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Stainless Steel Camping Pot",
+      "description": "This stainless steel camping pot offers excellent heat distribution and is built to withstand rugged outdoor use. Ideal for making soups, stews, or boiling water.",
+      "price": 50,
+      "category": "Cooking Gear",
+      "subCategory": "Pots",
+      "images": ["https://dhznjqezv3l9q.cloudfront.net/productImages/_article/C2167_03.png"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Titanium Cooking Pot",
+      "description": "Ultra-light titanium cooking pot for those who need a reliable and efficient option for their backcountry adventures. Compact, durable, and rust-resistant.",
+      "price": 75,
+      "category": "Cooking Gear",
+      "subCategory": "Pots",
+      "images": ["https://media.s-bol.com/NQqM7KOXx3m/550x794.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Non-Stick Camping Pot",
+      "description": "A non-stick camping pot designed for easy cooking and cleanup. Perfect for frying, simmering, and preparing meals on the go.",
+      "price": 40,
+      "category": "Cooking Gear",
+      "subCategory": "Pots",
+      "images": ["https://ae01.alicdn.com/kf/HTB1dOtwOXXXXXaHapXXq6xXFXXXB/Free-Shipping-DS-202-Outdoor-Non-stick-Camping-Pot-Cooking-Set-Tableware-for-1-2-Person.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Collapsible Silicone Pot",
+      "description": "Innovative collapsible silicone pot that saves space in your backpack while still providing excellent functionality for outdoor cooking.",
+      "price": 45,
+      "category": "Cooking Gear",
+      "subCategory": "Pots",
+      "images": ["https://th.bing.com/th/id/OIP.jiI54MRDSjZ8rrRiSLDpNwHaE8?rs=1&pid=ImgDetMain"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Large Family Camping Pot",
+      "description": "A large cooking pot designed for group camping trips. It features a sturdy build and can handle preparing meals for multiple people.",
+      "price": 60,
+      "category": "Cooking Gear",
+      "subCategory": "Pots",
+      "images": ["https://th.bing.com/th/id/OIP.xCo58FAdQgPVUxqPd6uNmQHaHa?rs=1&pid=ImgDetMain"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Compact Cooking Pot Set",
+      "description": "A set of compact cooking pots that nest together for easy transport. Great for campers who need versatile and space-saving cookware.",
+      "price": 70,
+      "category": "Cooking Gear",
+      "subCategory": "Pots",
+      "images": ["https://th.bing.com/th/id/OIP.EK84OdYJ7ZUxW-mlR7ZQrAHaEn?rs=1&pid=ImgDetMain"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Aluminum Camping Pot",
+      "description": "Lightweight aluminum camping pot with a durable design, perfect for boiling water and preparing meals during outdoor adventures.",
+      "price": 30,
+      "category": "Cooking Gear",
+      "subCategory": "Pots",
+      "images": ["https://th.bing.com/th/id/OIP.hXLDCDK62sxwMKslNtFFCwHaHa?rs=1&pid=ImgDetMain"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Multi-Purpose Outdoor Pot",
+      "description": "This multi-purpose outdoor pot is ideal for cooking a variety of meals. Its durable construction and easy-to-clean surface make it a must-have for camping.",
+      "price": 55,
+      "category": "Cooking Gear",
+      "subCategory": "Pots",
+      "images": ["https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/17c54381675069.5d072a64735cc.png"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Heat-Resistant Cooking Pot",
+      "description": "Heat-resistant cooking pot with a secure lid and foldable handles, designed to make your outdoor cooking experience seamless and efficient.",
+      "price": 65,
+      "category": "Cooking Gear",
+      "subCategory": "Pots",
+      "images": ["https://i.pinimg.com/originals/00/2e/e9/002ee960a1a762a234852ca026c0acd7.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Lightweight Camping Plate",
+      "description": "Durable and lightweight camping plate made of sturdy materials, perfect for enjoying meals during your outdoor adventures. Easy to clean and store.",
+      "price": 15,
+      "category": "Cooking Gear",
+      "subCategory": "Tableware",
+      "images": ["https://th.bing.com/th/id/R.dff76d3a433f1e110db3a066a1d3f288?rik=uWviof%2fqfNBaAg&riu=http%3a%2f%2fwww.lifeventure.com%2fcdn%2fshop%2fproducts%2f75210-ellipse-plate-blue-1.jpg%3fv%3d1694768815&ehk=hEmMRQrDe8zdhvApn1PfNurC3C3EZUjXlLj9O0DQBfk%3d&risl=&pid=ImgRaw&r=0"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Stainless Steel Camping Mug",
+      "description": "A high-quality stainless steel camping mug designed to keep beverages hot or cold. Ideal for coffee, tea, or any drink while outdoors.",
+      "price": 12,
+      "category": "Cooking Gear",
+      "subCategory": "Tableware",
+      "images": ["https://th.bing.com/th/id/OIP.YE8V3ExmikxCdQJEKmLQUgHaHa?rs=1&pid=ImgDetMain"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Collapsible Silicone Bowl",
+      "description": "Innovative collapsible silicone bowl that is lightweight and space-saving, making it perfect for backpacking or camping trips.",
+      "price": 18,
+      "category": "Cooking Gear",
+      "subCategory": "Tableware",
+      "images": ["https://example.com/collapsible-bowl.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Camping Cutlery Set",
+      "description": "Compact and durable camping cutlery set including a fork, knife, and spoon. Ideal for enjoying your meals while exploring the outdoors.",
+      "price": 20,
+      "category": "Cooking Gear",
+      "subCategory": "Tableware",
+      "images": ["https://i5.walmartimages.com/asr/6ff83a46-7e2e-414b-baaa-8acbd84e2b25.a2e8b8b5c0b7368bc85c9835e2f4bb77.jpeg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Plastic Camping Plate Set",
+      "description": "Set of durable plastic camping plates, lightweight and easy to clean. Designed for serving meals during outdoor trips.",
+      "price": 25,
+      "category": "Cooking Gear",
+      "subCategory": "Tableware",
+      "images": ["https://th.bing.com/th/id/R.e80e51f64872e1ddbbdb7653e34d9ba7?rik=5hkGI8H%2bWG4kJg&riu=http%3a%2f%2fstorefeederimages.blob.core.windows.net%2fdomesticeconomy%2fProducts%2fc0767ed2-da2b-417b-8cfa-6219c3e0088a%2fFull%2frqnz0naurvq.Jpeg&ehk=KluY0uTqSCJ1nK0O3zAj%2bF%2fb7pa5%2fd1JrV3FdUcNv1I%3d&risl=&pid=ImgRaw&r=0"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Insulated Travel Mug",
+      "description": "A compact insulated travel mug with a spill-proof lid, designed to keep your drinks at the perfect temperature during outdoor activities.",
+      "price": 22,
+      "category": "Cooking Gear",
+      "subCategory": "Tableware",
+      "images": ["https://static.outnorth.com/image/upload/f_auto,fl_lossy,q_auto/v1551394834/uploads/live_product_image/file/0/0/267/267899/stanley-classic-camp-mug-0-47l.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Camping Mess Kit",
+      "description": "A versatile camping mess kit that includes a bowl, cup, and utensils, all designed to stack and store easily for convenient use in the wild.",
+      "price": 30,
+      "category": "Cooking Gear",
+      "subCategory": "Tableware",
+      "images": ["https://i5.walmartimages.com/asr/64d626f9-7085-41ea-843d-9aa4e9f526ee_1.071b0a8509e27b757b1803f9a1c2a935.jpeg?odnWidth=1000&odnHeight=1000&odnBg=ffffff"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Enamel Camping Plate",
+      "description": "Classic enamel camping plate with a vintage look and durable design, perfect for serving meals around the campfire or on the trail.",
+      "price": 10,
+      "category": "Cooking Gear",
+      "subCategory": "Tableware",
+      "images": ["https://th.bing.com/th/id/OIP.W90fJqtMaTmusVnJ4sKlyAHaHa?rs=1&pid=ImgDetMain"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Folding Spork",
+      "description": "A folding spork that combines the functionality of a spoon and a fork, designed to save space and add convenience to your camping gear.",
+      "price": 8,
+      "category": "Cooking Gear",
+      "subCategory": "Tableware",
+      "images": ["https://theawesomer.com/photos/2009/11/110509_spork_3.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Stainless Steel Camping Bowl",
+      "description": "A durable stainless steel camping bowl that is perfect for eating soups, cereals, or snacks. Easy to clean and highly portable.",
+      "price": 14,
+      "category": "Cooking Gear",
+      "subCategory": "Tableware",
+      "images": ["https://th.bing.com/th/id/OIP.ojKZTt_6uwiMGvr8UUdNUQHaHa?w=600&h=600&rs=1&pid=ImgDetMain"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Compact Camping Stove",
+      "description": "A lightweight and compact camping stove designed for quick and efficient cooking. Perfect for backpacking and camping trips, with easy setup and storage.",
+      "price": 45,
+      "category": "Cooking Gear",
+      "subCategory": "Burners",
+      "images": ["https://images-na.ssl-images-amazon.com/images/I/71MaCsdZPWL._AC_SL1500_.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Portable Gas Burner",
+      "description": "A durable portable gas burner with adjustable flame control, ideal for outdoor cooking. Works with standard fuel canisters for convenience.",
+      "price": 50,
+      "category": "Cooking Gear",
+      "subCategory": "Burners",
+      "images": ["https://images-na.ssl-images-amazon.com/images/I/610X%2BbnSHpL._AC_SL1200_.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Dual Fuel Camping Stove",
+      "description": "This dual fuel camping stove offers compatibility with gas and liquid fuels, providing versatility and reliability for any outdoor cooking needs.",
+      "price": 80,
+      "category": "Cooking Gear",
+      "subCategory": "Burners",
+      "images": ["https://example.com/dual-fuel-stove.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Windproof Camping Stove",
+      "description": "A windproof camping stove designed for efficient cooking in challenging outdoor conditions. Features a stable base and a high-performance burner.",
+      "price": 60,
+      "category": "Cooking Gear",
+      "subCategory": "Burners",
+      "images": ["https://th.bing.com/th/id/OIP.Sd6ZE-A1x59nyqBu_v1DtgHaJM?rs=1&pid=ImgDetMain"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Ultralight Backpacking Stove",
+      "description": "An ultralight backpacking stove built for minimalists. Weighing just a few ounces, it offers quick heating and easy portability.",
+      "price": 40,
+      "category": "Cooking Gear",
+      "subCategory": "Burners",
+      "images": ["https://th.bing.com/th/id/OIP.wZ_xVuBkPn65hH9D0LtxTwAAAA?rs=1&pid=ImgDetMain"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Propane Camping Stove",
+      "description": "A sturdy propane camping stove with a large burner for even heat distribution. Ideal for cooking meals on extended outdoor trips.",
+      "price": 70,
+      "category": "Cooking Gear",
+      "subCategory": "Burners",
+      "images": ["https://images.homedepot-static.com/productImages/3784d7f0-0ef3-4ffb-9cb4-989d701f627a/svn/bayou-classic-other-fryers-sq14-64_1000.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Multi-Burner Camping Stove",
+      "description": "This multi-burner camping stove allows you to cook multiple dishes at once. Features a spacious design and efficient fuel usage.",
+      "price": 110,
+      "category": "Cooking Gear",
+      "subCategory": "Burners",
+      "images": ["https://i5.walmartimages.com/asr/597f9731-1b93-45f8-827d-eb47dbc9d00f_2.5463069e1d93f1dddc18bc8defde4c5f.jpeg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Alcohol Burner Stove",
+      "description": "An alcohol burner stove designed for simplicity and reliability. Lightweight and easy to use, it’s perfect for minimalist campers.",
+      "price": 30,
+      "category": "Cooking Gear",
+      "subCategory": "Burners",
+      "images": ["https://m.media-amazon.com/images/I/61GhpP9UScL._AC_SL1500_.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Foldable Camping Stove",
+      "description": "A foldable camping stove that’s easy to pack and store. Features a durable construction and efficient fuel consumption for outdoor use.",
+      "price": 55,
+      "category": "Cooking Gear",
+      "subCategory": "Burners",
+      "images": ["https://i.pinimg.com/originals/a7/93/ed/a793edd235e71fc6a8ac0d99904f3e93.jpg"],
+      "rating": {
+        "rate": 0,
+        "count": 0
+      }
+    },
+    {
+      "title": "Titanium Camping Stove",
+      "description": "A titanium camping stove that is lightweight, rust-resistant, and built to last. Delivers powerful performance while remaining easy to transport.",
+      "price": 90,
+      "category": "Cooking Gear",
+      "subCategory": "Burners",
+      "images": ["https://th.bing.com/th/id/OIP.rSUzfJS6n4GCZmEqGWqabwHaH-?rs=1&pid=ImgDetMain"],
       "rating": {
         "rate": 0,
         "count": 0
       }
     }
   ]
-  
-]
 
 
 
