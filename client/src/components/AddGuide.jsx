@@ -69,7 +69,7 @@ export const AddGuide = () => {
     try {
       const formData = new FormData()
       formData.append("title", formValue.title)
-      formData.append("content", JSON.stringify(formValue.content))
+      formData.append("content", formValue.content)
 
       // Append main image (file or URL)
       if (mainImage) {
