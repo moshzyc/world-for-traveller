@@ -13,35 +13,22 @@ cloudinary.config({
 const guidesCtrl = {
   async addGuide(req, res, next) {
     try {
-      console.log("Raw content received:", req.body.content)
-
       const { title } = req.body
-      let content = req.body.content
+      let content = req.body.content || ""
       let imageUrls = req.body.imageUrls || []
 
-      // Parse JSON strings if needed
+      // Parse imageUrls if it's a string
       try {
-        // Check if content is already an array
-        content = typeof content === "string" ? JSON.parse(content) : content
-
-        // If content is still a string after parsing (single item), wrap it in array
-        if (!Array.isArray(content)) {
-          content = [content]
-        }
-
         imageUrls =
           typeof imageUrls === "string" ? JSON.parse(imageUrls) : imageUrls
       } catch (e) {
-        console.error("Error parsing JSON:", e)
-        // If parsing fails, ensure content is an array
-        content = Array.isArray(content) ? content : [content]
+        console.error("Error parsing imageUrls:", e)
+        imageUrls = []
       }
-
-      console.log("Processed content:", content)
 
       const guideData = {
         title,
-        content, // Now properly parsed
+        content,
         images: [],
         mainImage: "",
       }
@@ -57,6 +44,8 @@ const guidesCtrl = {
         )
         guideData.mainImage = mainImageResult.secure_url
         fs.unlinkSync(mainImageFile.path)
+      } else if (req.body.mainImageUrl) {
+        guideData.mainImage = req.body.mainImageUrl
       }
 
       // Handle additional images from file upload
@@ -72,16 +61,8 @@ const guidesCtrl = {
 
       // Handle image URLs
       if (imageUrls && imageUrls.length > 0) {
-        // If no main image from file upload, use first URL as main image
-        if (!guideData.mainImage) {
-          guideData.mainImage = imageUrls[0]
-          guideData.images.push(...imageUrls.slice(1))
-        } else {
-          guideData.images.push(...imageUrls)
-        }
+        guideData.images.push(...imageUrls)
       }
-
-      console.log("Final guide data:", guideData)
 
       const newGuide = new Guide(guideData)
       const savedGuide = await newGuide.save()
@@ -98,36 +79,23 @@ const guidesCtrl = {
 
   async updateGuide(req, res, next) {
     try {
-      console.log("Raw content received:", req.body.content)
-
       const { id } = req.params
       const { title } = req.body
-      let content = req.body.content
+      let content = req.body.content || ""
       let imageUrls = req.body.imageUrls || []
 
-      // Parse JSON strings if needed
+      // Parse imageUrls if it's a string
       try {
-        // Check if content is already an array
-        content = typeof content === "string" ? JSON.parse(content) : content
-
-        // If content is still a string after parsing (single item), wrap it in array
-        if (!Array.isArray(content)) {
-          content = [content]
-        }
-
         imageUrls =
           typeof imageUrls === "string" ? JSON.parse(imageUrls) : imageUrls
       } catch (e) {
-        console.error("Error parsing JSON:", e)
-        // If parsing fails, ensure content is an array
-        content = Array.isArray(content) ? content : [content]
+        console.error("Error parsing imageUrls:", e)
+        imageUrls = []
       }
-
-      console.log("Processed content:", content)
 
       const updateData = {
         title,
-        content, // Now properly parsed
+        content,
         images: [...imageUrls],
       }
 

@@ -4,7 +4,9 @@ import { EDIT_GUIDE_URL } from "../constants/endPoint"
 
 export const EditGuideWin = (props) => {
   const [title, setTitle] = useState(props.title || "")
-  const [content, setContent] = useState(props.content || [])
+  const [content, setContent] = useState(
+    (props.content || "").replace(/<br>/g, "\n")
+  )
   const [mainImage, setMainImage] = useState(null)
   const [mainImageUrl, setMainImageUrl] = useState(props.mainImage || "")
   const [images, setImages] = useState(props.images || [])
@@ -58,12 +60,18 @@ export const EditGuideWin = (props) => {
     setFiles(files.filter((_, i) => i !== index))
   }
 
+  const handleContentChange = (index, value) => {
+    const updatedContent = [...content]
+    updatedContent[index] = value.replace(/\n/g, "<br>")
+    setContent(updatedContent)
+  }
+
   const onSubmit = async (e) => {
     e.preventDefault()
     const formData = new FormData()
 
     formData.append("title", title)
-    formData.append("content", JSON.stringify(content))
+    formData.append("content", content.replace(/\n/g, "<br>"))
 
     // Handle main image
     if (mainImage) {
@@ -178,45 +186,12 @@ export const EditGuideWin = (props) => {
 
           <div className="space-y-2">
             <label className="block font-medium text-gray-700">Content</label>
-            <div className="space-y-3">
-              {content.map((paragraph, index) => (
-                <div key={index} className="flex gap-2">
-                  <textarea
-                    value={paragraph}
-                    onChange={(e) => {
-                      const updatedContent = [...content]
-                      updatedContent[index] = e.target.value
-                      setContent(updatedContent)
-                    }}
-                    className="flex-1 rounded-lg border border-gray-300 p-2"
-                    rows="3"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveParagraph(index)}
-                    className="h-10 rounded-lg bg-red-500 px-4 text-white hover:bg-red-600"
-                  >
-                    Remove
-                  </button>
-                </div>
-              ))}
-              <div className="flex gap-2">
-                <textarea
-                  placeholder="Add new paragraph"
-                  value={newParagraph}
-                  onChange={(e) => setNewParagraph(e.target.value)}
-                  className="flex-1 rounded-lg border border-gray-300 p-2"
-                  rows="3"
-                />
-                <button
-                  type="button"
-                  onClick={handleAddParagraph}
-                  className="h-10 rounded-lg bg-[#2e7d32] px-4 text-white hover:bg-[#1b5e20]"
-                >
-                  Add
-                </button>
-              </div>
-            </div>
+            <textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              className="w-full rounded-lg border border-gray-300 p-2"
+              rows="10"
+            />
           </div>
 
           <div className="space-y-4">

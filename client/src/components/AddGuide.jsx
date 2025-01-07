@@ -5,7 +5,7 @@ import { ADD_GUIDE_URL } from "../constants/endPoint"
 export const AddGuide = () => {
   const [formValue, setFormValue] = useState({
     title: "",
-    content: [""],
+    content: "",
     images: [],
     imageUrls: [],
   })
@@ -48,10 +48,11 @@ export const AddGuide = () => {
     }))
   }
 
-  const handleContentChange = (index, value) => {
-    const updatedContent = [...formValue.content]
-    updatedContent[index] = value
-    setFormValue({ ...formValue, content: updatedContent })
+  const handleContentChange = (value) => {
+    setFormValue({
+      ...formValue,
+      content: value.replace(/\n/g, "<br>"),
+    })
   }
 
   const handleAddParagraph = () => {
@@ -94,7 +95,7 @@ export const AddGuide = () => {
       console.log("Guide added successfully:", response.data)
 
       // Reset form
-      setFormValue({ title: "", content: [""], images: [], imageUrls: [] })
+      setFormValue({ title: "", content: "", images: [], imageUrls: [] })
       setFiles([])
       setNewImageUrl("")
       setMainImage(null)
@@ -181,32 +182,12 @@ export const AddGuide = () => {
 
           <div className="flex flex-col gap-4">
             <label className="font-medium text-gray-700">Content</label>
-            {formValue.content.map((paragraph, index) => (
-              <div key={index} className="flex gap-2">
-                <textarea
-                  className="min-h-[100px] flex-1 rounded-lg border border-gray-300 p-2"
-                  placeholder={`Paragraph ${index + 1}`}
-                  value={paragraph}
-                  onChange={(e) => handleContentChange(index, e.target.value)}
-                />
-                {formValue.content.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveParagraph(index)}
-                    className="redBtn self-start"
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={handleAddParagraph}
-              className="whiteBtn self-start"
-            >
-              Add Paragraph
-            </button>
+            <textarea
+              className="min-h-[200px] rounded-lg border border-gray-300 p-2"
+              placeholder="Write your guide content here..."
+              value={formValue.content.replace(/<br>/g, "\n")}
+              onChange={(e) => handleContentChange(e.target.value)}
+            />
           </div>
 
           <div className="flex flex-col gap-4">

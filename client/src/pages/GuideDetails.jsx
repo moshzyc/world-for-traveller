@@ -57,11 +57,9 @@ export const GuideDetails = () => {
         </div>
 
         <div className="space-y-6">
-          {guide.content.map((paragraph, index) => (
-            <p key={index} className="text-lg leading-relaxed text-gray-700">
-              {paragraph}
-            </p>
-          ))}
+          <p className="whitespace-pre-line text-lg leading-relaxed text-gray-700">
+            {guide.content.replace(/<br>/g, "\n")}
+          </p>
         </div>
 
         {guide.images && guide.images.length > 0 && (

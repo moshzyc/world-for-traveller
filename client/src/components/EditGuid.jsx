@@ -10,11 +10,11 @@ export const EditGuide = () => {
   useEffect(() => {
     getGuides()
   }, [])
+
   const getGuides = async () => {
     try {
       const { data } = await axios.get(GET_GUIDE_URL)
       setGuides(data)
-      // console.log(data)
     } catch (error) {
       console.error(error)
     }
@@ -36,15 +36,10 @@ export const EditGuide = () => {
             <h3 className="mb-4 text-xl font-semibold text-green-800">
               {item.title}
             </h3>
-            <div className="space-y-2">
-              {item.content.map((paragraph, index) => (
-                <div key={index} className="rounded-lg bg-green-50 p-3">
-                  <p className="text-sm font-medium text-green-600">
-                    Paragraph {index + 1}
-                  </p>
-                  <p className="mt-1 line-clamp-2 text-gray-600">{paragraph}</p>
-                </div>
-              ))}
+            <div className="rounded-lg bg-green-50 p-3">
+              <p className="whitespace-pre-line text-gray-600">
+                {(item.content || "").replace(/<br>/g, "\n")}
+              </p>
             </div>
           </div>
           <div className="flex flex-col gap-3">
@@ -63,6 +58,7 @@ export const EditGuide = () => {
                     )
                   ) {
                     await axios.delete(DELETE_GUIDE_URL + `/${item._id}`)
+                    getGuides() // Refresh the list after deletion
                   }
                 } catch (error) {
                   console.error(error)
@@ -86,7 +82,13 @@ export const EditGuide = () => {
         <div className="p-8 text-center text-gray-500">No guides available</div>
       )}
       {guideEdited && (
-        <EditGuideWin {...guideEdited} onClose={() => setGuidesEdited(null)} />
+        <EditGuideWin
+          {...guideEdited}
+          onClose={() => {
+            setGuidesEdited(null)
+            getGuides() // Refresh the list after editing
+          }}
+        />
       )}
     </div>
   )

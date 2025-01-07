@@ -4,6 +4,13 @@ import { useNavigate } from "react-router-dom"
 export const GuideCard = ({ guide }) => {
   const navigate = useNavigate()
 
+  const renderContent = (content) => {
+    return (
+      content.replace(/<br>/g, "\n").substring(0, 150) +
+      (content.length > 150 ? "..." : "")
+    )
+  }
+
   return (
     <div
       onClick={() => navigate(`/guides/${guide._id}`)}
@@ -20,9 +27,8 @@ export const GuideCard = ({ guide }) => {
         <h3 className="mb-2 text-xl font-semibold text-gray-800">
           {guide.title}
         </h3>
-        <p className="text-gray-600">
-          {guide.content[0].substring(0, 150)}
-          {guide.content[0].length > 150 ? "..." : ""}
+        <p className="whitespace-pre-line text-gray-600">
+          {renderContent(guide.content)}
         </p>
       </div>
     </div>
