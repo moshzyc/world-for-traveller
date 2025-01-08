@@ -4,10 +4,12 @@ import { UserContext } from "../contexts/UserContextpProvider"
 import css from "../css/userForm.module.css"
 import { LOGIN_URL, SIGNUP_URL } from "../constants/endPoint"
 import axios from "axios"
+import { StoreContext } from "../contexts/StoreContaxtProvider"
 
 export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
   const [error, setError] = useState("")
   const { user, setUser } = useContext(UserContext)
+  const { updateCart, cart } = useContext(StoreContext)
   const navigate = useNavigate()
   const [formValues, setFormValues] = useState({
     name: " ",
@@ -55,6 +57,8 @@ export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
       } else {
         const { data } = await axios.post(LOGIN_URL, formValues)
         setUser(data)
+        updateCart(cart)
+        sessionStorage.clear()
         if (onLoginSuccess) {
           onLoginSuccess()
         } else {

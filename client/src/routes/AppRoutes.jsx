@@ -3,13 +3,9 @@ import {
   createBrowserRouter,
   RouterProvider,
   Navigate,
-  Link,
-  Routes,
-  Route,
 } from "react-router-dom"
 import { MainPage } from "../pages/MainPage"
 import {
-  UserContextpProvider,
   UserContext,
 } from "../contexts/UserContextpProvider"
 import { LoginSignup } from "../pages/LoginSignup"
@@ -30,7 +26,6 @@ import { UserPosts } from "../pages/UserPosts"
 import { AddUserPost } from "../components/AddUserPost"
 import { EditUserPost } from "../components/EditUserPost"
 import { PostDetails } from "../components/PostDetails"
-import { PrivateRoute } from "./PrivateRoute"
 import { Notifications } from "../components/Notifications"
 import ScrollToTop from "../components/ScrollToTop"
 

@@ -71,7 +71,7 @@ export const StoreContaxtProvider = ({ children }) => {
   }
   useEffect(() => {
     if (!user) {
-      const sortedData = localStorage.getItem("cart")
+      const sortedData = sessionStorage.getItem("cart")
       const itemsArrey = sortedData ? JSON.parse(sortedData) : []
       setCart(itemsArrey)
       const totalSum = itemsArrey.reduce(
@@ -161,7 +161,7 @@ export const StoreContaxtProvider = ({ children }) => {
     )
 
     if (!user) {
-      localStorage.setItem("cart", JSON.stringify(updatedCart))
+      sessionStorage.setItem("cart", JSON.stringify(updatedCart))
     } else {
       updateCart(updatedCart)
     }
@@ -179,9 +179,9 @@ export const StoreContaxtProvider = ({ children }) => {
 
     if (!user) {
       if (updatedCart.length > 0) {
-        localStorage.setItem("cart", JSON.stringify(updatedCart))
+        sessionStorage.setItem("cart", JSON.stringify(updatedCart))
       } else {
-        localStorage.clear()
+        sessionStorage.clear()
       }
     } else {
       updateCart(updatedCart) // שליחה לשרת
@@ -207,9 +207,9 @@ export const StoreContaxtProvider = ({ children }) => {
 
     if (!user) {
       if (updatedCart.length > 0) {
-        localStorage.setItem("cart", JSON.stringify(updatedCart))
+        sessionStorage.setItem("cart", JSON.stringify(updatedCart))
       } else {
-        localStorage.clear()
+        sessionStorage.clear()
       }
     } else {
       updateCart(updatedCart) // עדכון השרת
@@ -229,7 +229,7 @@ export const StoreContaxtProvider = ({ children }) => {
     setCartSum(roundToTwo(cartSum + pricePerUnit))
 
     if (!user) {
-      localStorage.setItem("cart", JSON.stringify(updatedCart))
+      sessionStorage.setItem("cart", JSON.stringify(updatedCart))
     } else {
       updateCart(updatedCart) // עדכון השרת
     }
@@ -239,7 +239,7 @@ export const StoreContaxtProvider = ({ children }) => {
     setCartSum(0) // מאפס את הסכום של העגלה
 
     if (!user) {
-      localStorage.removeItem("cart") // אם המשתמש לא מחובר, מסירים את העגלה מ- localStorage
+      sessionStorage.removeItem("cart") // אם המשתמש לא מחובר, מסירים את העגלה מ- sessionStorage
     } else {
       updateCart([]) // אם המשתמש מחובר, שולחים עגלה ריקה לשרת
     }
@@ -270,6 +270,7 @@ export const StoreContaxtProvider = ({ children }) => {
         success,
         setError,
         setSuccess,
+        updateCart
       }}
     >
       {children}
