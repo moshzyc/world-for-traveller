@@ -32,6 +32,7 @@ import { EditUserPost } from "../components/EditUserPost"
 import { PostDetails } from "../components/PostDetails"
 import { PrivateRoute } from "./PrivateRoute"
 import { Notifications } from "../components/Notifications"
+import ScrollToTop from "../components/ScrollToTop"
 
 export const AppRoutes = () => {
   const { user } = useContext(UserContext)
@@ -42,7 +43,12 @@ export const AppRoutes = () => {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <MainPage />,
+      element: (
+        <>
+          <MainPage />
+          <ScrollToTop />
+        </>
+      ),
       errorElement: <ErrorBoundary />,
       children: [
         {
