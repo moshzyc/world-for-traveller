@@ -9,7 +9,7 @@ import { StoreContext } from "../contexts/StoreContaxtProvider"
 export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
   const [error, setError] = useState("")
   const { user, setUser } = useContext(UserContext)
-  const { updateCart, cart } = useContext(StoreContext)
+  const { updateCartOnLogin } = useContext(StoreContext)
   const navigate = useNavigate()
   const [formValues, setFormValues] = useState({
     name: " ",
@@ -56,9 +56,10 @@ export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
         formChenge((p) => !p)
       } else {
         const { data } = await axios.post(LOGIN_URL, formValues)
-        setUser(data)
-        updateCart(cart)
+        await updateCartOnLogin()
         sessionStorage.clear()
+        setUser(data)
+
         if (onLoginSuccess) {
           onLoginSuccess()
         } else {

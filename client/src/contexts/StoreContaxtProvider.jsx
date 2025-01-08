@@ -101,7 +101,8 @@ export const StoreContaxtProvider = ({ children }) => {
       )
       setCartSum(totalSum)
     } catch (error) {
-      console.log(error)
+      console.error(error)
+      setError("Failed to fetch cart")
     }
   }
 
@@ -245,6 +246,49 @@ export const StoreContaxtProvider = ({ children }) => {
     }
   }
 
+  const updateCartOnLogin = async () => {
+    try {
+      // Get server cart
+      const { data } = await axios.get(CART_URL)
+      let formattedData = data.map((item) => ({
+        productId: item.productId,
+        title: item.title,
+        category: item.category,
+        price: item.price,
+        quantity: item.quantity,
+      }))
+
+      // Add quantities for existing items and add new items
+      cart.forEach((stateItem) => {
+        const existingItem = formattedData.find(
+          (serverItem) => serverItem.productId === stateItem.productId
+        )
+
+        if (existingItem) {
+          // If item exists in server cart, add quantities
+          existingItem.quantity += stateItem.quantity
+          existingItem.price = roundToTwo(
+            (existingItem.price / existingItem.quantity) * existingItem.quantity
+          )
+        } else {
+          // If item doesn't exist in server cart, add it
+          formattedData.push(stateItem)
+        }
+      })
+
+      // Update server with merged cart
+      await updateCart(formattedData)
+
+      // Update local state
+      setCart(formattedData)
+      const totalSum = formattedData.reduce((sum, item) => sum + item.price, 0)
+      setCartSum(totalSum)
+    } catch (error) {
+      console.error("Error merging carts:", error)
+      setError("Failed to sync cart with server")
+    }
+  }
+
   return (
     <StoreContext.Provider
       value={{
@@ -270,7 +314,8 @@ export const StoreContaxtProvider = ({ children }) => {
         success,
         setError,
         setSuccess,
-        updateCart
+        updateCart,
+        updateCartOnLogin,
       }}
     >
       {children}
