@@ -27,6 +27,7 @@ export const Header = () => {
   const [showInMobile, setShowInMobile] = useState(false)
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
   const headerRef = useRef(null)
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
 
   // הוקים וקונטקסט //
   const navigate = useNavigate()
@@ -48,6 +49,8 @@ export const Header = () => {
           return
         }
         setActiveDropdown(null)
+        setIsMobileNavOpen(false)
+        setIsSearchOpen(false)
       }
     }
 
@@ -58,15 +61,26 @@ export const Header = () => {
   // פונקציות לניהול הניווט והתפריטים //
   const toggleDropdown = (dropdownName) => {
     setActiveDropdown(activeDropdown === dropdownName ? null : dropdownName)
+    setIsMobileNavOpen(false)
+    setIsSearchOpen(false)
   }
 
   const toggleMobileNav = () => {
     setIsMobileNavOpen(!isMobileNavOpen)
+    setActiveDropdown(null)
+    setIsSearchOpen(false)
+  }
+
+  const toggleSearch = () => {
+    setIsSearchOpen(!isSearchOpen)
+    setActiveDropdown(null)
+    setIsMobileNavOpen(false)
   }
 
   const navigateAndClose = (path) => {
     setIsMobileNavOpen(false)
     setActiveDropdown(null)
+    setIsSearchOpen(false)
     navigateWithConfirm(path)
   }
 
@@ -83,6 +97,16 @@ export const Header = () => {
     }
   }
 
+  const handleSearch = () => {
+    setTitle(title)
+    setCategory([])
+    setSubCategory([])
+    navigate("/store")
+    setIsSearchOpen(false)
+    setActiveDropdown(null)
+    setIsMobileNavOpen(false)
+  }
+
   return (
     // הדר ראשי //
     <header ref={headerRef} className={css.header}>
@@ -97,34 +121,36 @@ export const Header = () => {
 
         {/* אזור החיפוש והניווט */}
         <div className="flex items-center">
-          <div className="flex items-center gap-4 sm:flex-row-reverse md:flex-row lg:flex-row">
+          <div className="flex items-center gap-4">
             {/* תיבת חיפוש */}
-            <div className={css.searchContainer}>
-              <input
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    setTitle(title)
-                    setCategory([])
-                    setSubCategory([])
-                    navigate("/store")
-                  }
-                }}
-                onChange={(e) => (title = e.target.value)}
-                className={css.input}
-                type="text"
-                placeholder="Search products..."
-              />
+            <div
+              className={`${css.searchContainer} ${isSearchOpen ? css.searchOpen : ""}`}
+            >
               <button
-                onClick={() => {
-                  setTitle(title)
-                  setCategory([])
-                  setSubCategory([])
-                  navigate("/store")
-                }}
-                className={css.sBtn}
+                onClick={toggleSearch}
+                className={`${css.searchToggle} md:hidden`}
               >
                 <img src={searchIcon} alt="Search" className={css.icons} />
               </button>
+
+              <div
+                className={`${css.searchInputWrapper} ${isSearchOpen ? "block" : "hidden md:block"}`}
+              >
+                <input
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleSearch()
+                    }
+                  }}
+                  onChange={(e) => (title = e.target.value)}
+                  className={css.input}
+                  type="text"
+                  placeholder="Search products..."
+                />
+                <button onClick={handleSearch} className={css.sBtn}>
+                  <img src={searchIcon} alt="Search" className={css.icons} />
+                </button>
+              </div>
             </div>
 
             {/* סרגל ניווט אייקונים */}
@@ -206,7 +232,7 @@ export const Header = () => {
                     className={`text-center ${activeDropdown !== "cart" ? "hidden" : ""} ${css.cartPreview}`}
                   >
                     <Link to="/cart">
-                      <button className="mt-2 cursor-pointer font-medium bg-green-800 px-4 py-2 w-full rounded-md text-white hover:underline">
+                      <button className="mt-2 w-full cursor-pointer rounded-md bg-green-800 px-4 py-2 font-medium text-white hover:underline">
                         go to cart
                       </button>
                     </Link>

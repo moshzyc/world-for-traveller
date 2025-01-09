@@ -83,6 +83,10 @@ const userSchema = new mongoose.Schema(
           type: Number,
           required: true,
         },
+        deliveryAddress: {
+          type: String,
+          required: true,
+        },
       },
     ],
     posts: [

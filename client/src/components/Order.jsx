@@ -43,7 +43,7 @@ export const Order = ({ exit }) => {
         (total, item) => total + item.price * item.quantity,
         0
       ),
-      address: address.trim(),
+      deliveryAddress: address.trim(),
     }
 
     try {

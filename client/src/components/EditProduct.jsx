@@ -6,7 +6,7 @@ import { PRODUCTS_URL } from "../constants/endPoint"
 
 export const EditProduct = () => {
   // שימוש בקונטקסט החנות
-  const { categories, products, setCategory, setSubCategory, setTitle, title } =
+  const { categories, products, setCategory, setSubCategory, setTitle, title, category } =
     useContext(StoreContext)
 
   // ניהול מצב הקומפוננטה
@@ -134,25 +134,29 @@ export const EditProduct = () => {
                 }}
                 name="category"
               >
+                <option value="">All</option>
                 {categoriesGenerator(categories)}
               </select>
             </div>
 
             {/* בחירת תת-קטגוריה */}
-            <div className="flex flex-col gap-2">
-              <label className="font-medium text-green-800">Subcategory</label>
-              <select
+            {category && (
+              <div className="flex flex-col gap-2">
+                <label className="font-medium text-green-800">Subcategory</label>
+                <select
                 className="rounded-lg border border-green-200 p-2 transition-colors focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
                 onChange={(e) => setSubCategory(e.target.value)}
                 name="subCategory"
               >
+                <option value="">All</option>
                 {categories[subIndex]?.subCategory ? (
                   subCategoriesGenerator(categories[subIndex].subCategory)
                 ) : (
                   <option disabled>No subcategories available</option>
                 )}
-              </select>
-            </div>
+                </select>
+              </div>
+            )}
           </div>
         </div>
 
