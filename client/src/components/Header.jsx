@@ -130,7 +130,7 @@ export const Header = () => {
                 onClick={toggleSearch}
                 className={`${css.searchToggle} md:hidden`}
               >
-                <img src={searchIcon} alt="Search" className={css.icons} />
+                <img src={searchIcon} alt="Search" className={css.searchIcon} />
               </button>
 
               <div
@@ -148,7 +148,11 @@ export const Header = () => {
                   placeholder="Search products..."
                 />
                 <button onClick={handleSearch} className={css.sBtn}>
-                  <img src={searchIcon} alt="Search" className={css.icons} />
+                  <img
+                    src={searchIcon}
+                    alt="Search"
+                    className={css.searchIcon}
+                  />
                 </button>
               </div>
             </div>
@@ -222,7 +226,7 @@ export const Header = () => {
                         if (e.detail === 2) handleCartClick()
                       }
                     }}
-                    className={css.icons}
+                    className={css.userIcons}
                     src={cartIcon}
                     alt="Cart"
                     title="Cart"
@@ -253,7 +257,7 @@ export const Header = () => {
                           if (e.detail === 2) handleUserClick()
                         }
                       }}
-                      className={`${css.icons} ${user ? css.userLogIcon : ""}`}
+                      className={`${css.userIcons} ${user ? css.userLogIcon : ""}`}
                       src={userIcon}
                       alt={user ? "User" : "Login/Signup"}
                       title={user ? "User" : "Login/Signup"}

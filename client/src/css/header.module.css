@@ -11,6 +11,24 @@
   width: 30px;
   height: 30px;
   cursor: pointer;
+  /* padding: 1px; */
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.userIcons {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.searchIcon {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
   padding: 5px;
   border-radius: 50%;
   transition: all 0.2s ease;
@@ -362,5 +380,8 @@
   .subCategoryItem:hover {
     background-color: #e8f5e9;
     color: #2e7d32;
+  }
+  .icons {
+    padding: 4px;
   }
 }
