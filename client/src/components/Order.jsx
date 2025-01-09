@@ -32,7 +32,6 @@ export const Order = ({ exit }) => {
 
     // יצירת אובייקט ההזמנה //
     const orderData = {
-      userId: user._id,
       cart: cart.map((item) => ({
         productId: item.productId,
         quantity: item.quantity,

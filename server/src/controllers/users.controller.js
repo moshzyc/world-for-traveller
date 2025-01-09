@@ -193,25 +193,28 @@ const userCtrl = {
         return next(new AppError("Cart must be an array", 400))
       }
 
-      const user = await User.findById(req._id) // מציאת המשתמש לפי ה-ID שנמצא ב-token
-      if (!user) {
+      // Using findOneAndUpdate instead of save() to avoid full validation
+      const result = await User.findByIdAndUpdate(
+        req._id,
+        {
+          $set: {
+            cart: cart.map((item) => ({
+              productId: item.productId,
+              quantity: item.quantity || 1,
+              addedAt: new Date(),
+            })),
+          },
+        },
+        { new: true, runValidators: false }
+      )
+
+      if (!result) {
         return next(new AppError("User not found", 404))
       }
 
-      // סינון הנתונים ושמירה בורמט אחיד
-      const formattedCart = cart.map((item) => ({
-        productId: item.productId || item._id, // אחידות לשדה productId
-        title: item.title,
-        category: item.category,
-        price: item.price,
-        quantity: item.quantity || 1, // ברירת מחדל לכמות
-      }))
-
-      user.cart = formattedCart // דריסת המערך הקיים
-      await user.save() // שמירת השינויים במסד הנתונים
-
       res.status(200).json({ message: "Cart saved successfully" })
     } catch (error) {
+      console.error("Save cart error:", error)
       next(new AppError("Error saving cart", 500, error))
     }
   },
@@ -242,12 +245,13 @@ const userCtrl = {
   },
   async saveOrder(req, res, next) {
     // חילוץ נתוני ההזמנה מגוף הבקשה
-    const { cart, totalAmount, address } = req.body
-    console.log(cart)
+    const { cart, totalAmount, deliveryAddress } = req.body
+    console.log("Received data:", { deliveryAddress, totalAmount, cart })
+    
     try {
       // בדיקת תקינות הנתונים הבסיסיים
-      if (!totalAmount || !address) {
-        return next(new AppError("Total amount and address are required", 400))
+      if (!totalAmount || !deliveryAddress) {
+        return next(new AppError("Total amount and delivery address are required", 400))
       }
 
       // וידוא שהעגלה אינה ריקה
@@ -255,33 +259,37 @@ const userCtrl = {
         return next(new AppError("Cart cannot be empty", 400))
       }
 
-      // מציאת המשתמש במסד הנתונים
-      const user = await User.findById(req._id)
-      if (!user) {
-        return next(new AppError("User not found", 404))
-      }
+      // Using findOneAndUpdate to avoid validation issues
+      const result = await User.findByIdAndUpdate(
+        req._id,
+        {
+          $push: {
+            orders: {
+              cart: cart.map((item) => ({
+                productId: item.productId,
+                quantity: item.quantity || 1,
+                addedAt: new Date(),
+              })),
+              orderDate: new Date(),
+              status: "pending",
+              totalAmount: totalAmount,
+              deliveryAddress: deliveryAddress
+            }
+          }
+        },
+        { new: true, runValidators: true }
+      )
 
-      // יצירת אובייקט הזמנה חדש
-      const newOrder = {
-        cart: cart.map((item) => ({
-          productId: item.productId,
-          quantity: item.quantity || 1,
-          addedAt: new Date(),
-        })),
-        orderDate: new Date(),
-        status: "pending",
-        totalAmount: totalAmount,
+      if (!result) {
+        return next(new AppError("Failed to save order", 500))
       }
-
-      // הוספת ההזמנה למערך ההזמנות של המשתמש
-      user.orders.push(newOrder)
-      await user.save()
 
       res.status(200).json({
         message: "Order saved successfully",
-        order: newOrder,
+        order: result.orders[result.orders.length - 1]
       })
     } catch (error) {
+      console.error("Save order error:", error)
       next(new AppError("Error saving order", 500, error))
     }
   },
