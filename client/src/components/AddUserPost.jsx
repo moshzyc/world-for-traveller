@@ -8,7 +8,9 @@ import { adminStyles } from "../pages/Admin"
 import { useNavigate } from "react-router-dom"
 
 export const AddUserPost = () => {
+  // שימוש בקונטקסט המשתמש
   const { user } = useContext(UserContext)
+  // ניהול מצב הטופס
   const [formValue, setFormValue] = useState({
     title: "",
     content: "",
@@ -19,16 +21,19 @@ export const AddUserPost = () => {
     mainImage: null,
   })
 
-  const [files, setFiles] = useState([])
-  const [categories, setCategories] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
-  const navigate = useNavigate()
+  // מצבים נוספים
+  const [files, setFiles] = useState([]) // קבצי תמונה נוספים
+  const [categories, setCategories] = useState([]) // רשימת קטגוריות
+  const [loading, setLoading] = useState(false) // מצב טעינה
+  const [error, setError] = useState(null) // הודעות שגיאה
+  const navigate = useNavigate() // ניווט בין דפים
 
+  // טעינת קטגוריות בעת טעינת הקומפוננטה
   useEffect(() => {
     fetchCategories()
   }, [])
 
+  // פונקציה לטעינת קטגוריות מהשרת
   const fetchCategories = async () => {
     try {
       const response = await axios.get(POST_CATEGORIES_URL)
@@ -39,6 +44,7 @@ export const AddUserPost = () => {
     }
   }
 
+  // טיפול בבחירת מיקום מ-Google Places
   const handleLocationSelect = (place) => {
     setFormValue({
       ...formValue,
@@ -50,6 +56,7 @@ export const AddUserPost = () => {
     })
   }
 
+  // טיפול בבחירת מוצר
   const handleProductSelect = (product) => {
     setFormValue({
       ...formValue,
@@ -57,31 +64,36 @@ export const AddUserPost = () => {
     })
   }
 
+  // טיפול בהעלאת קבצי תמונה נוספים
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files)
     setFiles((prevFiles) => [...prevFiles, ...selectedFiles])
   }
 
+  // טיפול בהעלאת תמונה ראשית
   const handleMainImageChange = (e) => {
     setFormValue({ ...formValue, mainImage: e.target.files[0] })
   }
 
+  // טיפול בשינוי תוכן הפוסט
   const handleContentChange = (e) => {
     setFormValue({ ...formValue, content: e.target.value })
   }
 
+  // שליחת הטופס
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
 
     try {
+      // יצירת אובייקט FormData לשליחת קבצים
       const formData = new FormData()
       formData.append("title", formValue.title)
       formData.append("content", formValue.content)
       formData.append("category", formValue.category)
 
-      // Debug log
+      // לוג לצורכי דיבוג
       console.log("Sending data:", {
         title: formValue.title,
         content: formValue.content,
@@ -93,24 +105,29 @@ export const AddUserPost = () => {
         userId: user._id,
       })
 
+      // הוספת נתוני מיקום אם קיימים
       if (formValue.location) {
         formData.append("location[name]", formValue.location.name)
         formData.append("location[lat]", formValue.location.lat)
         formData.append("location[lng]", formValue.location.lng)
       }
 
+      // הוספת מזהה מוצר אם קיים
       if (formValue.product) {
         formData.append("product", formValue.product)
       }
 
+      // הוספת תמונה ראשית
       if (formValue.mainImage) {
         formData.append("mainImage", formValue.mainImage)
       }
 
+      // הוספת תמונות נוספות
       files.forEach((file) => {
         formData.append("images", file)
       })
 
+      // שליחת הנתונים לשרת
       const { data } = await axios.post(ADD_POST_URL, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -118,6 +135,7 @@ export const AddUserPost = () => {
         withCredentials: true,
       })
 
+      // ניווט לדף הקהילה לאחר הצלחה
       navigate(`/community`)
     } catch (err) {
       console.error("Error adding post:", err.response?.data || err)
@@ -130,6 +148,7 @@ export const AddUserPost = () => {
   return (
     <div className="mx-auto max-w-3xl p-6">
       <h2 className={adminStyles.sectionTitle}>Create New Post</h2>
+      {/* הצגת הודעות שגיאה */}
       {error && (
         <div className="mb-4 rounded-lg bg-red-100 p-4 text-red-700">
           {error}
@@ -137,7 +156,7 @@ export const AddUserPost = () => {
       )}
 
       <form className="space-y-6" onSubmit={handleSubmit}>
-        {/* Title Input */}
+        {/* שדה כותרת */}
         <div>
           <label className={adminStyles.label}>Title</label>
           <input
@@ -151,7 +170,7 @@ export const AddUserPost = () => {
           />
         </div>
 
-        {/* Category Selection */}
+        {/* בחירת קטגוריה */}
         <div>
           <label className={adminStyles.label}>Category</label>
           <select
@@ -171,7 +190,7 @@ export const AddUserPost = () => {
           </select>
         </div>
 
-        {/* Conditional Location Input */}
+        {/* שדה מיקום מותנה */}
         {formValue.category === "locations" && (
           <div>
             <label className={adminStyles.label}>Location</label>
@@ -187,7 +206,7 @@ export const AddUserPost = () => {
           </div>
         )}
 
-        {/* Conditional Product Selection */}
+        {/* בחירת מוצר מותנית */}
         {formValue.category === "products reviews" && (
           <div>
             <label className={adminStyles.label}>Product</label>
@@ -198,7 +217,7 @@ export const AddUserPost = () => {
           </div>
         )}
 
-        {/* Content Paragraphs */}
+        {/* שדה תוכן */}
         <div>
           <label className={adminStyles.label}>Content</label>
           <textarea
@@ -210,7 +229,7 @@ export const AddUserPost = () => {
           />
         </div>
 
-        {/* Image Uploads */}
+        {/* העלאת תמונות */}
         <div>
           <label className={adminStyles.label}>Main Image</label>
           <input
@@ -231,7 +250,7 @@ export const AddUserPost = () => {
           />
         </div>
 
-        {/* Image Previews */}
+        {/* תצוגה מקדימה של תמונות */}
         {files.length > 0 && (
           <div className="grid grid-cols-3 gap-4">
             {files.map((file, index) => (
@@ -245,7 +264,7 @@ export const AddUserPost = () => {
           </div>
         )}
 
-        {/* Submit Button */}
+        {/* כפתור שליחה */}
         <button
           type="submit"
           className={`${adminStyles.button} w-full`}

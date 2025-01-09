@@ -3,12 +3,17 @@ import { useParams } from "react-router-dom"
 import axios from "axios"
 import { GET_GUIDE_URL } from "../constants/endPoint"
 
+// דף פרטי מדריך - מציג את כל המידע על מדריך ספציפי //
 export const GuideDetails = () => {
+  // קבלת מזהה המדריך מה-URL //
   const { id } = useParams()
-  const [guide, setGuide] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
 
+  // ניהול מצב //
+  const [guide, setGuide] = useState(null) // נתוני המדריך
+  const [loading, setLoading] = useState(true) // מצב טעינה
+  const [error, setError] = useState(null) // הודעות שגיאה
+
+  // טעינת נתוני המדריך בטעינה ראשונית //
   useEffect(() => {
     const fetchGuide = async () => {
       try {
@@ -25,6 +30,7 @@ export const GuideDetails = () => {
     fetchGuide()
   }, [id])
 
+  // תצוגת טעינה //
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -33,6 +39,7 @@ export const GuideDetails = () => {
     )
   }
 
+  // תצוגת שגיאה //
   if (error) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -41,13 +48,16 @@ export const GuideDetails = () => {
     )
   }
 
+  // תצוגת המדריך //
   return (
     <div className="mycontainer py-8">
       <article className="mx-auto max-w-4xl">
+        {/* כותרת המדריך */}
         <h1 className="mb-6 text-4xl font-bold text-[#2e7d32]">
           {guide.title}
         </h1>
 
+        {/* תמונה ראשית */}
         <div className="mb-8">
           <img
             src={guide.mainImage}
@@ -56,12 +66,14 @@ export const GuideDetails = () => {
           />
         </div>
 
+        {/* תוכן המדריך */}
         <div className="space-y-6">
           <p className="whitespace-pre-line text-lg leading-relaxed text-gray-700">
             {guide.content}
           </p>
         </div>
 
+        {/* גלריית תמונות - מוצגת רק אם יש תמונות נוספות */}
         {guide.images && guide.images.length > 0 && (
           <div className="mt-8">
             <h2 className="mb-4 text-2xl font-semibold text-[#2e7d32]">

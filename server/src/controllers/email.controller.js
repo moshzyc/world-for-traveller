@@ -6,18 +6,22 @@ import { secretKey } from "../secrets/env.js"
 
 const OAuth2 = google.auth.OAuth2
 
+// פונקציה ליצירת מעביר המיילים עם אימות OAuth2
 const createTransporter = async () => {
   try {
+    // יצירת לקוח OAuth2 עם פרטי ההזדהות של גוגל
     const oauth2Client = new OAuth2(
       process.env.GMAIL_CLIENT_ID,
       process.env.GMAIL_CLIENT_SECRET,
       "https://developers.google.com/oauthplayground"
     )
 
+    // הגדרת טוקן הרענון לאימות
     oauth2Client.setCredentials({
       refresh_token: process.env.GMAIL_REFRESH_TOKEN,
     })
 
+    // קבלת טוקן גישה חדש מגוגל
     const accessToken = await new Promise((resolve, reject) => {
       oauth2Client.getAccessToken((err, token) => {
         if (err) {
@@ -28,6 +32,7 @@ const createTransporter = async () => {
       })
     })
 
+    // יצירת טרנספורטר למשלוח מיילים עם אימות OAuth2
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -42,16 +47,20 @@ const createTransporter = async () => {
 
     return transporter
   } catch (err) {
+    // טיפול בשגיאות ביצירת הטרנספורטר
     console.error("Error creating transporter:", err)
     throw err
   }
 }
 
 const emailCtrl = {
+  // שליחת אימייל אישור הזמנה
   async sendOrderConfirmation(req, res, next) {
     try {
+      // חילוץ פרטי המייל מגוף הבקשה
       const { to, subject, html } = req.body
 
+      // הגדרת אפשרויות המייל
       const mailOptions = {
         from: process.env.EMAIL_USER,
         to,
@@ -59,30 +68,37 @@ const emailCtrl = {
         html,
       }
 
+      // יצירת טרנספורטר ושליחת המייל
       const transporter = await createTransporter()
       const info = await transporter.sendMail(mailOptions)
       console.log("Email sent: ", info.response)
 
+      // שליחת תשובת הצלחה
       res.status(200).json({
         message: "Order confirmation email sent successfully",
       })
     } catch (error) {
+      // טיפול בשגיאות במשלוח המייל
       console.error("Email error:", error)
       next(new AppError("Failed to send email", 500, error))
     }
   },
 
+  // שליחת מייל אימות חשבון
   async sendVerificationEmail(req, res, next) {
     try {
+      // קבלת פרטי המשתמש מהבקשה
       const { email, name } = req.body
 
-      // Create verification token
+      // יצירת טוקן אימות שתקף ל-24 שעות
       const verificationToken = jwt.sign({ email }, secretKey, {
         expiresIn: "24h",
       })
 
+      // יצירת כתובת URL לאימות
       const verificationUrl = `http://localhost:5173/verify-email/${verificationToken}`
 
+      // הגדרת תבנית המייל עם עיצוב
       const mailOptions = {
         from: process.env.EMAIL_USER,
         to: email,
@@ -104,13 +120,16 @@ const emailCtrl = {
         `,
       }
 
+      // שליחת המייל באמצעות הטרנספורטר
       const transporter = await createTransporter()
       await transporter.sendMail(mailOptions)
 
+      // שליחת תשובת הצלחה
       res.status(200).json({
         message: "Verification email sent successfully",
       })
     } catch (error) {
+      // טיפול בשגיאות במשלוח המייל
       console.error("Email error:", error)
       next(new AppError("Failed to send verification email", 500, error))
     }

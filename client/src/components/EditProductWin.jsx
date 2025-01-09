@@ -4,14 +4,16 @@ import { EDIT_PRODUCT_URL } from "../constants/endPoint"
 import css from "../css/overlay.module.css"
 
 export const EditProductWin = (props) => {
-  const [title, setTitle] = useState(props.title || "")
-  const [description, setDescription] = useState(props.description || "")
-  const [price, setPrice] = useState(props.price || 0)
-  const [weather, setWeather] = useState(props.weather || "none")
-  const [images, setImages] = useState(props.images || [])
-  const [newImage, setNewImage] = useState("")
-  const [newFiles, setNewFiles] = useState([])
+  // ניהול מצב הטופס
+  const [title, setTitle] = useState(props.title || "") // כותרת
+  const [description, setDescription] = useState(props.description || "") // תיאור
+  const [price, setPrice] = useState(props.price || 0) // מחיר
+  const [weather, setWeather] = useState(props.weather || "none") // מזג אוויר
+  const [images, setImages] = useState(props.images || []) // תמונות קיימות
+  const [newImage, setNewImage] = useState("") // תמונה חדשה מ-URL
+  const [newFiles, setNewFiles] = useState([]) // קבצי תמונה חדשים
 
+  // עדכון ערכי הטופס כאשר ה-props משתנים
   useEffect(() => {
     setTitle(props.title)
     setDescription(props.description)
@@ -20,6 +22,7 @@ export const EditProductWin = (props) => {
     setImages(props.images || [])
   }, [props])
 
+  // הוספת תמונה חדשה מ-URL
   const handleAddImage = () => {
     if (newImage.trim()) {
       setImages([...images, newImage.trim()])
@@ -27,30 +30,34 @@ export const EditProductWin = (props) => {
     }
   }
 
+  // הסרת תמונה קיימת
   const handleRemoveImage = (index) => {
     setImages(images.filter((_, i) => i !== index))
   }
 
+  // טיפול בהעלאת קבצי תמונה חדשים
   const handleFileUpload = (e) => {
     const files = Array.from(e.target.files)
     setNewFiles([...newFiles, ...files])
   }
 
+  // שליחת הטופס
   const onSubmit = async (e) => {
     e.preventDefault()
 
     const formData = new FormData()
+    // הוספת נתונים בסיסיים
     formData.append("title", title)
     formData.append("description", description)
     formData.append("price", price)
     formData.append("weather", weather)
 
-    // Append new files for upload
+    // הוספת קבצי תמונה חדשים
     newFiles.forEach((file) => {
       formData.append("images", file)
     })
 
-    // Append existing image URLs
+    // הוספת כתובות URL של תמונות קיימות
     images.forEach((image) => {
       formData.append("existingImages", image)
     })
@@ -85,9 +92,12 @@ export const EditProductWin = (props) => {
     <div className={css.outsideOverlay}>
       <div className={`${css.insideOverlay} max-w-2xl`}>
         <div className="rounded-lg bg-white p-6 shadow-xl">
-          <h2 className="mb-6 text-2xl font-bold text-[#2e7d32]">Edit Product</h2>
-          
+          <h2 className="mb-6 text-2xl font-bold text-[#2e7d32]">
+            Edit Product
+          </h2>
+
           <form onSubmit={onSubmit} className="space-y-4">
+            {/* שדה כותרת */}
             <div className="space-y-2">
               <label className="block font-medium text-gray-700">Title:</label>
               <input
@@ -98,8 +108,11 @@ export const EditProductWin = (props) => {
               />
             </div>
 
+            {/* שדה תיאור */}
             <div className="space-y-2">
-              <label className="block font-medium text-gray-700">Description:</label>
+              <label className="block font-medium text-gray-700">
+                Description:
+              </label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -107,6 +120,7 @@ export const EditProductWin = (props) => {
               />
             </div>
 
+            {/* שדה מחיר */}
             <div className="space-y-2">
               <label className="block font-medium text-gray-700">Price:</label>
               <input
@@ -117,8 +131,11 @@ export const EditProductWin = (props) => {
               />
             </div>
 
+            {/* בחירת מזג אוויר */}
             <div className="space-y-2">
-              <label className="block font-medium text-gray-700">Weather:</label>
+              <label className="block font-medium text-gray-700">
+                Weather:
+              </label>
               <select
                 value={weather}
                 onChange={(e) => setWeather(e.target.value)}
@@ -131,11 +148,17 @@ export const EditProductWin = (props) => {
               </select>
             </div>
 
+            {/* תצוגת תמונות קיימות */}
             <div className="space-y-2">
-              <label className="block font-medium text-gray-700">Current Images:</label>
+              <label className="block font-medium text-gray-700">
+                Current Images:
+              </label>
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
                 {images.map((img, index) => (
-                  <div key={index} className="relative rounded-lg border border-gray-200 p-2">
+                  <div
+                    key={index}
+                    className="relative rounded-lg border border-gray-200 p-2"
+                  >
                     <img
                       src={img}
                       alt={`Product ${index}`}
@@ -153,8 +176,11 @@ export const EditProductWin = (props) => {
               </div>
             </div>
 
+            {/* הוספת תמונה מ-URL */}
             <div className="space-y-2">
-              <label className="block font-medium text-gray-700">Add Image URL:</label>
+              <label className="block font-medium text-gray-700">
+                Add Image URL:
+              </label>
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -173,8 +199,11 @@ export const EditProductWin = (props) => {
               </div>
             </div>
 
+            {/* העלאת תמונות חדשות */}
             <div className="space-y-2">
-              <label className="block font-medium text-gray-700">Upload New Images:</label>
+              <label className="block font-medium text-gray-700">
+                Upload New Images:
+              </label>
               <input
                 type="file"
                 multiple
@@ -183,6 +212,7 @@ export const EditProductWin = (props) => {
               />
             </div>
 
+            {/* כפתורי פעולה */}
             <div className="mt-6 flex justify-end gap-4">
               <button
                 type="button"

@@ -1,4 +1,3 @@
-
 import React, { useContext } from "react"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
 
@@ -6,9 +5,9 @@ const CartTable = ({ fullScreen, seeCart }) => {
   const { cart, addAnother, minusAmount, deletItem, cartSum } =
     useContext(StoreContext)
 
-  // Calculate max-height for non-fullScreen mode (5 items + header + total)
-  const compactRowHeight = 56 // height for each row in pixels
-  const maxCompactHeight = compactRowHeight * 7 // 5 items + header + total row
+  // חישוב גובה מקסימלי למצב תצוגה מצומצם (5 פריטים + כותרת + שורת סיכום)
+  const compactRowHeight = 56 // גובה כל שורה בפיקסלים
+  const maxCompactHeight = compactRowHeight * 7 // 5 פריטים + כותרת + שורת סיכום
 
   return (
     <div

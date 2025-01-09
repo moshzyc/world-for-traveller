@@ -13,11 +13,12 @@ cloudinary.config({
 const guidesCtrl = {
   async addGuide(req, res, next) {
     try {
+      // חילוץ נתוני המדריך מגוף הבקשה
       const { title } = req.body
       let content = req.body.content || ""
       let imageUrls = req.body.imageUrls || []
 
-      // Parse imageUrls if it's a string
+      // פירוס מערך כתובות התמונות אם התקבל כמחרוזת
       try {
         imageUrls =
           typeof imageUrls === "string" ? JSON.parse(imageUrls) : imageUrls
@@ -26,6 +27,7 @@ const guidesCtrl = {
         imageUrls = []
       }
 
+      // יצירת אובייקט המדריך
       const guideData = {
         title,
         content,
@@ -33,9 +35,10 @@ const guidesCtrl = {
         mainImage: "",
       }
 
-      // Handle main image from file upload
+      // טיפול בתמונה הראשית שהועלתה כקובץ
       if (req.files && req.files.mainImage && req.files.mainImage[0]) {
         const mainImageFile = req.files.mainImage[0]
+        // העלאת התמונה ל-Cloudinary
         const mainImageResult = await cloudinary.uploader.upload(
           mainImageFile.path,
           {
@@ -43,12 +46,14 @@ const guidesCtrl = {
           }
         )
         guideData.mainImage = mainImageResult.secure_url
+        // מחיקת הקובץ הזמני
         fs.unlinkSync(mainImageFile.path)
       } else if (req.body.mainImageUrl) {
+        // שימוש בכתובת URL קיימת לתמונה הראשית
         guideData.mainImage = req.body.mainImageUrl
       }
 
-      // Handle additional images from file upload
+      // טיפול בתמונות נוספות שהועלו כקבצים
       if (req.files && req.files.images) {
         for (const file of req.files.images) {
           const uploadResult = await cloudinary.uploader.upload(file.path, {
@@ -59,11 +64,12 @@ const guidesCtrl = {
         }
       }
 
-      // Handle image URLs
+      // הוספת כתובות URL של תמונות נוספות
       if (imageUrls && imageUrls.length > 0) {
         guideData.images.push(...imageUrls)
       }
 
+      // שמירת המדריך במסד הנתונים
       const newGuide = new Guide(guideData)
       const savedGuide = await newGuide.save()
 
@@ -79,12 +85,13 @@ const guidesCtrl = {
 
   async updateGuide(req, res, next) {
     try {
+      // קבלת מזהה המדריך ונתוני העדכון
       const { id } = req.params
       const { title } = req.body
       let content = req.body.content || ""
       let imageUrls = req.body.imageUrls || []
 
-      // Parse imageUrls if it's a string
+      // פירוס מערך כתובות התמונות אם התקבל כמחרוזת
       try {
         imageUrls =
           typeof imageUrls === "string" ? JSON.parse(imageUrls) : imageUrls
@@ -93,13 +100,14 @@ const guidesCtrl = {
         imageUrls = []
       }
 
+      // יצירת אובייקט העדכון
       const updateData = {
         title,
         content,
         images: [...imageUrls],
       }
 
-      // Handle main image from file upload
+      // טיפול בעדכון התמונה הראשית
       if (req.files && req.files.mainImage && req.files.mainImage[0]) {
         const mainImageFile = req.files.mainImage[0]
         const mainImageResult = await cloudinary.uploader.upload(
@@ -114,7 +122,7 @@ const guidesCtrl = {
         updateData.mainImage = req.body.mainImageUrl
       }
 
-      // Handle additional images from file upload
+      // טיפול בתמונות נוספות חדשות
       if (req.files && req.files.images) {
         for (const file of req.files.images) {
           const uploadResult = await cloudinary.uploader.upload(file.path, {
@@ -125,6 +133,7 @@ const guidesCtrl = {
         }
       }
 
+      // עדכון המדריך במסד הנתונים
       const updatedGuide = await Guide.findByIdAndUpdate(id, updateData, {
         new: true,
       })
@@ -145,6 +154,7 @@ const guidesCtrl = {
 
   async getGuides(req, res, next) {
     try {
+      // שליפת כל המדריכים ממסד הנתונים
       const guides = await Guide.find()
       res.status(200).json(guides)
     } catch (error) {
@@ -154,6 +164,7 @@ const guidesCtrl = {
 
   async deleteGuide(req, res, next) {
     try {
+      // מחיקת מדריך לפי מזהה
       const guideId = req.params.id
       const deletedGuide = await Guide.findByIdAndDelete(guideId)
 
@@ -172,6 +183,7 @@ const guidesCtrl = {
 
   async getGuideById(req, res, next) {
     try {
+      // שליפת מדריך בודד לפי מזהה
       const guide = await Guide.findById(req.params.id)
       if (!guide) {
         return next(new AppError("Guide not found", 404))

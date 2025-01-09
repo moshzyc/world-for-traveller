@@ -3,18 +3,21 @@ import axios from "axios"
 import { ADD_GUIDE_URL } from "../constants/endPoint"
 
 export const AddGuide = () => {
+  // ניהול מצב הטופס
   const [formValue, setFormValue] = useState({
     title: "",
     content: "",
     images: [],
     imageUrls: [],
   })
+  // מצבים נוספים לניהול קבצים ותמונות
   const [files, setFiles] = useState([])
   const [mainImage, setMainImage] = useState(null)
   const [mainImageUrl, setMainImageUrl] = useState("")
   const [newImageUrl, setNewImageUrl] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  // טיפול בשינוי התמונה הראשית
   const handleMainImageChange = (e) => {
     const file = e.target.files[0]
     if (file) {
@@ -22,15 +25,18 @@ export const AddGuide = () => {
     }
   }
 
+  // טיפול בשינוי כתובת התמונה הראשית
   const handleMainImageUrlChange = (e) => {
     setMainImageUrl(e.target.value)
   }
 
+  // טיפול בהוספת קבצי תמונה נוספים
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files)
     setFiles((prevFiles) => [...prevFiles, ...selectedFiles])
   }
 
+  // הוספת כתובת URL של תמונה
   const handleAddImageUrl = () => {
     if (newImageUrl.trim()) {
       setFormValue((prev) => ({
@@ -41,6 +47,7 @@ export const AddGuide = () => {
     }
   }
 
+  // הסרת כתובת URL של תמונה
   const handleRemoveImageUrl = (index) => {
     setFormValue((prev) => ({
       ...prev,
@@ -48,6 +55,7 @@ export const AddGuide = () => {
     }))
   }
 
+  // טיפול בשינוי תוכן המדריך
   const handleContentChange = (value) => {
     setFormValue({
       ...formValue,
@@ -55,37 +63,42 @@ export const AddGuide = () => {
     })
   }
 
+  // הוספת פסקה חדשה
   const handleAddParagraph = () => {
     setFormValue({ ...formValue, content: [...formValue.content, ""] })
   }
 
+  // הסרת פסקה
   const handleRemoveParagraph = (index) => {
     const updatedContent = formValue.content.filter((_, i) => i !== index)
     setFormValue({ ...formValue, content: updatedContent })
   }
 
+  // שליחת הטופס
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
+      // יצירת אובייקט FormData לשליחת קבצים
       const formData = new FormData()
       formData.append("title", formValue.title)
       formData.append("content", formValue.content)
 
-      // Append main image (file or URL)
+      // הוספת התמונה הראשית (קובץ או URL)
       if (mainImage) {
         formData.append("mainImage", mainImage)
       } else if (mainImageUrl) {
         formData.append("mainImageUrl", mainImageUrl)
       }
 
-      // Append additional files
+      // הוספת קבצי תמונה נוספים
       files.forEach((file) => {
         formData.append("images", file)
       })
 
-      // Append imageUrls
+      // הוספת כתובות URL של תמונות
       formData.append("imageUrls", JSON.stringify(formValue.imageUrls))
 
+      // שליחת הנתונים לשרת
       const response = await axios.post(ADD_GUIDE_URL, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -94,7 +107,7 @@ export const AddGuide = () => {
 
       console.log("Guide added successfully:", response.data)
 
-      // Reset form
+      // איפוס הטופס
       setFormValue({ title: "", content: "", images: [], imageUrls: [] })
       setFiles([])
       setNewImageUrl("")
@@ -109,6 +122,7 @@ export const AddGuide = () => {
     <div className="p-4">
       <div className="rounded-lg bg-white p-6 shadow-md">
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+          {/* שדה כותרת */}
           <div className="flex flex-col gap-2">
             <label className="font-medium text-gray-700">Title</label>
             <input
@@ -122,6 +136,7 @@ export const AddGuide = () => {
             />
           </div>
 
+          {/* אזור התמונה הראשית */}
           <div className="flex flex-col gap-4">
             <label className="font-medium text-gray-700">Main Image</label>
 
@@ -180,6 +195,7 @@ export const AddGuide = () => {
             )}
           </div>
 
+          {/* אזור התוכן */}
           <div className="flex flex-col gap-4">
             <label className="font-medium text-gray-700">Content</label>
             <textarea
@@ -190,6 +206,7 @@ export const AddGuide = () => {
             />
           </div>
 
+          {/* אזור תמונות נוספות */}
           <div className="flex flex-col gap-4">
             <label className="font-medium text-gray-700">
               Additional Images
@@ -226,6 +243,7 @@ export const AddGuide = () => {
             </div>
           </div>
 
+          {/* תצוגה מקדימה של תמונות שהועלו */}
           {files.length > 0 && (
             <div>
               <h3 className="mb-2 font-medium text-gray-700">
@@ -256,6 +274,7 @@ export const AddGuide = () => {
             </div>
           )}
 
+          {/* תצוגה מקדימה של תמונות URL */}
           {formValue.imageUrls.length > 0 && (
             <div>
               <h3 className="mb-2 font-medium text-gray-700">
@@ -284,6 +303,7 @@ export const AddGuide = () => {
             </div>
           )}
 
+          {/* כפתור שליחה */}
           <button
             type="submit"
             disabled={isSubmitting}

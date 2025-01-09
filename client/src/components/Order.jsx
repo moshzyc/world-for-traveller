@@ -14,7 +14,7 @@ export const Order = ({ exit }) => {
   const [address, setAddress] = useState("")
   const navigate = useNavigate()
 
-  // Format price to ILS
+  // פונקציה לעיצוב המחיר בשקלים //
   const formatPrice = (price) => {
     return new Intl.NumberFormat("he-IL", {
       style: "currency",
@@ -22,12 +22,15 @@ export const Order = ({ exit }) => {
     }).format(price)
   }
 
+  // טיפול בשליחת ההזמנה //
   const handleSubmit = async () => {
+    // בדיקת תקינות הכתובת //
     if (!address.trim()) {
       alert("Please enter a delivery address")
       return
     }
 
+    // יצירת אובייקט ההזמנה //
     const orderData = {
       userId: user._id,
       cart: cart.map((item) => ({
@@ -44,10 +47,10 @@ export const Order = ({ exit }) => {
     }
 
     try {
-      // Send order to database
+      // שליחת ההזמנה למסד הנתונים //
       const orderResponse = await axios.post(ORDER_URL, orderData)
 
-      // Prepare email data
+      // הכנת תבנית המייל //
       const emailData = {
         to: user.email,
         subject: "Order Confirmation",
@@ -89,9 +92,10 @@ export const Order = ({ exit }) => {
         `,
       }
 
-      // Send confirmation email
+      // שליחת מייל אישור //
       await axios.post(SEND_EMAIL_URL, emailData)
 
+      // ניקוי העגלה וניווט לדף הבית //
       clearCart()
       navigate("/")
     } catch (error) {
@@ -103,7 +107,9 @@ export const Order = ({ exit }) => {
 
   return (
     <div className={css.outsideOverlay}>
+      {/* תוכן ההזמנה */}
       <div className={css.insideOverlay}>
+        {/* כפתור יציאה */}
         <div className="sticky top-0 w-7 text-left">
           <button
             onClick={() => exit((p) => !p)}
@@ -112,11 +118,16 @@ export const Order = ({ exit }) => {
             X
           </button>
         </div>
+
+        {/* טבלת העגלה */}
         <CartTable fullScreen />
+
+        {/* טופס ההזמנה */}
         <form
           onSubmit={handleSubmit}
           className="mx-auto max-w-lg rounded-lg bg-white p-4 shadow-md"
         >
+          {/* פרטי המשתמש */}
           <p className="mb-2 text-lg font-semibold">
             Your name: <span className="font-normal">{user.name}</span>
           </p>
@@ -124,6 +135,7 @@ export const Order = ({ exit }) => {
             Your email: <span className="font-normal">{user.email}</span>
           </p>
 
+          {/* שדה כתובת למשלוח */}
           <div className="mb-4">
             <label
               htmlFor="address"
@@ -142,6 +154,7 @@ export const Order = ({ exit }) => {
             />
           </div>
 
+          {/* רכיב תשלום PayPal */}
           <PayPalCheckout handleSubmit={handleSubmit} />
         </form>
       </div>

@@ -1,19 +1,23 @@
+// ייבוא הספריות והקונטקסט הנדרשים //
 import React, { useContext } from "react"
 import { Link } from "react-router-dom"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
 import { UserContext } from "../contexts/UserContextpProvider"
 
 export const Footer = () => {
+  // שימוש בקונטקסט החנות והמשתמש //
   const { categories, setCategory, setSubCategory, setTitle } =
     useContext(StoreContext)
   const { user } = useContext(UserContext)
 
+  // פונקציה לטיפול בלחיצה על קטגוריה //
   const handleCategoryClick = (categoryName) => {
     setCategory(categoryName)
     setSubCategory([])
     setTitle("")
   }
 
+  // פונקציה לטיפול בלחיצה על החנות //
   const handleStoreClick = () => {
     setCategory([])
     setSubCategory([])
@@ -21,10 +25,11 @@ export const Footer = () => {
   }
 
   return (
+    // פוטר ראשי //
     <footer className="bg-[#2e7d32] text-white">
       <div className="mycontainer py-12">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
-          {/* About Section */}
+          {/* חלק אודות */}
           <div>
             <h3 className="mb-4 text-lg font-semibold">World for Traveler</h3>
             <p className="text-[#e8f5e9]">
@@ -32,10 +37,11 @@ export const Footer = () => {
             </p>
           </div>
 
-          {/* Quick Links */}
+          {/* קישורים מהירים */}
           <div>
             <h3 className="mb-4 text-lg font-semibold">Quick Links</h3>
             <ul className="space-y-2">
+              {/* קישורי ניווט */}
               <li>
                 <Link
                   to="/"
@@ -80,7 +86,7 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Categories */}
+          {/* רשימת קטגוריות */}
           <div>
             <h3 className="mb-4 text-lg font-semibold">Categories</h3>
             <ul className="space-y-2">
@@ -98,7 +104,7 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* פרטי יצירת קשר */}
           <div>
             <h3 className="mb-4 text-lg font-semibold">Contact</h3>
             <ul className="space-y-2 text-[#e8f5e9]">
@@ -109,31 +115,19 @@ export const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
+        {/* חלק תחתון של הפוטר */}
         <div className="mt-8 border-t border-[#e8f5e9]/20 pt-8">
           <div className="flex flex-col items-center justify-between md:flex-row">
+            {/* זכויות יוצרים */}
             <p className="text-sm text-[#e8f5e9]">
               © {new Date().getFullYear()} World for Traveler. All rights
               reserved.
             </p>
+            {/* קישורים נוספים (כרגע מוסתרים) */}
             <div className="mt-4 md:mt-0">
               <ul className="flex space-x-4 text-sm">
-                {/* <li>
-                  <Link
-                    to="/privacy"
-                    className="text-[#e8f5e9] transition-colors hover:text-white"
-                  >
-                    Privacy Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/terms"
-                    className="text-[#e8f5e9] transition-colors hover:text-white"
-                  >
-                    Terms of Service
-                  </Link>
-                </li> */}
+                {/* <li>Privacy Policy</li> */}
+                {/* <li>Terms of Service</li> */}
               </ul>
             </div>
           </div>

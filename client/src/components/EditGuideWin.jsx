@@ -3,6 +3,7 @@ import axios from "axios"
 import { EDIT_GUIDE_URL } from "../constants/endPoint"
 
 export const EditGuideWin = (props) => {
+  // טיפול במצב הטופס
   const [title, setTitle] = useState(props.title || "")
   const [content, setContent] = useState(props.content || "")
   const [mainImage, setMainImage] = useState(null)
@@ -12,19 +13,22 @@ export const EditGuideWin = (props) => {
   const [newParagraph, setNewParagraph] = useState("")
   const [files, setFiles] = useState([])
 
+  // טיפול בשינוי התמונה הראשית
   const handleMainImageChange = (e) => {
     const file = e.target.files[0]
     if (file) {
       setMainImage(file)
-      setMainImageUrl("") // Clear URL when file is selected
+      setMainImageUrl("") // ניקוי כתובת URL כאשר נבחר קובץ
     }
   }
 
+  // טיפול בשינוי כתובת התמונה הראשית
   const handleMainImageUrlChange = (e) => {
     setMainImageUrl(e.target.value)
-    setMainImage(null) // Clear file when URL is entered
+    setMainImage(null) // ניקוי הקובץ כאשר מוזנת כתובת URL
   }
 
+  // טיפול בהוספת פסקה חדשה
   const handleAddParagraph = () => {
     if (newParagraph.trim()) {
       setContent([...content, newParagraph.trim()])
@@ -32,21 +36,25 @@ export const EditGuideWin = (props) => {
     }
   }
 
+  // טיפול בהסרת פסקה
   const handleRemoveParagraph = (index) => {
     setContent(content.filter((_, i) => i !== index))
   }
 
+  // טיפול בהסרת תמונה
   const handleRemoveImage = (index) => {
     const updatedImages = [...images]
     updatedImages.splice(index, 1)
     setImages(updatedImages)
   }
 
+  // טיפול בהעלאת קבצים
   const handleFileUpload = (e) => {
     const selectedFiles = Array.from(e.target.files)
     setFiles((prevFiles) => [...prevFiles, ...selectedFiles])
   }
 
+  // טיפול בהוספת כתובת תמונה
   const handleAddImage = () => {
     if (newImage.trim()) {
       setImages([...images, newImage.trim()])
@@ -54,36 +62,40 @@ export const EditGuideWin = (props) => {
     }
   }
 
+  // טיפול בהסרת קובץ
   const handleRemoveFile = (index) => {
     setFiles(files.filter((_, i) => i !== index))
   }
 
+  // טיפול בשינוי תוכן
   const handleContentChange = (index, value) => {
     const updatedContent = [...content]
     updatedContent[index] = value
     setContent(updatedContent)
   }
 
+  // שליחת הטופס
   const onSubmit = async (e) => {
     e.preventDefault()
     const formData = new FormData()
 
+    // הוספת נתונים בסיסיים
     formData.append("title", title)
     formData.append("content", content)
 
-    // Handle main image
+    // טיפול בתמונה ראשית
     if (mainImage) {
       formData.append("mainImage", mainImage)
     } else if (mainImageUrl) {
       formData.append("mainImageUrl", mainImageUrl)
     }
 
-    // Handle additional files
+    // טיפול בקבצים נוספים
     files.forEach((file) => {
       formData.append("images", file)
     })
 
-    // Handle existing and new image URLs
+    // טיפול בכתובות URL של תמונות קיימות וחדשות
     formData.append("imageUrls", JSON.stringify(images))
 
     try {
@@ -109,6 +121,7 @@ export const EditGuideWin = (props) => {
       <div className="my-8 w-full max-w-2xl rounded-lg bg-white p-6 shadow-xl">
         <h2 className="mb-6 text-2xl font-bold text-[#2e7d32]">Edit Guide</h2>
         <form onSubmit={onSubmit} className="space-y-6">
+          {/* שדה כותרת */}
           <div className="space-y-2">
             <label htmlFor="title" className="block font-medium text-gray-700">
               Title
@@ -122,6 +135,7 @@ export const EditGuideWin = (props) => {
             />
           </div>
 
+          {/* אזור תמונה ראשית */}
           <div className="space-y-4">
             <label className="block font-medium text-gray-700">
               Main Image
@@ -182,6 +196,7 @@ export const EditGuideWin = (props) => {
             )}
           </div>
 
+          {/* אזור תוכן */}
           <div className="space-y-2">
             <label className="block font-medium text-gray-700">Content</label>
             <textarea
@@ -192,6 +207,7 @@ export const EditGuideWin = (props) => {
             />
           </div>
 
+          {/* אזור תמונות נוספות */}
           <div className="space-y-4">
             <label className="block font-medium text-gray-700">
               Additional Images
@@ -267,6 +283,7 @@ export const EditGuideWin = (props) => {
             </div>
           </div>
 
+          {/* כפתורי פעולה */}
           <div className="flex justify-end gap-4 pt-4">
             <button
               type="button"

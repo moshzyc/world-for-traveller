@@ -6,11 +6,16 @@ import { LOGIN_URL, SIGNUP_URL } from "../constants/endPoint"
 import axios from "axios"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
 
+// קומפוננטת טופס משתמש - משמשת גם להרשמה וגם להתחברות
 export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
+  // ניהול מצב השגיאות בטופס
   const [error, setError] = useState("")
+  // שימוש בקונטקסט המשתמש והחנות
   const { user, setUser } = useContext(UserContext)
   const { updateCartOnLogin } = useContext(StoreContext)
   const navigate = useNavigate()
+  
+  // ניהול ערכי הטופס
   const [formValues, setFormValues] = useState({
     name: " ",
     email: " ",
@@ -19,6 +24,7 @@ export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
     birthDate: " ",
   })
 
+  // איפוס הטופס כשעוברים בין הרשמה להתחברות
   useEffect(() => {
     if (!isSignup) {
       setFormValues({
@@ -28,6 +34,7 @@ export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
     }
   }, [isSignup])
 
+  // בדיקת גיל המשתמש - חייב להיות מעל 10
   const validateAge = (birthDate) => {
     const today = new Date()
     const birth = new Date(birthDate)
@@ -44,22 +51,28 @@ export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
     return age >= 10
   }
 
+  // טיפול בשליחת הטופס
   const onSubmit = async (e) => {
     e.preventDefault()
     try {
       if (isSignup) {
+        // בדיקת גיל בהרשמה
         if (!validateAge(formValues.birthDate)) {
           setError("You must be at least 10 years old to sign up")
           return
         }
+        // שליחת בקשת הרשמה
         await axios.post(SIGNUP_URL, formValues)
         formChenge((p) => !p)
       } else {
+        // שליחת בקשת התחברות
         const { data } = await axios.post(LOGIN_URL, formValues)
+        // עדכון העגלה בשרת
         await updateCartOnLogin()
         sessionStorage.clear()
         setUser(data)
 
+        // טיפול בהצלחת ההתחברות
         if (onLoginSuccess) {
           onLoginSuccess()
         } else {
@@ -67,6 +80,7 @@ export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
         }
       }
     } catch (error) {
+      // טיפול בשגיאות
       if (error.response?.status === 401 && error.response?.data?.message) {
         setError(error.response.data.message)
       } else {
@@ -75,6 +89,7 @@ export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
     }
   }
 
+  // חישוב התאריך המקסימלי המותר להרשמה (גיל 10)
   const getMaxDate = () => {
     const date = new Date()
     date.setFullYear(date.getFullYear() - 10)
@@ -82,12 +97,14 @@ export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
   }
 
   return (
+    // טופס עם עיצוב מותאם
     <form
       onSubmit={onSubmit}
       className={`mx-auto w-72 max-w-md rounded-lg bg-white p-4 shadow-lg ${
         !onLoginSuccess ? "max-h-[90vh] overflow-y-auto" : ""
       }`}
     >
+      {/* הצגת הודעות שגיאה */}
       {error && (
         <div className="mb-4 rounded-md bg-red-100 p-4">
           <div className="flex">
@@ -112,6 +129,7 @@ export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
       )}
 
       <div className="space-y-4">
+        {/* שדות הטופס להרשמה בלבד */}
         {isSignup && (
           <div className="space-y-2">
             <label htmlFor="name" className="block font-medium text-gray-700">
@@ -133,6 +151,7 @@ export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
           </div>
         )}
 
+        {/* שדה אימייל - משותף להרשמה והתחברות */}
         <div className="space-y-2">
           <label htmlFor="email" className="block font-medium text-gray-700">
             Email
@@ -152,6 +171,7 @@ export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
           />
         </div>
 
+        {/* שדה סיסמה - משותף להרשמה והתחברות */}
         <div className="space-y-2">
           <label htmlFor="password" className="block font-medium text-gray-700">
             Password
@@ -171,8 +191,10 @@ export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
           />
         </div>
 
+        {/* שדות נוספים להרשמה בלבד */}
         {isSignup && (
           <>
+            {/* שדה תאריך לידה */}
             <div className="space-y-2">
               <label
                 htmlFor="birthDate"
@@ -197,6 +219,7 @@ export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
               />
             </div>
 
+            {/* שדה מספר טלפון */}
             <div className="space-y-2">
               <label
                 htmlFor="phone"
@@ -222,6 +245,7 @@ export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
           </>
         )}
 
+        {/* כפתור שליחה */}
         <button
           type="submit"
           className="w-full rounded-lg bg-[#2e7d32] py-2 text-white transition-colors hover:bg-[#1b5e20]"
@@ -229,6 +253,7 @@ export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
           {isSignup ? "Sign Up" : "Login"}
         </button>
 
+        {/* קישור למעבר בין הרשמה להתחברות */}
         <p
           className="cursor-pointer text-center text-[#2e7d32] hover:underline"
           onClick={() => formChenge((p) => !p)}

@@ -24,16 +24,19 @@ import {
 } from "react-icons/fa"
 import { Rating } from "../components/Rating"
 
+// דף מוצר - מציג את כל הפרטים של מוצר ספציפי //
 export const Product = () => {
-  const { addItem } = useContext(StoreContext)
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const [product, setProduct] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [showShareMenu, setShowShareMenu] = useState(false)
-  const [copySuccess, setCopySuccess] = useState(false)
+  // ניהול מצב וקונטקסט //
+  const { addItem } = useContext(StoreContext) // פונקציית הוספה לעגלה
+  const { id } = useParams() // מזהה המוצר מה-URL
+  const navigate = useNavigate() // ניווט
+  const [product, setProduct] = useState(null) // נתוני המוצר
+  const [loading, setLoading] = useState(true) // מצב טעינה
+  const [error, setError] = useState(null) // הודעות שגיאה
+  const [showShareMenu, setShowShareMenu] = useState(false) // תפריט שיתוף
+  const [copySuccess, setCopySuccess] = useState(false) // הצלחת העתקת קישור
 
+  // נתוני שיתוף //
   const shareUrl = `${window.location.origin}/product/${id}`
   const shareTitle = product
     ? `Check out ${product.title}!`
@@ -41,10 +44,12 @@ export const Product = () => {
   const shareDescription =
     product?.description || "Great product from our store!"
 
+  // טעינת נתוני המוצר בטעינה ראשונית //
   useEffect(() => {
     getProduct()
   }, [id])
 
+  // פונקציה לטעינת נתוני המוצר //
   const getProduct = async () => {
     try {
       setLoading(true)
@@ -59,6 +64,7 @@ export const Product = () => {
     }
   }
 
+  // פונקציה להוספת מוצר לעגלה //
   const handleAddToCart = () => {
     const item = {
       title: product.title,
@@ -70,6 +76,7 @@ export const Product = () => {
     addItem(item)
   }
 
+  // פונקציה להעתקת קישור המוצר //
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(shareUrl)
@@ -80,6 +87,7 @@ export const Product = () => {
     }
   }
 
+  // תצוגת טעינה //
   if (loading) {
     return (
       <div className="mycontainer flex min-h-screen items-center justify-center">
@@ -88,6 +96,7 @@ export const Product = () => {
     )
   }
 
+  // תצוגת שגיאה //
   if (error || !product) {
     return (
       <div className="mycontainer flex min-h-screen items-center justify-center">
@@ -101,6 +110,7 @@ export const Product = () => {
     )
   }
 
+  // תצוגת המוצר //
   return (
     <div className="mycontainer py-8">
       <button
@@ -113,7 +123,7 @@ export const Product = () => {
 
       <div className="mx-auto max-w-6xl overflow-hidden rounded-lg bg-white shadow-md">
         <div className="grid gap-6 p-6 md:grid-cols-2">
-          {/* Image Section */}
+          {/* אזור תמונת המוצר */}
           <div className="relative h-[300px] md:h-[400px] lg:h-[500px]">
             <img
               className="h-full w-full rounded-lg bg-[#f0f7f0] object-contain"
@@ -126,12 +136,14 @@ export const Product = () => {
             />
           </div>
 
-          {/* Product Details Section */}
+          {/* אזור פרטי המוצר */}
           <div className="flex h-full flex-col">
+            {/* כותרת המוצר */}
             <h1 className="mb-4 text-2xl font-bold text-[#2e7d32] md:text-3xl">
               {product.title}
             </h1>
 
+            {/* קטגוריות ומזג אוויר */}
             <div className="mb-4 rounded-lg bg-[#f0f7f0] p-4">
               <p className="mb-2 text-base font-semibold md:text-lg">
                 Category:{" "}
@@ -151,17 +163,20 @@ export const Product = () => {
               )}
             </div>
 
+            {/* תיאור המוצר */}
             <div className="flex-grow">
               <p className="mb-4 text-sm text-gray-600 md:text-base">
                 {product.description}
               </p>
             </div>
 
+            {/* מחיר וכפתורי פעולה */}
             <div className="mt-4">
               <p className="mb-4 text-xl font-bold text-[#2e7d32] md:text-2xl">
                 {product.price} ILS
               </p>
 
+              {/* כפתורי הוספה לעגלה ושיתוף */}
               <div className="flex items-center gap-3">
                 <button
                   onClick={handleAddToCart}
@@ -170,6 +185,7 @@ export const Product = () => {
                   Add to Cart
                 </button>
 
+                {/* תפריט שיתוף */}
                 <div className="relative">
                   <button
                     onClick={() => setShowShareMenu(!showShareMenu)}
@@ -263,6 +279,7 @@ export const Product = () => {
               </div>
             </div>
 
+            {/* דירוג המוצר */}
             <div className="mb-4">
               <Rating
                 productId={product._id}

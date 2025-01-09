@@ -9,52 +9,62 @@ import axios from "axios"
 const userCtrl = {
   async signup(req, res, next) {
     try {
+      // הצפנת הסיסמה באמצעות bcrypt
       const hashedPassword = await bcrypt.hash(req.body.password, 10)
+      // יצירת משתמש חדש במסד הנתונים
       const user = await User.create({
         ...req.body,
         password: hashedPassword,
-        isVerified: false,
+        isVerified: false, // המשתמש לא מאומת בהתחלה
       })
 
-      // Send verification email
+      // שליחת מייל אימות
       try {
         await axios.post("http://localhost:3000/email/send-verification", {
           email: user.email,
           name: user.name,
         })
-      } catch (emailError) {
-        console.error("Error sending verification email:", emailError)
+      } catch (error) {
+        // תיעוד שגיאה במקרה של כישלון בשליחת המייל
+        next(new AppError("Error sending verification email", 500, error))
       }
 
+      // שליחת תשובה חיובית עם פרטי המשתמש (ללא הסיסמה האמיתית)
       res.status(201).json({
         message: "Please check your email to verify your account",
         user: { ...user._doc, password: "*****" },
       })
     } catch (error) {
+      // במקרה של שגיאה (למשל, משתמש קיים), שליחת הודעת שגיאה
       next(new AppError("User already exists", 400, error))
     }
   },
   async login(req, res, next) {
+    // חילוץ אימייל וסיסמה מהבקשה
     const { email, password } = req.body
     try {
+      // חיפוש המשתמש לפי האימייל
       const user = await User.findOne({ email })
 
+      // בדיקה אם המשתמש קיים והסיסמה נכונה
       if (!user || !(await bcrypt.compare(password, user.password))) {
         return next(new AppError("Invalid credentials", 401))
       }
 
-      // Check if user is verified
+      // בדיקה אם המשתמש אימת את המייל שלו
       if (!user.isVerified) {
         return next(
           new AppError("Please verify your email before logging in", 401)
         )
       }
 
+      // יצירת טוקן גישה שתקף ל-15 דקות
       const accessToken = jwt.sign(
         { _id: user._id, role: user.role },
         secretKey,
         { expiresIn: "15m" }
       )
+      // יצירת טוקן רענון שתקף ל-30 יום
       const refreshToken = jwt.sign(
         { _id: user._id, role: user.role },
         secretKey,
@@ -62,24 +72,29 @@ const userCtrl = {
           expiresIn: "30d",
         }
       )
+      // שמירת טוקן הרענון במסד הנתונים
       user.refreshTokens.push({
         token: refreshToken,
         createdAt: new Date(),
       })
       await user.save()
 
+      // הגדרת קוקי עבור טוקן הגישה
       res.cookie("access_token", "Bearer " + accessToken, {
         httpOnly: true,
         secure: true,
         sameSite: "none",
       })
+      // הגדרת קוקי עבור טוקן הרענון
       res.cookie("refresh_token", "Bearer " + refreshToken, {
         httpOnly: true,
         secure: true,
         sameSite: "none",
       })
+      // שליחת פרטי המשתמש בתשובה (ללא הסיסמה האמיתית)
       res.status(201).json({ ...user._doc, password: "****" })
     } catch (error) {
+      // טיפול בשגיאות בתהליך ההתחברות
       next(new AppError("Error during login", 401, error))
     }
   },
@@ -133,34 +148,41 @@ const userCtrl = {
     }
   },
   async updateUser(req, res, next) {
+    // חילוץ הפרטים שהמשתמש רוצה לעדכן
     const { name, email, password, newPassword, phone } = req.body
     try {
+      // בדיקת תקינות האימייל אם הוא מסופק
       if (email && !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
         return next(new AppError("Invalid email format", 400))
       }
+      // מציאת המשתמש במסד הנתונים
       const user = await User.findById(req._id)
       if (!user) {
         return next(new AppError("User not found", 404))
       }
 
-      // If user wants to change password, verify old password
+      // אם המשתמש רוצה לשנות סיסמה, יש לוודא את הסיסמה הישנה
       if (newPassword) {
         const isPasswordValid = await bcrypt.compare(password, user.password)
         if (!isPasswordValid) {
           return next(new AppError("Incorrect password", 400))
         }
+        // הצפנת הסיסמה החדשה
         user.password = await bcrypt.hash(newPassword, 10)
       }
 
-      // Update user details
+      // עדכון פרטי המשתמש
       if (name) user.name = name
       if (email) user.email = email
-      if (phone) user.phone = phone // Add phone update
+      if (phone) user.phone = phone
 
+      // שמירת השינויים במסד הנתונים
       await user.save()
 
+      // שליחת אישור על העדכון המוצלח
       res.status(200).json({ message: "User updated successfully" })
     } catch (error) {
+      // טיפול בשגיאות בתהליך העדכון
       next(new AppError("Error updating user", 500, error))
     }
   },
@@ -219,47 +241,53 @@ const userCtrl = {
     }
   },
   async saveOrder(req, res, next) {
+    // חילוץ נתוני ההזמנה מגוף הבקשה
     const { cart, totalAmount, address } = req.body
     console.log(cart)
     try {
+      // בדיקת תקינות הנתונים הבסיסיים
       if (!totalAmount || !address) {
         return next(new AppError("Total amount and address are required", 400))
       }
 
+      // וידוא שהעגלה אינה ריקה
       if (!Array.isArray(cart) || cart.length === 0) {
         return next(new AppError("Cart cannot be empty", 400))
       }
 
-      const user = await User.findById(req._id) // מציאת המשתמש לפי ה-ID שנמצא ב-token
+      // מציאת המשתמש במסד הנתונים
+      const user = await User.findById(req._id)
       if (!user) {
         return next(new AppError("User not found", 404))
       }
 
-      // יצירת אובייקט הזמנה
+      // יצירת אובייקט הזמנה חדש
       const newOrder = {
         cart: cart.map((item) => ({
-          productId: item.productId, // אחידות לשדה productId
+          productId: item.productId,
           quantity: item.quantity || 1,
           addedAt: new Date(),
         })),
         orderDate: new Date(),
-        status: "pending", // ברירת מחדל
+        status: "pending",
         totalAmount: totalAmount,
       }
 
-      // הוספת ההזמנה לשדה orders של המשתמש
+      // הוספת ההזמנה למערך ההזמנות של המשתמש
       user.orders.push(newOrder)
-      await user.save() // שמירה במסד הנתונים
+      await user.save()
 
-      res
-        .status(200)
-        .json({ message: "Order saved successfully", order: newOrder })
+      res.status(200).json({
+        message: "Order saved successfully",
+        order: newOrder,
+      })
     } catch (error) {
       next(new AppError("Error saving order", 500, error))
     }
   },
   async getOrders(req, res, next) {
     try {
+      // שליפת המשתמש עם פרטי ההזמנות המלאים
       const user = await User.findById(req._id).populate({
         path: "orders.cart.productId",
         select: "title price category images",
@@ -270,7 +298,7 @@ const userCtrl = {
         return next(new AppError("User not found", 404))
       }
 
-      // Filter out null products and format the response
+      // עיבוד וסינון ההזמנות
       const orders = user.orders.map((order) => ({
         _id: order._id,
         orderDate: order.orderDate,
@@ -296,9 +324,11 @@ const userCtrl = {
   },
   async verifyEmail(req, res, next) {
     try {
+      // קבלת טוקן האימות מהפרמטרים
       const { token } = req.params
       const decoded = jwt.verify(token, secretKey)
 
+      // עדכון סטטוס האימות של המשתמש
       const user = await User.findOneAndUpdate(
         { email: decoded.email },
         { isVerified: true },
@@ -317,6 +347,7 @@ const userCtrl = {
     }
   },
   async toggleFavorite(req, res, next) {
+    // קבלת מזהה המוצר מגוף הבקשה
     const { productId } = req.body
     try {
       const user = await User.findById(req._id)
@@ -324,15 +355,16 @@ const userCtrl = {
         return next(new AppError("User not found", 404))
       }
 
+      // בדיקה אם המוצר כבר במועדפים
       const favoriteIndex = user.favorites.findIndex(
         (fav) => fav.productId.toString() === productId
       )
 
       if (favoriteIndex === -1) {
-        // Add to favorites
+        // הוספה למועדפים
         user.favorites.push({ productId })
       } else {
-        // Remove from favorites
+        // הסרה מהמועדפים
         user.favorites.splice(favoriteIndex, 1)
       }
 
@@ -350,6 +382,7 @@ const userCtrl = {
   },
   async getFavorites(req, res, next) {
     try {
+      // שליפת המשתמש עם פרטי המוצרים המועדפים
       const user = await User.findById(req._id).populate({
         path: "favorites.productId",
         select: "title price category images description rating",
@@ -359,6 +392,7 @@ const userCtrl = {
         return next(new AppError("User not found", 404))
       }
 
+      // עיבוד רשימת המועדפים
       const favorites = user.favorites.map((fav) => ({
         ...fav.productId._doc,
         addedAt: fav.addedAt,
@@ -371,11 +405,13 @@ const userCtrl = {
   },
   async getAllOrders(req, res, next) {
     try {
+      // שליפת כל המשתמשים עם פרטי ההזמנות שלהם
       const users = await User.find({}, "orders name email").populate({
         path: "orders.cart.productId",
         select: "title price category",
       })
 
+      // איחוד כל ההזמנות למערך אחד עם פרטי המשתמש
       const allOrders = users.reduce((acc, user) => {
         const userOrders = user.orders.map((order) => ({
           ...order.toObject(),
@@ -386,7 +422,7 @@ const userCtrl = {
         return [...acc, ...userOrders]
       }, [])
 
-      // Sort orders by date, newest first
+      // מיון ההזמנות לפי תאריך, החדשות ביותר קודם
       allOrders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate))
 
       res.status(200).json(allOrders)
@@ -395,6 +431,7 @@ const userCtrl = {
     }
   },
   async updateOrderStatus(req, res, next) {
+    // קבלת פרטי העדכון מגוף הבקשה
     const { orderId, userId, status } = req.body
     try {
       const user = await User.findById(userId)
@@ -402,7 +439,7 @@ const userCtrl = {
         return next(new AppError("User not found", 404))
       }
 
-      // Find the order in the user's orders array
+      // חיפוש ההזמנה במערך ההזמנות של המשתמש
       const orderIndex = user.orders.findIndex(
         (order) => order._id.toString() === orderId
       )
@@ -411,7 +448,7 @@ const userCtrl = {
         return next(new AppError("Order not found", 404))
       }
 
-      // Update the order status
+      // עדכון סטטוס ההזמנה
       user.orders[orderIndex].status = status
       await user.save()
 
@@ -425,6 +462,7 @@ const userCtrl = {
   },
   async getAllUsers(req, res, next) {
     try {
+      // שליפת כל המשתמשים ללא סיסמאות וטוקנים
       const users = await User.find({}, "-password -refreshTokens")
       res.status(200).json(users)
     } catch (error) {
@@ -432,18 +470,20 @@ const userCtrl = {
     }
   },
   async adminUpdateUser(req, res, next) {
+    // קבלת פרטי העדכון מגוף הבקשה
     const { userId, updates, adminPassword } = req.body
 
     try {
-      // Verify admin password
+      // אימות סיסמת המנהל
       const admin = await User.findById(req._id)
       if (!admin || !(await bcrypt.compare(adminPassword, admin.password))) {
         return next(new AppError("Invalid admin credentials", 401))
       }
 
-      // Don't allow password updates through this route
+      // מניעת עדכון סיסמה וטוקנים דרך נתיב זה
       const { password, refreshTokens, ...allowedUpdates } = updates
 
+      // עדכון פרטי המשתמש
       const user = await User.findByIdAndUpdate(
         userId,
         { $set: allowedUpdates },
@@ -464,6 +504,7 @@ const userCtrl = {
   },
   async saveTrip(req, res, next) {
     try {
+      // קבלת פרטי הטיול מגוף הבקשה
       const { name, locations, dates, weatherData } = req.body
       const userId = req._id
 
@@ -472,6 +513,7 @@ const userCtrl = {
         return next(new AppError("User not found", 404))
       }
 
+      // הוספת הטיול למערך הטיולים של המשתמש
       user.trips.push({
         name,
         locations,
@@ -491,6 +533,7 @@ const userCtrl = {
   },
   async getTrips(req, res, next) {
     try {
+      // שליפת המשתמש עם פרטי הטיולים שלו
       const user = await User.findById(req._id)
       if (!user) {
         return next(new AppError("User not found", 404))
@@ -503,6 +546,7 @@ const userCtrl = {
   },
   async deleteTrip(req, res, next) {
     try {
+      // קבלת מזהה הטיול מהפרמטרים
       const { tripId } = req.params
       const user = await User.findById(req._id)
 
@@ -510,6 +554,7 @@ const userCtrl = {
         return next(new AppError("User not found", 404))
       }
 
+      // הסרת הטיול מהמערך
       user.trips = user.trips.filter((trip) => trip._id.toString() !== tripId)
       await user.save()
 
@@ -520,6 +565,7 @@ const userCtrl = {
   },
   async updateTrip(req, res, next) {
     try {
+      // קבלת פרטי העדכון
       const { tripId } = req.params
       const { name, locations, dates, weatherData } = req.body
       const userId = req._id
@@ -529,6 +575,7 @@ const userCtrl = {
         return next(new AppError("User not found", 404))
       }
 
+      // חיפוש הטיול במערך
       const tripIndex = user.trips.findIndex(
         (trip) => trip._id.toString() === tripId
       )
@@ -536,13 +583,14 @@ const userCtrl = {
         return next(new AppError("Trip not found", 404))
       }
 
+      // עדכון פרטי הטיול
       user.trips[tripIndex] = {
         ...user.trips[tripIndex],
         name,
         locations,
         dates,
         weatherData,
-        _id: user.trips[tripIndex]._id, // Preserve the original ID
+        _id: user.trips[tripIndex]._id, // שמירה על המזהה המקורי
       }
 
       await user.save()

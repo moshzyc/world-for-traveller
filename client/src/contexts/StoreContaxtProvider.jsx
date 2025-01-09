@@ -8,50 +8,46 @@ import {
 import { UserContext } from "../contexts/UserContextpProvider"
 export const StoreContext = createContext()
 
+// קונטקסט לניהול החנות - מנהל את המוצרים, העגלה והקטגוריות //
 export const StoreContaxtProvider = ({ children }) => {
+  // משתני מצב לניהול החנות //
   const { user } = useContext(UserContext)
-  const [cart, setCart] = useState([])
-  const [cartSum, setCartSum] = useState(0)
-  const [products, setProducts] = useState([])
-  const [allProducts, setAllProducts] = useState([])
-  const [category, setCategory] = useState("")
-  const [subCategory, setSubCategory] = useState("")
-  const [title, setTitle] = useState("")
-  const [categories, setCategories] = useState([])
-  const [activeMobileCategory, setActiveMobileCategory] = useState(null)
-  const [rate, setRate] = useState(0)
-  const [error, setError] = useState(null)
-  const [success, setSuccess] = useState(null)
+  const [cart, setCart] = useState([]) // עגלת קניות
+  const [cartSum, setCartSum] = useState(0) // סכום העגלה
+  const [products, setProducts] = useState([]) // מוצרים מסוננים
+  const [allProducts, setAllProducts] = useState([]) // כל המוצרים
+  const [category, setCategory] = useState("") // קטגוריה נבחרת
+  const [subCategory, setSubCategory] = useState("") // תת-קטגוריה
+  const [title, setTitle] = useState("") // חיפוש לפי כותרת
+  const [categories, setCategories] = useState([]) // רשימת קטגוריות
+  const [activeMobileCategory, setActiveMobileCategory] = useState(null) // קטגוריה פעילה במובייל
+  const [rate, setRate] = useState(0) // דירוג
+  const [error, setError] = useState(null) // הודעות שגיאה
+  const [success, setSuccess] = useState(null) // הודעות הצלחה
 
+  // טעינת מוצרים מסוננים בעת שינוי פילטרים //
   useEffect(() => {
     getProductsFilterd()
   }, [category, subCategory, title, rate])
-  // useEffect(() => {
-  //   getProducts()
-  // }, [])
+
+  // טעינת קטגוריות בטעינה ראשונית //
   useEffect(() => {
     getCategories()
   }, [])
 
-  // const getProducts = async () => {
-  //   try {
-  //     const { data } = await axios.get(`${PRODUCTS_URL}`)
-  //     setAllProducts(data)
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // }
+  // פונקציה לטעינת קטגוריות //
   const getCategories = async () => {
     try {
       const { data } = await axios.get(GET_CATEGORIES_URL)
       setCategories(data)
-      // console.log(data)
       setError(null)
     } catch (error) {
       setError("Failed to fetch categories")
       console.error(error)
     }
   }
+
+  // פונקציה לטעינת מוצרים מסוננים //
   const getProductsFilterd = async () => {
     try {
       const { data } = await axios.get(
@@ -59,18 +55,21 @@ export const StoreContaxtProvider = ({ children }) => {
       )
       setProducts(data)
       setError(null)
-      // console.log(data)
     } catch (err) {
       setError("Failed to fetch products")
       console.error(err)
     }
   }
 
+  // פונקציה לעיגול מספרים לשתי ספרות אחרי הנקודה //
   const roundToTwo = (num) => {
     return Math.round(num * 100) / 100
   }
+
+  // טעינת עגלת קניות בהתאם למצב המשתמש //
   useEffect(() => {
     if (!user) {
+      // טעינה מהסשן אם המשתמש לא מחובר
       const sortedData = sessionStorage.getItem("cart")
       const itemsArrey = sortedData ? JSON.parse(sortedData) : []
       setCart(itemsArrey)
@@ -80,6 +79,7 @@ export const StoreContaxtProvider = ({ children }) => {
       )
       setCartSum(totalSum)
     } else {
+      // טעינה מהשרת אם המשתמש מחובר
       getCart()
     }
   }, [user])
@@ -168,6 +168,7 @@ export const StoreContaxtProvider = ({ children }) => {
     }
   }
 
+  // מחיקת פריט מהעגלה //
   const deletItem = (number) => {
     const updatedCart = cart.filter((item, index) => index + 1 !== number)
     const removedItem = cart[number - 1]
@@ -189,6 +190,7 @@ export const StoreContaxtProvider = ({ children }) => {
     }
   }
 
+  // הפחתת כמות פריט //
   const minusAmount = (number) => {
     const index = number - 1
     const updatedCart = [...cart]
@@ -217,6 +219,7 @@ export const StoreContaxtProvider = ({ children }) => {
     }
   }
 
+  // הוספת כמות לפריט //
   const addAnother = (number) => {
     const index = number - 1
     const updatedCart = [...cart]
@@ -235,9 +238,11 @@ export const StoreContaxtProvider = ({ children }) => {
       updateCart(updatedCart) // עדכון השרת
     }
   }
+
+  // ניקוי העגלה //
   const clearCart = () => {
-    setCart([]) // מנקה את העגלה ב-state
-    setCartSum(0) // מאפס את הסכום של העגלה
+    setCart([])
+    setCartSum(0)
 
     if (!user) {
       sessionStorage.removeItem("cart") // אם המשתמש לא מחובר, מסירים את העגלה מ- sessionStorage
@@ -246,9 +251,10 @@ export const StoreContaxtProvider = ({ children }) => {
     }
   }
 
+  // עדכון העגלה בעת התחברות //
   const updateCartOnLogin = async () => {
     try {
-      // Get server cart
+      // מיזוג עגלה מקומית עם עגלת שרת
       const { data } = await axios.get(CART_URL)
       let formattedData = data.map((item) => ({
         productId: item.productId,
@@ -289,6 +295,7 @@ export const StoreContaxtProvider = ({ children }) => {
     }
   }
 
+  // העברת ערכים לקונטקסט //
   return (
     <StoreContext.Provider
       value={{

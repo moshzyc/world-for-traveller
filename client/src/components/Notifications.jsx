@@ -2,9 +2,12 @@ import { useContext, useEffect } from "react"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
 import styles from "../css/notifications.module.css"
 
+// קומפוננטת התראות - מציגה הודעות שגיאה והצלחה //
 export const Notifications = () => {
+  // שימוש בקונטקסט להצגת התראות //
   const { error, success, setError, setSuccess } = useContext(StoreContext)
 
+  // טיימר להסרת ההתראות אוטומטית לאחר 3 שניות //
   useEffect(() => {
     if (error || success) {
       const timer = setTimeout(() => {
@@ -15,19 +18,22 @@ export const Notifications = () => {
     }
   }, [error, success])
 
-  // Don't show notifications for critical errors (those are handled by ErrorBoundary)
+  // לא מציג התראות אם אין שגיאה או הצלחה //
   if (!error && !success) return null
-  if (error?.fatal) return null // Skip fatal errors
+  // מדלג על שגיאות קריטיות (מטופלות על ידי ErrorBoundary) //
+  if (error?.fatal) return null
 
   return (
     <div
       className="fixed right-4 top-4 z-50 flex flex-col gap-2"
       aria-live="polite"
     >
+      {/* הודעת שגיאה */}
       {error && (
         <div
           className={`${styles.slideIn} flex items-center gap-2 rounded-lg bg-red-100 px-4 py-3 text-red-700 shadow-md`}
         >
+          {/* אייקון שגיאה */}
           <svg
             className="h-5 w-5 flex-shrink-0"
             viewBox="0 0 20 20"
@@ -39,7 +45,9 @@ export const Notifications = () => {
               clipRule="evenodd"
             />
           </svg>
+          {/* טקסט השגיאה */}
           <span className="text-sm">{error}</span>
+          {/* כפתור סגירה */}
           <button
             onClick={() => setError(null)}
             className="ml-auto text-red-700 hover:text-red-900"
@@ -49,10 +57,13 @@ export const Notifications = () => {
           </button>
         </div>
       )}
+
+      {/* הודעת הצלחה */}
       {success && (
         <div
           className={`${styles.slideIn} flex items-center gap-2 rounded-lg bg-green-100 px-4 py-3 text-green-700 shadow-md`}
         >
+          {/* אייקון הצלחה */}
           <svg
             className="h-5 w-5 flex-shrink-0"
             viewBox="0 0 20 20"
@@ -64,7 +75,9 @@ export const Notifications = () => {
               clipRule="evenodd"
             />
           </svg>
+          {/* טקסט ההצלחה */}
           <span className="text-sm">{success}</span>
+          {/* כפתור סגירה */}
           <button
             onClick={() => setSuccess(null)}
             className="ml-auto text-green-700 hover:text-green-900"

@@ -21,21 +21,26 @@ import chevronIcon from "../assets/chevron-icon.svg"
 import { useNavigateWithConfirm } from "../hooks/useNavigateWithConfirm"
 
 export const Header = () => {
+  // ניהול מצב התפריטים הנפתחים והממשק //
   const [activeDropdown, setActiveDropdown] = useState(null)
   const [isSignup, setIsSignup] = useState(false)
   const [showInMobile, setShowInMobile] = useState(false)
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
   const headerRef = useRef(null)
+
+  // הוקים וקונטקסט //
   const navigate = useNavigate()
   const { user } = useContext(UserContext)
   const { setTitle, categories, setCategory, setSubCategory, cart } =
     useContext(StoreContext)
-  let title = ""
-  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
   const navigateWithConfirm = useNavigateWithConfirm()
+  let title = ""
 
+  // טיפול בלחיצות מחוץ לתפריט הנפתח //
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (headerRef.current && !headerRef.current.contains(event.target)) {
+        // התעלמות מלחיצות על כפתור הוספה לעגלה //
         if (
           activeDropdown === "cart" &&
           event.target.closest("[data-add-to-cart]")
@@ -50,6 +55,7 @@ export const Header = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [activeDropdown])
 
+  // פונקציות לניהול הניווט והתפריטים //
   const toggleDropdown = (dropdownName) => {
     setActiveDropdown(activeDropdown === dropdownName ? null : dropdownName)
   }
@@ -64,6 +70,7 @@ export const Header = () => {
     navigateWithConfirm(path)
   }
 
+  // טיפול בלחיצות על אייקונים //
   const handleCartClick = () => {
     navigateAndClose("/cart")
   }
@@ -77,16 +84,21 @@ export const Header = () => {
   }
 
   return (
+    // הדר ראשי //
     <header ref={headerRef} className={css.header}>
       <div className="mycontainer flex h-[90px] items-center justify-between">
+        {/* לוגו */}
         <img
           onClick={() => navigateAndClose("/")}
           className={css.logo}
           src={logo}
           alt="Logo"
         />
+
+        {/* אזור החיפוש והניווט */}
         <div className="flex items-center">
           <div className="flex items-center gap-4 sm:flex-row-reverse md:flex-row lg:flex-row">
+            {/* תיבת חיפוש */}
             <div className={css.searchContainer}>
               <input
                 onKeyDown={(e) => {
@@ -114,27 +126,16 @@ export const Header = () => {
                 <img src={searchIcon} alt="Search" className={css.icons} />
               </button>
             </div>
-            <div className="flex items-center ml-1">
+
+            {/* סרגל ניווט אייקונים */}
+            <div className="ml-1 flex items-center">
               <div className={css.iconsNavStrip}>
+                {/* תפריט ניווט */}
                 <nav
                   className={`${css.iconsNav} ${isMobileNavOpen ? css.iconsNavOpen : ""}`}
                 >
-                  <Link
-                    to="/trip-planner"
-                    onClick={() => navigateAndClose("/trip-planner")}
-                  >
-                    <img
-                      src={tripPlannerIcon}
-                      alt="Trip Planner"
-                      className={css.icons}
-                    />
-                  </Link>
-                  <Link
-                    to="/guides"
-                    onClick={() => navigateAndClose("/guides")}
-                  >
-                    <img src={guidesIcon} alt="Guides" className={css.icons} />
-                  </Link>
+                  {/* קישורי ניווט */}
+
                   <Link
                     to="/community"
                     onClick={() => navigateAndClose("/community")}
@@ -146,7 +147,29 @@ export const Header = () => {
                       title="Travel Community"
                     />
                   </Link>
+
+                  <Link
+                    to="/guides"
+                    onClick={() => navigateAndClose("/guides")}
+                    title="Travel Guides"
+                  >
+                    <img src={guidesIcon} alt="Guides" className={css.icons} />
+                  </Link>
+
+                  <Link
+                    to="/trip-planner"
+                    onClick={() => navigateAndClose("/trip-planner")}
+                    title="Trip Planner"
+                  >
+                    <img
+                      src={tripPlannerIcon}
+                      alt="Trip Planner"
+                      className={css.icons}
+                    />
+                  </Link>
                 </nav>
+
+                {/* כפתור תפריט נייד */}
                 <button
                   onClick={toggleMobileNav}
                   className={`${css.mobileMenuButton} ${isMobileNavOpen ? css.open : ""}`}
@@ -158,44 +181,56 @@ export const Header = () => {
                   />
                 </button>
               </div>
+
+              {/* אייקוני עגלה ומשתמש */}
               <div className="flex items-center gap-4">
+                {/* עגלת קניות */}
                 <div className="relative">
                   <img
                     onClick={(e) => {
                       const isMobile = window.innerWidth < 768
                       if (isMobile) {
-                        handleCartClick() // Direct navigation on mobile
+                        handleCartClick()
                       } else {
-                        toggleDropdown("cart") // Keep dropdown toggle on desktop
-                        if (e.detail === 2) handleCartClick() // Double click navigation on desktop
+                        toggleDropdown("cart")
+                        if (e.detail === 2) handleCartClick()
                       }
                     }}
                     className={css.icons}
                     src={cartIcon}
                     alt="Cart"
+                    title="Cart"
                   />
+                  {/* תצוגה מקדימה של העגלה */}
                   <div
-                    className={`${activeDropdown !== "cart" ? "hidden" : ""} ${css.cartPreview}`}
+                    className={`text-center ${activeDropdown !== "cart" ? "hidden" : ""} ${css.cartPreview}`}
                   >
+                    <Link to="/cart">
+                      <button className="mt-2 cursor-pointer font-medium bg-green-800 px-4 py-2 w-full rounded-md text-white hover:underline">
+                        go to cart
+                      </button>
+                    </Link>
                     <CartTable seeCart={() => setActiveDropdown(null)} />
                   </div>
                 </div>
 
+                {/* פרופיל משתמש */}
                 <div className="relative">
                   <div className={css.userInfo}>
                     <img
                       onClick={(e) => {
                         const isMobile = window.innerWidth < 768
                         if (isMobile) {
-                          handleUserClick() // Direct navigation on mobile
+                          handleUserClick()
                         } else {
-                          toggleDropdown("user") // Keep dropdown toggle on desktop
-                          if (e.detail === 2) handleUserClick() // Double click navigation on desktop
+                          toggleDropdown("user")
+                          if (e.detail === 2) handleUserClick()
                         }
                       }}
                       className={`${css.icons} ${user ? css.userLogIcon : ""}`}
                       src={userIcon}
-                      alt="User"
+                      alt={user ? "User" : "Login/Signup"}
+                      title={user ? "User" : "Login/Signup"}
                     />
                     {user && <span className={css.userName}>{user.name}</span>}
                   </div>
@@ -216,9 +251,13 @@ export const Header = () => {
               </div>
             </div>
           </div>
+
+          {/* סרגל קטגוריות */}
           <div className="flex items-center gap-4">
             <div className={css.catBar}>
               <div
+                alt="Store Categories"
+                title="Store Categories"
                 onClick={() => toggleDropdown("categories")}
                 className={`${css.linseBox} ${activeDropdown === "categories" ? css.linseBoxRotate : ""}`}
               >

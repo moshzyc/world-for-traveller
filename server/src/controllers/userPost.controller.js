@@ -12,20 +12,21 @@ cloudinary.config({
 })
 
 const userPostCtrl = {
-  // Add a new post
+  // הוספת פוסט חדש
   async addPost(req, res, next) {
     try {
+      // חילוץ נתונים מגוף הבקשה
       const { title, content, category, location, product } = req.body
       const userId = req._id
 
-      // Basic validatio
+      // בדיקת תקינות בסיסית
       if (!title || !content || !category) {
         return next(
           new AppError("Title, content, and category are required", 400)
         )
       }
 
-      // Category-specific validation
+      // בדיקות תקינות לפי קטגוריה
       if (category === "locations" && !location) {
         return next(
           new AppError("Location is required for location posts", 400)
@@ -37,15 +38,17 @@ const userPostCtrl = {
         )
       }
 
+      // מציאת המשתמש במסד הנתונים
       const user = await User.findById(userId)
       if (!user) {
         return next(new AppError("User not found", 404))
       }
 
-      // Handle image uploads
+      // טיפול בהעלאת תמונות
       let mainImageUrl = ""
       let additionalImages = []
 
+      // העלאת תמונה ראשית ל-Cloudinary
       if (req.files?.mainImage) {
         const mainImageResult = await cloudinary.uploader.upload(
           req.files.mainImage[0].path,
@@ -55,6 +58,7 @@ const userPostCtrl = {
         fs.unlinkSync(req.files.mainImage[0].path)
       }
 
+      // העלאת תמונות נוספות
       if (req.files?.images) {
         for (const file of req.files.images) {
           const result = await cloudinary.uploader.upload(file.path, {
@@ -65,7 +69,7 @@ const userPostCtrl = {
         }
       }
 
-      // Create post
+      // יצירת הפוסט החדש
       const newPost = new UserPost({
         title,
         content: content || "",
@@ -82,7 +86,7 @@ const userPostCtrl = {
 
       const savedPost = await newPost.save()
 
-      // Add post to user's posts array
+      // הוספת הפוסט למערך הפוסטים של המשתמש
       user.posts.push({ postId: savedPost._id })
       await user.save()
 
@@ -95,18 +99,19 @@ const userPostCtrl = {
     }
   },
 
-  // Get user's own posts
+  // קבלת הפוסטים של המשתמש
   async getUserPosts(req, res, next) {
     try {
       const userId = req._id
       const { page = 1, limit = 10, status = "active" } = req.query
 
-      // Create query object
+      // יצירת אובייקט השאילתה
       const query = {
         "createdBy.userId": userId,
-        status: status, // This will match 'active' or 'deleted' posts
+        status: status, // מתאים לפוסטים פעילים או מחוקים
       }
 
+      // שליפת הפוסטים עם דפדוף
       const posts = await UserPost.find(query)
         .sort({ createdAt: -1 })
         .skip((page - 1) * limit)
@@ -128,11 +133,12 @@ const userPostCtrl = {
     }
   },
 
-  // Get all public posts with filters
+  // קבלת כל הפוסטים הציבוריים עם פילטרים
   async getAllPosts(req, res, next) {
     try {
       const { category, search, page = 1, limit = 10 } = req.query
 
+      // בניית שאילתת החיפוש
       const query = { status: "active" }
 
       if (category) query.category = category
@@ -143,6 +149,7 @@ const userPostCtrl = {
         ]
       }
 
+      // שליפת הפוסטים המסוננים
       const posts = await UserPost.find(query)
         .populate("product", "title images price")
         .sort({ createdAt: -1 })
@@ -165,25 +172,26 @@ const userPostCtrl = {
     }
   },
 
-  // Update post
+  // עדכון פוסט
   async updatePost(req, res, next) {
     try {
       const postId = req.params.id
       const { title, content, category, location, product } = req.body
       const userId = req._id
-      const userRole = req.user?.role // Get user role if available
+      const userRole = req.user?.role
 
+      // בדיקת קיום הפוסט
       const post = await UserPost.findById(postId)
       if (!post) {
         return next(new AppError("Post not found", 404))
       }
 
-      // Check authorization - allow both owner and admin
+      // בדיקת הרשאות - מאפשר למחבר ולמנהל
       if (post.createdBy.userId.toString() !== userId && userRole !== "admin") {
         return next(new AppError("Not authorized to update this post", 403))
       }
 
-      // Handle image updates
+      // יצירת אובייקט העדכון
       let updateData = {
         title,
         content: content || "",
@@ -192,6 +200,7 @@ const userPostCtrl = {
         ...(product && { product }),
       }
 
+      // טיפול בעדכון תמונות
       if (req.files?.mainImage) {
         const result = await cloudinary.uploader.upload(
           req.files.mainImage[0].path,
@@ -201,6 +210,7 @@ const userPostCtrl = {
         fs.unlinkSync(req.files.mainImage[0].path)
       }
 
+      // טיפול בתמונות נוספות
       if (req.files?.images) {
         const newImages = []
         for (const file of req.files.images) {
@@ -213,7 +223,7 @@ const userPostCtrl = {
         updateData.images = newImages
       }
 
-      // Add admin edit record if admin is making the change
+      // הוספת רשומת עריכה אדמין אם העדכון נעשה על ידי מנהל
       if (userRole === "admin") {
         updateData.$push = {
           adminEdits: {
@@ -238,7 +248,7 @@ const userPostCtrl = {
     }
   },
 
-  // Delete post
+  // מחיקת פוסט
   async deletePost(req, res, next) {
     try {
       const postId = req.params.id
@@ -249,7 +259,7 @@ const userPostCtrl = {
         return next(new AppError("Post not found", 404))
       }
 
-      // Check authorization - allow both owner and admin
+      // בדיקת הרשאות - מאפשר למחבר ולמנהל
       if (post.createdBy.userId.toString() !== userId && req.role !== "admin") {
         return next(new AppError("Not authorized to delete this post", 403))
       }
@@ -265,7 +275,7 @@ const userPostCtrl = {
     }
   },
 
-  // Get categories
+  // קבלת קטגוריות
   async getCategories(req, res, next) {
     try {
       const categories = await PostCategory.find()
@@ -275,7 +285,7 @@ const userPostCtrl = {
     }
   },
 
-  // Get post by ID
+  // קבלת פוסט לפי מזהה
   async getPostById(req, res, next) {
     try {
       const { id } = req.params
@@ -294,12 +304,13 @@ const userPostCtrl = {
     }
   },
 
+  // עריכת פוסט על ידי מנהל
   async adminEditPost(req, res, next) {
     try {
       const postId = req.params.id
       const { title, content, category, location, product } = req.body
 
-      // Create update data object
+      // יצירת אובייקט העדכון
       let updateData = {
         title,
         content: content || "",
@@ -308,7 +319,7 @@ const userPostCtrl = {
         ...(product && { product }),
       }
 
-      // Handle image uploads
+      // טיפול בהעלאת תמונות
       if (req.files?.mainImage) {
         const mainImageResult = await cloudinary.uploader.upload(
           req.files.mainImage[0].path,
@@ -318,7 +329,7 @@ const userPostCtrl = {
         fs.unlinkSync(req.files.mainImage[0].path)
       }
 
-      // Add the admin edit record with correct action type
+      // הוספת רשומת עריכת מנהל
       updateData.$push = {
         adminEdits: {
           editedBy: "Admin",
@@ -346,6 +357,7 @@ const userPostCtrl = {
     }
   },
 
+  // מחיקת פוסט על ידי מנהל
   async adminDeletePost(req, res, next) {
     try {
       const postId = req.params.id
@@ -356,6 +368,7 @@ const userPostCtrl = {
         return next(new AppError("Post not found", 404))
       }
 
+      // סימון הפוסט כמחוק והוספת רשומת מחיקה
       post.status = "deleted"
       post.adminEdits.push({
         editedBy: "Admin",
@@ -376,6 +389,7 @@ const userPostCtrl = {
     }
   },
 
+  // דירוג פוסט
   async ratePost(req, res, next) {
     try {
       const { id } = req.params
@@ -387,28 +401,28 @@ const userPostCtrl = {
         return next(new AppError("Post not found", 404))
       }
 
-      // Find if user has already rated this post
+      // בדיקה אם המשתמש כבר דירג את הפוסט
       const existingRatingIndex = post.rating.userRatings.findIndex(
         (r) => r.userId.toString() === userId.toString()
       )
 
       if (existingRatingIndex !== -1) {
-        // Update existing rating
+        // עדכון דירוג קיים
         const oldRating = post.rating.userRatings[existingRatingIndex].rating
         post.rating.userRatings[existingRatingIndex].rating = rating
 
-        // Recalculate average rating
+        // חישוב מחדש של הדירוג הממוצע
         const totalRating =
           post.rating.rate * post.rating.count - oldRating + rating
         post.rating.rate = Number((totalRating / post.rating.count).toFixed(1))
       } else {
-        // Add new rating
+        // הוספת דירוג חדש
         post.rating.userRatings.push({
           userId,
           rating,
         })
 
-        // Calculate new rating
+        // חישוב הדירוג החדש
         const newCount = post.rating.count + 1
         const newRate =
           (post.rating.rate * post.rating.count + rating) / newCount

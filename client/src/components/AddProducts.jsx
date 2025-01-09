@@ -18,7 +18,7 @@ export const AddProducts = () => {
   const [images, setImages] = useState([])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Update default values when categories are loaded
+  // עדכון ערכי ברירת מחדל כאשר הקטגוריות נטענות
   useEffect(() => {
     if (categories.length > 0) {
       setFormValue((prev) => ({
@@ -29,18 +29,22 @@ export const AddProducts = () => {
     }
   }, [categories])
 
+  // טיפול בהעלאת קבצי תמונה
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files)
+    // סינון קבצים כפולים
     const uniqueFiles = files.filter(
       (file) => !images.some((existingFile) => existingFile.name === file.name)
     )
     setImages([...images, ...uniqueFiles])
   }
 
+  // שליחת הטופס
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     try {
+      // יצירת אובייקט FormData לשליחת קבצים
       const formData = new FormData()
       formData.append("title", formValue.title)
       formData.append("category", formValue.category)
@@ -52,6 +56,7 @@ export const AddProducts = () => {
         formData.append(`images`, image)
       })
 
+      // שליחת הנתונים לשרת
       const response = await axios.post(ADD_PRODUCT_URL, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -59,6 +64,7 @@ export const AddProducts = () => {
       })
 
       console.log("Product created successfully:", response.data)
+      // איפוס הטופס לאחר הצלחה
       setFormValue({
         title: "",
         category: categories[0].category,
@@ -74,6 +80,7 @@ export const AddProducts = () => {
     }
   }
 
+  // יצירת אפשרויות הקטגוריות
   const categoriesGenerator = (arr) =>
     arr.map((item) => (
       <option value={item.category} key={item._id}>
@@ -81,6 +88,7 @@ export const AddProducts = () => {
       </option>
     ))
 
+  // יצירת אפשרויות תת-הקטגוריות
   const subCategoriesGenerator = (arr) =>
     arr.map((item, index) => (
       <option value={item} key={`${item}-${index}`}>
@@ -92,6 +100,7 @@ export const AddProducts = () => {
     <div className="p-4">
       <div className="rounded-lg bg-white p-6 shadow-md">
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+          {/* שדה כותרת */}
           <div className="flex flex-col gap-2">
             <label className="font-medium text-gray-700">Title</label>
             <input
@@ -106,7 +115,9 @@ export const AddProducts = () => {
             />
           </div>
 
+          {/* בחירת קטגוריה ותת-קטגוריה */}
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {/* תיבת בחירת קטגוריה */}
             <div className="flex flex-col gap-2">
               <label className="font-medium text-gray-700">Category</label>
               <select
@@ -128,6 +139,7 @@ export const AddProducts = () => {
               </select>
             </div>
 
+            {/* תיבת בחירת תת-קטגוריה */}
             <div className="flex flex-col gap-2">
               <label className="font-medium text-gray-700">Subcategory</label>
               <select
@@ -147,6 +159,7 @@ export const AddProducts = () => {
             </div>
           </div>
 
+          {/* שדה מחיר */}
           <div className="flex flex-col gap-2">
             <label className="font-medium text-gray-700">Price</label>
             <input
@@ -161,6 +174,7 @@ export const AddProducts = () => {
             />
           </div>
 
+          {/* בחירת מזג אוויר */}
           <div className="flex flex-col gap-2">
             <label className="font-medium text-gray-700">Weather</label>
             <select
@@ -178,6 +192,7 @@ export const AddProducts = () => {
             </select>
           </div>
 
+          {/* שדה תיאור */}
           <div className="flex flex-col gap-2">
             <label className="font-medium text-gray-700">Description</label>
             <textarea
@@ -191,6 +206,7 @@ export const AddProducts = () => {
             />
           </div>
 
+          {/* העלאת תמונות */}
           <div className="flex flex-col gap-2">
             <label className="font-medium text-gray-700">Images</label>
             <input
@@ -201,6 +217,7 @@ export const AddProducts = () => {
             />
           </div>
 
+          {/* תצוגה מקדימה של תמונות */}
           {images.length > 0 && (
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
               {images.map((image, index) => (
@@ -226,6 +243,7 @@ export const AddProducts = () => {
             </div>
           )}
 
+          {/* כפתור שליחה */}
           <button
             type="submit"
             disabled={isSubmitting}

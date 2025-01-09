@@ -1,24 +1,31 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import axios from "axios"
 import { Link } from "react-router-dom"
 import { GET_ALL_POSTS_URL } from "../constants/endPoint"
 import { Rating } from "../components/Rating"
+import { UserContext } from "../contexts/UserContextpProvider"
 
+// דף פוסטים של משתמשים - מציג את כל הפוסטים בקהילה //
 export const UserPosts = () => {
-  const [posts, setPosts] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const { user } = useContext(UserContext)
+  // ניהול מצב //
+  const [posts, setPosts] = useState([]) // רשימת פוסטים
+  const [loading, setLoading] = useState(true) // מצב טעינה
+  const [error, setError] = useState(null) // הודעות שגיאה
   const [filters, setFilters] = useState({
+    // מסנני תצוגה
     category: "",
     search: "",
     page: 1,
   })
-  const [pagination, setPagination] = useState(null)
+  const [pagination, setPagination] = useState(null) // נתוני דפדוף
 
+  // טעינת פוסטים בכל שינוי במסננים //
   useEffect(() => {
     fetchPosts()
   }, [filters])
 
+  // פונקציה לטעינת פוסטים מהשרת //
   const fetchPosts = async () => {
     try {
       setLoading(true)
@@ -39,6 +46,7 @@ export const UserPosts = () => {
     }
   }
 
+  // טיפול בחיפוש //
   const handleSearch = (e) => {
     e.preventDefault()
     setFilters((prev) => ({ ...prev, page: 1 }))
@@ -47,11 +55,13 @@ export const UserPosts = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="mycontainer">
+        {/* כותרת וסרגל חיפוש */}
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <h1 className="text-3xl font-bold text-[#2e7d32]">
             Travel Community
           </h1>
 
+          {/* טופס חיפוש וסינון */}
           <form onSubmit={handleSearch} className="flex gap-2">
             <input
               type="text"
@@ -79,14 +89,19 @@ export const UserPosts = () => {
               <option value="tips">Travel Tips</option>
             </select>
           </form>
+          
         </div>
-
+        <Link to="/community/add" className="btn">
+          {user&&(<button className="btn bg-[#2e7d32] text-white w-[100px] p-1 rounded-lg mb-4 hover:bg-[#31ab37] active:scale-95">Create Post</button>)}
+        </Link>
+        {/* תצוגת טעינה, שגיאה או תוכן */}
         {loading ? (
           <div className="text-center">Loading...</div>
         ) : error ? (
           <div className="text-center text-red-500">{error}</div>
         ) : (
           <>
+            {/* רשת פוסטים */}
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {posts.map((post) => (
                 <Link
@@ -94,6 +109,7 @@ export const UserPosts = () => {
                   to={`/community/post/${post._id}`}
                   className="group overflow-hidden rounded-lg border border-gray-200 transition-all hover:shadow-lg"
                 >
+                  {/* תמונת פוסט */}
                   <div className="relative aspect-video">
                     <img
                       src={post.mainImage}
@@ -106,6 +122,8 @@ export const UserPosts = () => {
                       </span>
                     </div>
                   </div>
+
+                  {/* תוכן הפוסט */}
                   <div className="p-4">
                     <h2 className="mb-2 text-xl font-semibold text-gray-900">
                       {post.title}
@@ -114,6 +132,7 @@ export const UserPosts = () => {
                       {post.content[0]}
                     </p>
 
+                    {/* דירוג */}
                     <div className="mb-3">
                       <Rating
                         productId={post._id}
@@ -134,6 +153,7 @@ export const UserPosts = () => {
                       />
                     </div>
 
+                    {/* פרטי יוצר ותאריך */}
                     <div className="flex items-center justify-between text-sm text-gray-500">
                       <span>{post.createdBy.username}</span>
                       <span>
@@ -145,6 +165,7 @@ export const UserPosts = () => {
               ))}
             </div>
 
+            {/* דפדוף */}
             {pagination && pagination.pages > 1 && (
               <div className="mt-8 flex justify-center gap-2">
                 {Array.from({ length: pagination.pages }, (_, i) => (
@@ -165,6 +186,7 @@ export const UserPosts = () => {
               </div>
             )}
 
+            {/* הודעה כשאין פוסטים */}
             {posts.length === 0 && (
               <div className="rounded-lg bg-white p-8 text-center shadow-md">
                 <div className="mb-4 text-4xl">🔍</div>

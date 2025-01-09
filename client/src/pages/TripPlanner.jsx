@@ -173,6 +173,7 @@ export const TripPlanner = () => {
 
   return (
     <div className="mycontainer py-8">
+      {/* כפתור חזרה לדף הבית */}
       <button
         onClick={handleHomeClick}
         className="mb-4 text-gray-600 hover:text-gray-800"
@@ -180,6 +181,7 @@ export const TripPlanner = () => {
         <span>← Back to Home</span>
       </button>
 
+      {/* התראה על שינויים שלא נשמרו */}
       {isDirty && (
         <div className="mb-4 rounded-lg bg-yellow-50 p-4 text-yellow-800">
           <div className="flex items-center">
@@ -205,8 +207,10 @@ export const TripPlanner = () => {
         </div>
       )}
 
+      {/* כותרת הדף */}
       <h1 className="mb-6 text-2xl font-bold text-[#2e7d32]">Trip Planner</h1>
 
+      {/* כפתור שמירת טיול */}
       <div className="mb-6">
         <button
           onClick={() => setShowSaveModal(true)}
@@ -221,6 +225,7 @@ export const TripPlanner = () => {
         </button>
       </div>
 
+      {/* מודל שמירת טיול */}
       {showSaveModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="w-full max-w-md rounded-lg bg-white p-6">
@@ -250,8 +255,11 @@ export const TripPlanner = () => {
         </div>
       )}
 
+      {/* תוכן הדף הראשי */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        {/* עמודה ימנית - מפה ומוצרים מומלצים */}
         <div className="space-y-6 lg:col-span-2">
+          {/* אזור בחירת יעדים */}
           <div className="rounded-lg bg-white p-4 shadow-md">
             <h2 className="mb-4 text-xl font-semibold">Select Destinations</h2>
             <GoogleMap
@@ -261,6 +269,7 @@ export const TripPlanner = () => {
             />
           </div>
 
+          {/* מוצרים מומלצים - מסך גדול */}
           <div className="hidden lg:block">
             {recommendedProducts.length > 0 && (
               <div className="rounded-lg bg-white p-4 shadow-md">
@@ -270,7 +279,9 @@ export const TripPlanner = () => {
           </div>
         </div>
 
+        {/* עמודה שמאלית - פרטי טיול */}
         <div className="space-y-6">
+          {/* התראה על תאריכים חסרים */}
           {(!tripDates.start || !tripDates.end) && (
             <div className="rounded-lg bg-yellow-50 p-4 text-yellow-800">
               <p className="text-sm">
@@ -281,6 +292,7 @@ export const TripPlanner = () => {
             </div>
           )}
 
+          {/* רכיבי מידע על הטיול */}
           <TripDetails
             selectedLocations={selectedLocations}
             tripDates={tripDates}
@@ -305,6 +317,7 @@ export const TripPlanner = () => {
           <NearbyAttractions locations={selectedLocations} />
         </div>
 
+        {/* מוצרים מומלצים - מסך נייד */}
         <div className="mx-auto w-[80%] lg:hidden">
           {recommendedProducts.length > 0 && (
             <div className="rounded-lg bg-white p-4 shadow-md">

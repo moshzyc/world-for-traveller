@@ -4,6 +4,7 @@ import { PRODUCTS_URL } from "../constants/endPoint"
 import { adminStyles } from "../pages/Admin"
 
 export const ProductSelector = ({ onProductSelect }) => {
+  // ניהול מצב המוצרים והסינונים //
   const [products, setProducts] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedProduct, setSelectedProduct] = useState(null)
@@ -16,14 +17,17 @@ export const ProductSelector = ({ onProductSelect }) => {
   })
   const [categories, setCategories] = useState([])
 
+  // טעינת מוצרים וקטגוריות בעת שינוי הסינונים //
   useEffect(() => {
     fetchProducts()
     fetchCategories()
   }, [filters])
 
+  // פונקציה לטעינת מוצרים עם פרמטרים //
   const fetchProducts = async () => {
     try {
       setLoading(true)
+      // בניית פרמטרים לשאילתה //
       const params = new URLSearchParams()
       if (searchTerm) params.append("search", searchTerm)
       if (filters.category) params.append("category", filters.category)
@@ -40,6 +44,7 @@ export const ProductSelector = ({ onProductSelect }) => {
     }
   }
 
+  // פונקציה לטעינת קטגוריות //
   const fetchCategories = async () => {
     try {
       const { data } = await axios.get(`${PRODUCTS_URL}/categories`)
@@ -49,6 +54,7 @@ export const ProductSelector = ({ onProductSelect }) => {
     }
   }
 
+  // טיפול בבחירת מוצר //
   const handleProductSelect = (product) => {
     setSelectedProduct(product)
     onProductSelect(product)
@@ -56,11 +62,12 @@ export const ProductSelector = ({ onProductSelect }) => {
 
   return (
     <div className="space-y-4">
-      {/* Only show filters if no product is selected */}
+      {/* הצגת סינונים רק כאשר לא נבחר מוצר */}
       {!selectedProduct && (
         <>
-          {/* Filters */}
+          {/* אזור הסינונים */}
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {/* בחירת קטגוריה */}
             <select
               className={adminStyles.select}
               value={filters.category}
@@ -76,6 +83,7 @@ export const ProductSelector = ({ onProductSelect }) => {
               ))}
             </select>
 
+            {/* סינון לפי מחיר מינימלי */}
             <input
               type="number"
               placeholder="Min Price"
@@ -86,6 +94,7 @@ export const ProductSelector = ({ onProductSelect }) => {
               }
             />
 
+            {/* סינון לפי מחיר מקסימלי */}
             <input
               type="number"
               placeholder="Max Price"
@@ -97,7 +106,7 @@ export const ProductSelector = ({ onProductSelect }) => {
             />
           </div>
 
-          {/* Search */}
+          {/* שדה חיפוש */}
           <input
             type="text"
             placeholder="Search products..."
@@ -108,14 +117,14 @@ export const ProductSelector = ({ onProductSelect }) => {
         </>
       )}
 
-      {/* Products List */}
+      {/* רשימת המוצרים */}
       {loading ? (
         <div className="text-center">Loading...</div>
       ) : error ? (
         <div className="text-red-500">{error}</div>
       ) : (
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {/* Show only selected product if one is selected, otherwise show all */}
+          {/* הצגת מוצר נבחר או כל המוצרים */}
           {selectedProduct ? (
             <div
               key={selectedProduct._id}
@@ -148,10 +157,13 @@ export const ProductSelector = ({ onProductSelect }) => {
                 alt={selectedProduct.title}
                 className="mb-2 h-32 w-full rounded-lg object-cover"
               />
+              {/* שם המוצר */}
               <h3 className="font-medium">{selectedProduct.title}</h3>
+              {/* מחיר המוצר */}
               <p className="text-sm text-gray-600">${selectedProduct.price}</p>
             </div>
           ) : (
+            // רשימת כל המוצרים //
             products.map((product) => (
               <div
                 key={product._id}
@@ -171,6 +183,7 @@ export const ProductSelector = ({ onProductSelect }) => {
         </div>
       )}
 
+      {/* הודעה כאשר אין מוצרים */}
       {products.length === 0 && !loading && !selectedProduct && (
         <div className="text-center text-gray-500">No products found</div>
       )}

@@ -7,21 +7,25 @@ import { OrdersManagement } from "../components/OrdersManagement"
 import { UsersManagement } from "../components/UsersManagement"
 import { UserPostsManagement } from "../components/UserPostsManagement"
 
+// דף ניהול - מאפשר למנהל לנהל את כל היבטי המערכת //
 export const Admin = () => {
-  const [addProducts, setAddProducts] = useState(false)
-  const [AddGuides, setAddGuides] = useState(false)
-  const [editProducts, setEditProducts] = useState(false)
-  const [editGuides, setEditGuides] = useState(false)
-  const [showOrders, setShowOrders] = useState(false)
-  const [showUsers, setShowUsers] = useState(false)
-  const [showPosts, setShowPosts] = useState(false)
+  // ניהול מצב תצוגת הסקציות השונות //
+  const [addProducts, setAddProducts] = useState(false) // הוספת מוצרים
+  const [AddGuides, setAddGuides] = useState(false) // הוספת מדריכים
+  const [editProducts, setEditProducts] = useState(false) // עריכת מוצרים
+  const [editGuides, setEditGuides] = useState(false) // עריכת מדריכים
+  const [showOrders, setShowOrders] = useState(false) // צפייה בהזמנות
+  const [showUsers, setShowUsers] = useState(false) // ניהול משתמשים
+  const [showPosts, setShowPosts] = useState(false) // ניהול פוסטים
+
+  // חיפוש משתמשים ופוסטים //
   const [userSearch, setUserSearch] = useState("")
   const [postSearch, setPostSearch] = useState("")
 
   return (
     <main className="min-h-screen bg-[#f0f7f0] py-8">
       <div className="mycontainer max-w-4xl">
-        {/* Products Management Section */}
+        {/* סקציית ניהול מוצרים */}
         <h2 className="mb-6 flex items-center gap-3 text-2xl font-bold text-[#2e7d32]">
           <svg
             className="h-6 w-6"
@@ -39,7 +43,7 @@ export const Admin = () => {
           Products Management
         </h2>
         <div className="mb-8 overflow-hidden rounded-lg bg-white shadow-lg">
-          {/* Add Products Section */}
+          {/* אזור הוספת מוצרים */}
           <div
             onClick={() => setAddProducts((p) => !p)}
             className="cursor-pointer border-b border-green-100 p-4 transition-all hover:bg-[#e8f5e9]"
@@ -57,7 +61,7 @@ export const Admin = () => {
             <AddProducts />
           </div>
 
-          {/* Edit Products Section */}
+          {/* אזור עריכת מוצרים */}
           <div
             onClick={() => setEditProducts((p) => !p)}
             className="cursor-pointer border-b border-green-100 p-4 transition-all hover:bg-[#e8f5e9]"
@@ -76,7 +80,7 @@ export const Admin = () => {
           </div>
         </div>
 
-        {/* Guides Management Section */}
+        {/* סקציית ניהול מדריכים */}
         <h2 className="mb-6 flex items-center gap-3 text-2xl font-bold text-[#2e7d32]">
           <svg
             className="h-6 w-6"
@@ -94,7 +98,7 @@ export const Admin = () => {
           Guides Management
         </h2>
         <div className="overflow-hidden rounded-lg bg-white shadow-lg">
-          {/* Add Guide Section */}
+          {/* אזור הוספת מדריך */}
           <div
             onClick={() => setAddGuides((p) => !p)}
             className="cursor-pointer border-b border-green-100 p-4 transition-all hover:bg-[#e8f5e9]"
@@ -112,7 +116,7 @@ export const Admin = () => {
             <AddGuide />
           </div>
 
-          {/* Edit Guide Section */}
+          {/* אזור עריכת מדריך */}
           <div
             onClick={() => setEditGuides((p) => !p)}
             className="cursor-pointer border-b border-green-100 p-4 transition-all hover:bg-[#e8f5e9]"
@@ -131,7 +135,7 @@ export const Admin = () => {
           </div>
         </div>
 
-        {/* Orders Management Section */}
+        {/* סקציית ניהול הזמנות */}
         <h2 className="mb-6 mt-8 flex items-center gap-3 text-2xl font-bold text-[#2e7d32]">
           <svg
             className="h-6 w-6"
@@ -167,7 +171,7 @@ export const Admin = () => {
           </div>
         </div>
 
-        {/* Users Management Section */}
+        {/* סקציית ניהול משתמשים */}
         <h2 className="mb-6 mt-8 flex items-center gap-3 text-2xl font-bold text-[#2e7d32]">
           <svg
             className="h-6 w-6"
@@ -199,6 +203,7 @@ export const Admin = () => {
           <div
             className={`transition-all ${showUsers ? "animate-fadeIn" : "hidden"}`}
           >
+            {/* חיפוש משתמשים */}
             <div className="border-b border-green-100 p-4">
               <input
                 type="text"
@@ -212,7 +217,7 @@ export const Admin = () => {
           </div>
         </div>
 
-        {/* Posts Management Section */}
+        {/* סקציית ניהול פוסטים */}
         <h2 className="mb-6 mt-8 flex items-center gap-3 text-2xl font-bold text-[#2e7d32]">
           <svg
             className="h-6 w-6"
@@ -244,6 +249,7 @@ export const Admin = () => {
           <div
             className={`transition-all ${showPosts ? "animate-fadeIn" : "hidden"}`}
           >
+            {/* חיפוש פוסטים */}
             <div className="border-b border-green-100 p-4">
               <input
                 type="text"
@@ -261,7 +267,7 @@ export const Admin = () => {
   )
 }
 
-// Updated common styles for child components
+// סגנונות משותפים לקומפוננטות הבן //
 export const adminStyles = {
   input:
     "w-full rounded-lg border border-gray-300 p-2 transition-colors focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none",

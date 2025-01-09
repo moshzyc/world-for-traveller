@@ -1,8 +1,11 @@
 import React, { useState } from "react"
 
+// קומפוננטת רשימת הזמנות - מציגה את כל ההזמנות של המשתמש עם אפשרות סינון //
 export const OrdersList = ({ orders }) => {
+  // ניהול מצב פילטר סטטוס ההזמנות //
   const [statusFilter, setStatusFilter] = useState("all")
 
+  // סינון ההזמנות לפי סטטוס //
   const filteredOrders = orders.filter((order) =>
     statusFilter === "all" ? true : order.status === statusFilter
   )
@@ -47,10 +50,12 @@ export const OrdersList = ({ orders }) => {
   )
 }
 
+// קומפוננטת הזמנה בודדת - מציגה את פרטי ההזמנה //
 export const PrvOrder = (props) => {
+  // מצב הצגת/הסתרת פרטי ההזמנה //
   const [seeOrder, setSeeOrder] = useState(false)
 
-  // Format the date to be more readable
+  // פונקציה לעיצוב התאריך בפורמט קריא //
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -61,17 +66,17 @@ export const PrvOrder = (props) => {
     })
   }
 
-  // Get status color
+  // פונקציה לקבלת צבע הסטטוס //
   const getStatusColor = (status) => {
     switch (status.toLowerCase()) {
       case "pending":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-yellow-100 text-yellow-800" // צהוב לממתין
       case "completed":
-        return "bg-[#e8f5e9] text-[#2e7d32]"
+        return "bg-[#e8f5e9] text-[#2e7d32]" // ירוק להושלם
       case "cancelled":
-        return "bg-red-100 text-red-800"
+        return "bg-red-100 text-red-800" // אדום לבוטל
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-100 text-gray-800" // אפור לברירת מחדל
     }
   }
 

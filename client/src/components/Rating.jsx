@@ -9,6 +9,7 @@ import {
 import { UserContext } from "../contexts/UserContextpProvider"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
 
+// קומפוננטת דירוג - מאפשרת למשתמשים לדרג מוצרים ופוסטים //
 export const Rating = ({
   productId,
   rating,
@@ -16,11 +17,13 @@ export const Rating = ({
   showUserRating = true,
   isPost = false,
 }) => {
-  const [hover, setHover] = useState(null)
-  const [userRating, setUserRating] = useState(0)
-  const { user } = useContext(UserContext)
-  const { setRate } = useContext(StoreContext)
+  // ניהול מצב הדירוג //
+  const [hover, setHover] = useState(null) // מצב ריחוף העכבר
+  const [userRating, setUserRating] = useState(0) // דירוג המשתמש הנוכחי
+  const { user } = useContext(UserContext) // פרטי המשתמש מהקונטקסט
+  const { setRate } = useContext(StoreContext) // עדכון הדירוג בסטור
 
+  // טעינת דירוג המשתמש הקיים //
   useEffect(() => {
     if (user && rating.userRatings) {
       const existingRating = rating.userRatings.find(
@@ -32,28 +35,33 @@ export const Rating = ({
     }
   }, [user, rating])
 
+  // טיפול בדירוג חדש //
   const handleRating = async (currentRating) => {
+    // בדיקת התחברות משתמש //
     if (!user) {
       alert("Please login to rate")
       return
     }
 
     try {
+      // בחירת נקודת קצה בהתאם לסוג הפריט (פוסט או מוצר) //
       const endpoint = isPost
         ? `${POSTS_URL}/rate/${productId}`
         : `${PRODUCTS_URL}/rate/${productId}`
 
+      // שליחת הדירוג לשרת //
       await axios.post(endpoint, {
         rating: currentRating,
       })
 
-      // Fetch updated data
+      // קבלת נתונים מעודכנים //
       const { data } = await axios.get(
         isPost
           ? `${GET_POST_BY_ID_URL}/${productId}`
           : `${PRODUCTS_URL}/product/${productId}`
       )
 
+      // עדכון הדירוג בממשק //
       if (onRatingUpdate) {
         onRatingUpdate(data.rating)
       }
@@ -65,6 +73,7 @@ export const Rating = ({
 
   return (
     <div className="flex items-center gap-2">
+      {/* תצוגת כוכבי הדירוג */}
       <div className="flex items-center">
         {[...Array(5)].map((_, index) => {
           const ratingValue = index + 1
@@ -85,19 +94,24 @@ export const Rating = ({
                 size={20}
                 color={
                   ratingValue <= (hover || userRating || rating.rate)
-                    ? "#ffc107"
-                    : "#e4e5e9"
+                    ? "#ffc107" // צבע כוכב מלא
+                    : "#e4e5e9" // צבע כוכב ריק
                 }
               />
             </button>
           )
         })}
       </div>
+
+      {/* תצוגת מידע על הדירוג */}
       <div className="flex items-center gap-2">
+        {/* דירוג ממוצע */}
         <span className="text-sm font-medium">{rating.rate.toFixed(1)}</span>
+        {/* מספר דירוגים */}
         <span className="text-sm text-gray-600">
           ({rating.count} {rating.count === 1 ? "rating" : "ratings"})
         </span>
+        {/* הצגת הדירוג של המשתמש */}
         {showUserRating && userRating > 0 && (
           <span className="text-sm text-green-600">
             (You rated: {userRating})

@@ -2,26 +2,30 @@ import React, { useContext, useState } from "react"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
 import { Card } from "../components/Card"
 
+// דף החנות - מציג את כל המוצרים עם אפשרויות סינון ודפדוף //
 export const Store = () => {
+  // קבלת נתונים מהקונטקסט //
   const { products, category, subCategory, title, setSubCategory } =
     useContext(StoreContext)
 
-  console.log("Category:", category, "SubCategory:", subCategory)
+  // ניהול מצב דפדוף //
+  const [currentPage, setCurrentPage] = useState(1) // דף נוכחי
+  const [itemsPerPage, setItemsPerPage] = useState(10) // מספר פריטים בדף
 
-  const [currentPage, setCurrentPage] = useState(1)
-  const [itemsPerPage, setItemsPerPage] = useState(10)
-
+  // סינון מוצרים לפי חיפוש //
   const filteredProducts = title
     ? products.filter((item) =>
         item.title.toLowerCase().includes(title.toLowerCase())
       )
     : products || []
 
+  // חישוב מוצרים לדף הנוכחי //
   const indexOfLastItem = currentPage * itemsPerPage
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
   const currentItems = filteredProducts.slice(indexOfFirstItem, indexOfLastItem)
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage)
 
+  // יצירת כרטיסי מוצרים //
   const productGenerator = (arr) => {
     return arr
       .map((item) => {
@@ -30,23 +34,25 @@ export const Store = () => {
       .filter(Boolean)
   }
 
+  // קומפוננטת דפדוף //
   const Pagination = () => {
+    // חישוב מספרי העמודים להצגה //
     const getPageNumbers = () => {
       const pageNumbers = []
       if (totalPages <= 5) {
-        // If 5 or fewer pages, show all
+        // אם יש 5 עמודים או פחות, הצג את כולם
         for (let i = 1; i <= totalPages; i++) {
           pageNumbers.push(i)
         }
       } else {
-        // Always add page 1
+        // תמיד הוסף את עמוד 1
         pageNumbers.push(1)
 
         if (currentPage <= 3) {
-          // If near start, show 2,3,4,...,last
+          // אם קרוב להתחלה, הצג 2,3,4,...,אחרון
           pageNumbers.push(2, 3, 4, "...", totalPages)
         } else if (currentPage >= totalPages - 2) {
-          // If near end, show 1,...,last-3,last-2,last-1,last
+          // אם קרוב לסוף, הצג 1,...,אחרון-3,אחרון-2,אחרון-1,אחרון
           pageNumbers.push(
             "...",
             totalPages - 3,
@@ -55,7 +61,7 @@ export const Store = () => {
             totalPages
           )
         } else {
-          // If in middle, show 1,...,current-1,current,current+1,...,last
+          // אם באמצע, הצג 1,...,נוכחי-1,נוכחי,נוכחי+1,...,אחרון
           pageNumbers.push(
             "...",
             currentPage - 1,
@@ -69,8 +75,10 @@ export const Store = () => {
       return pageNumbers
     }
 
+    // תצוגת רכיב הדפדוף //
     return (
       <div className="mt-8 flex items-center justify-center gap-4">
+        {/* בחירת מספר פריטים בדף */}
         <select
           value={itemsPerPage}
           onChange={(e) => {
@@ -83,7 +91,7 @@ export const Store = () => {
           <option value={20}>20 per page</option>
           <option value={40}>40 per page</option>
         </select>
-
+        {/* כפתור לעמוד קודם */}
         <button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
@@ -124,9 +132,11 @@ export const Store = () => {
     )
   }
 
+  // תצוגת הדף //
   return (
     <main className="min-h-screen bg-[#f0f7f0] py-8">
       <div className="mycontainer">
+        {/* כותרת וסינון */}
         <div className="mb-8">
           {title ? (
             <div>
@@ -155,15 +165,18 @@ export const Store = () => {
           ) : (
             <h1 className="text-xl font-medium text-green-800">All Products</h1>
           )}
+          {/* מספר מוצרים שנמצאו */}
           <p className="mt-1 text-sm text-green-600">
             {filteredProducts.length} products found
           </p>
         </div>
 
+        {/* רשימת המוצרים */}
         <div className="flex flex-wrap justify-center gap-4">
           {productGenerator(currentItems)}
         </div>
 
+        {/* דפדוף - מוצג רק אם יש יותר מ-10 מוצרים */}
         {filteredProducts.length > 10 && <Pagination />}
       </div>
     </main>

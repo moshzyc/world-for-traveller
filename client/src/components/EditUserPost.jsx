@@ -13,6 +13,7 @@ export const EditUserPost = () => {
   const { user } = useContext(UserContext)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  // סטייט ראשוני עבור הטופס //
   const [formValue, setFormValue] = useState({
     title: "",
     content: "",
@@ -23,6 +24,7 @@ export const EditUserPost = () => {
     mainImage: null,
   })
 
+  // סטייט עבור תמונות //
   const [files, setFiles] = useState([])
   const [currentImages, setCurrentImages] = useState([])
   const [currentMainImage, setCurrentMainImage] = useState("")
@@ -31,6 +33,7 @@ export const EditUserPost = () => {
     fetchPost()
   }, [id])
 
+  // טעינת הפוסט בעת טעינת הדף //
   const fetchPost = async () => {
     try {
       const { data } = await axios.get(`${POSTS_URL}/post/${id}`, {
@@ -53,6 +56,7 @@ export const EditUserPost = () => {
     }
   }
 
+  // טיפול בבחירת מיקום //
   const handleLocationSelect = (place) => {
     setFormValue({
       ...formValue,
@@ -71,6 +75,7 @@ export const EditUserPost = () => {
     })
   }
 
+  // טיפול בהעלאת קבצים //
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files)
     setFiles((prevFiles) => [...prevFiles, ...selectedFiles])
@@ -93,6 +98,7 @@ export const EditUserPost = () => {
     setFormValue({ ...formValue, content: updatedContent })
   }
 
+  // שליחת הטופס //
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
@@ -119,6 +125,7 @@ export const EditUserPost = () => {
         formData.append("images", file)
       })
 
+      // שליחה לנקודת קצה שונה בהתאם לתפקיד המשתמש //
       const endpoint =
         user.role === "admin"
           ? `${POSTS_URL}/admin/edit/${id}`
@@ -136,15 +143,19 @@ export const EditUserPost = () => {
     }
   }
 
+  // תצוגת טעינה ושגיאה //
   if (loading) return <div className="py-8 text-center">Loading...</div>
   if (error) return <div className="py-8 text-center text-red-500">{error}</div>
 
   return (
+    // טיכל ראשי לטופס העריכה //
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="mycontainer max-w-2xl">
         <h1 className="mb-8 text-3xl font-bold text-[#2e7d32]">Edit Post</h1>
 
+        {/* טופס העריכה */}
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* שדה כותרת */}
           <div>
             <label className={adminStyles.label}>Title</label>
             <input
@@ -158,6 +169,7 @@ export const EditUserPost = () => {
             />
           </div>
 
+          {/* בחירת קטגוריה */}
           <div>
             <label className={adminStyles.label}>Category</label>
             <select
@@ -175,6 +187,7 @@ export const EditUserPost = () => {
             </select>
           </div>
 
+          {/* שדה מיקום - מוצג רק כאשר נבחרה קטגוריית מיקומים */}
           {formValue.category === "locations" && (
             <div>
               <label className={adminStyles.label}>Location</label>
@@ -190,6 +203,7 @@ export const EditUserPost = () => {
             </div>
           )}
 
+          {/* שדה מוצר - מוצג רק כאשר נבחרה קטגוריית ביקורות מוצרים */}
           {formValue.category === "products reviews" && (
             <div>
               <label className={adminStyles.label}>Product</label>
@@ -200,7 +214,7 @@ export const EditUserPost = () => {
             </div>
           )}
 
-          {/* Content Paragraphs */}
+          {/* שדה תוכן */}
           <div>
             <label className={adminStyles.label}>Content</label>
             <textarea
@@ -212,7 +226,7 @@ export const EditUserPost = () => {
             />
           </div>
 
-          {/* Current Images */}
+          {/* הצגת תמונה ראשית נוכחית */}
           {currentMainImage && (
             <div>
               <label className={adminStyles.label}>Current Main Image</label>
@@ -224,7 +238,7 @@ export const EditUserPost = () => {
             </div>
           )}
 
-          {/* Image Uploads */}
+          {/* העלאת תמונה ראשית חדשה */}
           <div>
             <label className={adminStyles.label}>New Main Image</label>
             <input
@@ -234,6 +248,7 @@ export const EditUserPost = () => {
             />
           </div>
 
+          {/* הצגת תמונות נוספות קיימות */}
           {currentImages.length > 0 && (
             <div>
               <label className={adminStyles.label}>
@@ -252,6 +267,7 @@ export const EditUserPost = () => {
             </div>
           )}
 
+          {/* העלאת תמונות נוספות חדשות */}
           <div>
             <label className={adminStyles.label}>New Additional Images</label>
             <input
@@ -262,7 +278,7 @@ export const EditUserPost = () => {
             />
           </div>
 
-          {/* New Image Previews */}
+          {/* תצוגה מקדימה של תמונות חדשות */}
           {files.length > 0 && (
             <div className="grid grid-cols-3 gap-4">
               {files.map((file, index) => (
@@ -276,7 +292,7 @@ export const EditUserPost = () => {
             </div>
           )}
 
-          {/* Submit Button */}
+          {/* כפתור שליחה */}
           <button
             type="submit"
             className={`${adminStyles.button} w-full`}

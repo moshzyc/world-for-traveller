@@ -25,12 +25,16 @@ import axios from "axios"
 import { USER_URL } from "../constants/endPoint"
 
 export const Card = ({ item, onFavoriteUpdate }) => {
+  // שימוש בקונטקסט החנות והוק ניווט
   const { addItem } = useContext(StoreContext)
   const navigate = useNavigate()
-  const [showShareMenu, setShowShareMenu] = useState(false)
-  const [copySuccess, setCopySuccess] = useState(false)
-  const [isFavorite, setIsFavorite] = useState(false)
 
+  // ניהול מצבי תצוגה ומועדפים
+  const [showShareMenu, setShowShareMenu] = useState(false) // תפריט שיתוף
+  const [copySuccess, setCopySuccess] = useState(false) // הצלחת העתקת קישור
+  const [isFavorite, setIsFavorite] = useState(false) // סטטוס מועדפים
+
+  // בדיקת סטטוס מועדפים בטעינה
   useEffect(() => {
     const checkFavoriteStatus = async () => {
       try {
@@ -45,10 +49,12 @@ export const Card = ({ item, onFavoriteUpdate }) => {
     checkFavoriteStatus()
   }, [item._id])
 
+  // יצירת נתוני שיתוף
   const shareUrl = `${window.location.origin}/product/${item._id}`
   const shareTitle = `Check out ${item.title}!`
   const shareDescription = item.description || "Great product from our store!"
 
+  // העתקת קישור ללוח
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(shareUrl)
@@ -59,6 +65,7 @@ export const Card = ({ item, onFavoriteUpdate }) => {
     }
   }
 
+  // הוספה/הסרה ממועדפים
   const toggleFavorite = async (e) => {
     e.stopPropagation()
     try {
@@ -74,6 +81,7 @@ export const Card = ({ item, onFavoriteUpdate }) => {
 
   return (
     <div className={`${css.card} m-auto`}>
+      {/* תיבת תמונה */}
       <div className={css.imgBox}>
         <img
           src={Array.isArray(item.images) ? item.images[0] : item.images}
@@ -82,6 +90,8 @@ export const Card = ({ item, onFavoriteUpdate }) => {
           onClick={() => navigate(`/product/${item._id}`)}
         />
       </div>
+
+      {/* תוכן הכרטיס */}
       <div className={css.content}>
         <h3
           onClick={() => navigate(`/product/${item._id}`)}
@@ -89,18 +99,24 @@ export const Card = ({ item, onFavoriteUpdate }) => {
         >
           {item.title}
         </h3>
+
+        {/* רכיב דירוג */}
         <Rating
           productId={item._id}
           rating={item.rating}
           showUserRating={false}
           onRatingUpdate={(newRating) => {
-            // Optional: Update the local state if needed
+            // אופציונלי: עדכון מצב מקומי אם נדרש
           }}
         />
+
         <p className={css.description}>{item.description}</p>
+
+        {/* אזור מחיר וכפתורים */}
         <div className={css.priceBox}>
           <span className={css.price}>{item.price} ILS</span>
           <div className="flex items-center gap-2">
+            {/* כפתור הוספה לעגלה */}
             <button
               data-add-to-cart
               onClick={() => addItem(item)}
@@ -109,7 +125,7 @@ export const Card = ({ item, onFavoriteUpdate }) => {
               Add to Cart
             </button>
 
-            {/* Share Button */}
+            {/* כפתור שיתוף */}
             <div className="relative">
               <button
                 onClick={() => setShowShareMenu(!showShareMenu)}
@@ -119,9 +135,10 @@ export const Card = ({ item, onFavoriteUpdate }) => {
                 <FaShare className="text-sm" />
               </button>
 
-              {/* Share Menu */}
+              {/* תפריט שיתוף */}
               {showShareMenu && (
                 <div className="absolute bottom-full right-0 z-50 mb-2 flex flex-row-reverse gap-2 rounded-lg bg-white p-2 shadow-lg">
+                  {/* כפתור העתקת קישור */}
                   <button
                     onClick={handleCopyLink}
                     className="transition-transform hover:scale-110"
@@ -136,6 +153,7 @@ export const Card = ({ item, onFavoriteUpdate }) => {
                     </div>
                   </button>
 
+                  {/* כפתורי שיתוף לרשתות חברתיות */}
                   <WhatsappShareButton url={shareUrl} title={shareTitle}>
                     <div className="rounded-full p-1.5 hover:bg-gray-100">
                       <FaWhatsapp className="text-base text-[#25D366]" />
@@ -167,6 +185,7 @@ export const Card = ({ item, onFavoriteUpdate }) => {
               )}
             </div>
 
+            {/* כפתור מועדפים */}
             <button
               onClick={toggleFavorite}
               className={`rounded-full p-2 transition-colors ${

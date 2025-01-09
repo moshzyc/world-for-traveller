@@ -26,6 +26,44 @@ export const Home = () => {
         </div>
       </section>
 
+      {/* Categories Section */}
+      <section className="py-16">
+        <div className="mycontainer">
+          <h2 className="mb-12 text-center text-3xl font-bold text-[#2e7d32]">
+            Explore Our Products
+          </h2>
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-2">
+            {/* Store Categories */}
+            {categories?.map((cat) => (
+              <div
+                key={cat._id}
+                onClick={() => handleCategoryClick(cat.category)}
+                className="group cursor-pointer"
+              >
+                <div className="transform overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:scale-105">
+                  <div className="relative flex h-48 items-center justify-center bg-[#e8f5e9]">
+                    <img
+                      src={cat.image}
+                      alt={cat.category}
+                      className="h-full w-full select-none object-cover"
+                      draggable="false"
+                    />
+                  </div>
+                  <div className="bg-white p-6">
+                    <h3 className="mb-2 text-xl font-semibold text-[#2e7d32]">
+                      {cat.category}
+                    </h3>
+                    <p className="text-gray-600">
+                      {cat.subCategory.length} subcategories
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Trip Planner Section */}
       <section className="pb-8 pt-5">
         <div className="mycontainer">
@@ -110,44 +148,6 @@ export const Home = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Categories Section */}
-      <section className="py-16">
-        <div className="mycontainer">
-          <h2 className="mb-12 text-center text-3xl font-bold text-[#2e7d32]">
-            Explore Our Products
-          </h2>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-2">
-            {/* Store Categories */}
-            {categories?.map((cat) => (
-              <div
-                key={cat._id}
-                onClick={() => handleCategoryClick(cat.category)}
-                className="group cursor-pointer"
-              >
-                <div className="transform overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:scale-105">
-                  <div className="relative flex h-48 items-center justify-center bg-[#e8f5e9]">
-                    <img
-                      src={cat.image}
-                      alt={cat.category}
-                      className="h-full w-full select-none object-cover"
-                      draggable="false"
-                    />
-                  </div>
-                  <div className="bg-white p-6">
-                    <h3 className="mb-2 text-xl font-semibold text-[#2e7d32]">
-                      {cat.category}
-                    </h3>
-                    <p className="text-gray-600">
-                      {cat.subCategory.length} subcategories
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>

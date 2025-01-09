@@ -4,7 +4,9 @@ import { Link } from "react-router-dom"
 import { POSTS_URL } from "../constants/endPoint"
 import { adminStyles } from "../pages/Admin"
 
+// קומפוננטת ניהול פוסטים - מאפשרת למנהל לצפות, לערוך ולמחוק פוסטים //
 export const UserPostsManagement = ({ searchQuery }) => {
+  // ניהול מצב הפוסטים ומידע נוסף //
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -13,18 +15,18 @@ export const UserPostsManagement = ({ searchQuery }) => {
   const [deleteReason, setDeleteReason] = useState("")
   const [postToDelete, setPostToDelete] = useState(null)
 
+  // טעינת פוסטים בעת שינוי עמוד או חיפוש //
   useEffect(() => {
     fetchPosts()
   }, [page, searchQuery])
 
+  // פונקציה לטעינת הפוסטים מהשרת //
   const fetchPosts = async () => {
     try {
       setLoading(true)
       const { data } = await axios.get(
         `${POSTS_URL}/all?page=${page}&search=${searchQuery}`,
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       )
       setPosts(data.posts)
       setPagination(data.pagination)
@@ -36,12 +38,14 @@ export const UserPostsManagement = ({ searchQuery }) => {
     }
   }
 
+  // פונקציה למחיקת פוסט //
   const handleDelete = async () => {
     try {
       await axios.delete(`${POSTS_URL}/delete/${postToDelete}`, {
         withCredentials: true,
         data: { deleteReason },
       })
+      // איפוס הטופס ורענון הפוסטים //
       setPostToDelete(null)
       setDeleteReason("")
       fetchPosts()
@@ -51,17 +55,20 @@ export const UserPostsManagement = ({ searchQuery }) => {
     }
   }
 
+  // תצוגות טעינה ושגיאה //
   if (loading) return <div className="p-4 text-center">Loading...</div>
   if (error) return <div className="p-4 text-center text-red-500">{error}</div>
 
   return (
     <div className="p-4">
       <div className="space-y-4">
+        {/* רשימת הפוסטים */}
         {posts.map((post) => (
           <div
             key={post._id}
             className="flex items-start justify-between rounded-lg border border-gray-200 p-4"
           >
+            {/* תצוגת פרטי הפוסט */}
             <div className="flex gap-4">
               <img
                 src={post.mainImage}
@@ -81,6 +88,8 @@ export const UserPostsManagement = ({ searchQuery }) => {
                 </p>
               </div>
             </div>
+
+            {/* כפתורי פעולה */}
             <div className="flex gap-2">
               <Link
                 to={`/community/edit/${post._id}`}
@@ -98,12 +107,14 @@ export const UserPostsManagement = ({ searchQuery }) => {
           </div>
         ))}
 
+        {/* הודעה כאשר אין פוסטים */}
         {posts.length === 0 && (
           <div className="rounded-lg bg-gray-50 p-8 text-center">
             <p className="text-gray-600">No posts found</p>
           </div>
         )}
 
+        {/* דפדוף */}
         {pagination && pagination.pages > 1 && (
           <div className="mt-4 flex justify-center gap-2">
             {Array.from({ length: pagination.pages }, (_, i) => (
@@ -123,7 +134,7 @@ export const UserPostsManagement = ({ searchQuery }) => {
         )}
       </div>
 
-      {/* Delete Confirmation Modal */}
+      {/* מודאל אישור מחיקה */}
       {postToDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="w-full max-w-md rounded-lg bg-white p-6">

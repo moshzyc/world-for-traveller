@@ -6,20 +6,26 @@ import { UserContext } from "../contexts/UserContextpProvider"
 import { adminStyles } from "../pages/Admin"
 import { Rating } from "./Rating"
 
+// קומפוננטת פרטי פוסט - מציגה את כל המידע של פוסט ספציפי //
 export const PostDetails = () => {
+  // הוקים וקונטקסט //
   const { id } = useParams()
   const navigate = useNavigate()
   const { user } = useContext(UserContext)
+
+  // ניהול מצב הפוסט //
   const [post, setPost] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [deleteReason, setDeleteReason] = useState("")
 
+  // טעינת הפוסט בעת טעינת הדף //
   useEffect(() => {
     fetchPost()
   }, [id])
 
+  // פונקציה לטעינת הפוסט מהשרת //
   const fetchPost = async () => {
     try {
       const { data } = await axios.get(`${GET_POST_BY_ID_URL}/${id}`)
@@ -32,8 +38,10 @@ export const PostDetails = () => {
     }
   }
 
+  // פונקציה למחיקת הפוסט //
   const handleDelete = async () => {
     try {
+      // נתיב שונה למנהל ולמשתמש רגיל //
       const endpoint =
         user.role === "admin"
           ? `${POSTS_URL}/admin/delete/${id}`
@@ -52,17 +60,19 @@ export const PostDetails = () => {
     }
   }
 
+  // תצוגות טעינה ושגיאה //
   if (loading) return <div className="py-8 text-center">Loading...</div>
   if (error) return <div className="py-8 text-center text-red-500">{error}</div>
   if (!post) return <div className="py-8 text-center">Post not found</div>
 
+  // בדיקת הרשאות עריכה //
   const isAuthorized =
     user && (user.id === post.createdBy.userId || user.role === "admin")
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="mycontainer max-w-4xl">
-        {/* Navigation */}
+        {/* ניווט חזרה לקהילה */}
         <Link
           to="/community"
           className="mb-4 inline-flex items-center text-[#2e7d32] hover:text-[#1b5e20]"
@@ -83,7 +93,7 @@ export const PostDetails = () => {
           Back to Community
         </Link>
 
-        {/* Post Header */}
+        {/* כותרת הפוסט ומידע בסיסי */}
         <div className="mb-8 flex items-start justify-between">
           <div>
             <h1 className="mb-2 text-3xl font-bold text-gray-900">
@@ -117,7 +127,7 @@ export const PostDetails = () => {
             )}
         </div>
 
-        {/* Add Rating component after the header */}
+        {/* רכיב דירוג */}
         <div className="mb-6">
           <Rating
             productId={post._id}
@@ -128,11 +138,11 @@ export const PostDetails = () => {
                 rating: newRating,
               }))
             }}
-            isPost={true} // Add this prop to differentiate between posts and products
+            isPost={true}
           />
         </div>
 
-        {/* Main Image */}
+        {/* תמונה ראשית */}
         <div className="mb-8 bg-gray-100">
           <img
             src={post.mainImage}
@@ -141,7 +151,7 @@ export const PostDetails = () => {
           />
         </div>
 
-        {/* Location or Product Info */}
+        {/* מידע על מיקום או מוצר */}
         {post.category === "locations" && post.location && (
           <div className="mb-8 rounded-lg bg-white p-4 shadow-md">
             <h2 className="mb-2 text-xl font-semibold">Location Details</h2>
@@ -172,14 +182,14 @@ export const PostDetails = () => {
           </div>
         )}
 
-        {/* Content */}
+        {/* תוכן הפוסט */}
         <div className="prose max-w-none">
           <p className="mb-4 whitespace-pre-line text-gray-700">
             {post.content}
           </p>
         </div>
 
-        {/* Additional Images */}
+        {/* תמונות נוספות */}
         {post.images && post.images.length > 0 && (
           <div className="mt-8">
             <h2 className="mb-4 text-xl font-semibold">More Images</h2>
@@ -196,7 +206,7 @@ export const PostDetails = () => {
           </div>
         )}
 
-        {/* Admin Edits History */}
+        {/* היסטוריית עריכות מנהל */}
         {post.adminEdits && post.adminEdits.length > 0 && (
           <div className="mt-8 rounded-lg bg-gray-100 p-4">
             <h2 className="mb-2 text-lg font-semibold">Edit History</h2>
@@ -218,7 +228,7 @@ export const PostDetails = () => {
           </div>
         )}
 
-        {/* Delete Confirmation Modal */}
+        {/* חלון מודאלי לאישור מחיקה */}
         {showDeleteModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="w-full max-w-md rounded-lg bg-white p-6">

@@ -21,6 +21,7 @@ import { RecommendedProducts } from "./trip/RecommendedProducts"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
 
 export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
+  // ניהול מצב ונתונים //
   const { user, setUser, role } = useContext(UserContext)
   const { setError, setSuccess } = useContext(StoreContext)
   const [error, setLocalError] = useState(null)
@@ -28,6 +29,8 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
   const [orders, setOrders] = useState([])
   const [activeTab, setActiveTab] = useState("profile")
   const navigate = useNavigate()
+
+  // טופס עריכת פרופיל //
   const [isEditing, setIsEditing] = useState(false)
   const [editForm, setEditForm] = useState({
     name: "",
@@ -36,15 +39,24 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
     newPassword: "",
     phone: "",
   })
+
+  // מחיקת חשבון //
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [deletePassword, setDeletePassword] = useState("")
+
+  // מועדפים והזמנות //
   const [favorites, setFavorites] = useState([])
   const [statusFilter, setStatusFilter] = useState("all")
+
+  // פוסטים של המשתמש //
   const [userPosts, setUserPosts] = useState([])
   const [postsLoading, setPostsLoading] = useState(true)
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
   const [pagination, setPagination] = useState(null)
+  const [postStatusFilter, setPostStatusFilter] = useState("active")
+
+  // טיולים //
   const [trips, setTrips] = useState([])
   const [tripsLoading, setTripsLoading] = useState(false)
   const [showShareModal, setShowShareModal] = useState(false)
@@ -57,8 +69,8 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
     weatherData: [],
   })
   const [recommendedProducts, setRecommendedProducts] = useState([])
-  const [postStatusFilter, setPostStatusFilter] = useState("active")
 
+  // טעינת נתונים ראשונית //
   useEffect(() => {
     user && getOrders()
   }, [user])
@@ -83,6 +95,7 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
     }
   }, [activeTab, page, postStatusFilter])
 
+  // פונקציות לטיפול בנתונים //
   const getOrders = async () => {
     try {
       const { data } = await axios.get(`${USER_URL}get-orders`, {
@@ -146,10 +159,12 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
     }
   }
 
+  // סינון הזמנות לפי סטטוס //
   const filteredOrders = orders.filter((order) =>
     statusFilter === "all" ? true : order.status === statusFilter
   )
 
+  // טעינת פוסטים של המשתמש //
   const fetchUserPosts = async () => {
     try {
       setLoading(true)
@@ -171,6 +186,7 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
     }
   }
 
+  // פונקציות ניהול הטיולים //
   const fetchTrips = async () => {
     try {
       setTripsLoading(true)
@@ -260,6 +276,7 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
     }
   }
 
+  // מבנה התצוגה //
   const renderProfileContent = () => (
     <div className="rounded-lg bg-white p-6 shadow-md">
       {!isEditing ? (
@@ -427,9 +444,11 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
     editingTrip && (
       <div className="fixed inset-0 z-[9999] overflow-y-auto bg-black bg-opacity-50">
         <div className="modal-content mx-auto my-20 w-full max-w-6xl rounded-lg bg-white p-6">
+          {/* כותרת המודאל וכפתור סגירה */}
           <div className="mb-4 flex items-center justify-between">
             <div>
               <h2 className="text-xl font-semibold">Edit Trip</h2>
+              {/* שדה שם הטיול */}
               <div className="mt-2">
                 <input
                   type="text"
@@ -443,6 +462,7 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
                 />
               </div>
             </div>
+            {/* כפתור סגירת המודאל */}
             <button
               onClick={() => setEditingTrip(null)}
               className="text-gray-500 hover:text-gray-700"
@@ -460,8 +480,11 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
               </svg>
             </button>
           </div>
+
+          {/* תוכן המודאל - מפה ומוצרים מומלצים */}
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <div className="space-y-6 lg:col-span-2">
+              {/* אזור בחירת יעדים במפה */}
               <div className="rounded-lg bg-white p-4 shadow-md">
                 <h2 className="mb-4 text-xl font-semibold">
                   Select Destinations
@@ -489,6 +512,7 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
                 />
               </div>
 
+              {/* אזור מוצרים מומלצים */}
               <div className="hidden lg:block">
                 {recommendedProducts.length > 0 && (
                   <div className="rounded-lg bg-white p-4 shadow-md">
@@ -499,6 +523,7 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
             </div>
 
             <div className="space-y-6">
+              {/* פרטי הטיול */}
               <TripDetails
                 selectedLocations={editTripForm.locations}
                 tripDates={editTripForm.dates}
@@ -514,7 +539,7 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
                   })
                 }}
               />
-
+{/*פרטי מזג אוויר*/}
               <WeatherInfo
                 locations={editTripForm.locations}
                 dates={editTripForm.dates}
@@ -618,6 +643,11 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
                         Admin Dashboard
                       </p>
                     )}
+                    <Link to="/user">
+                      <button className="mt-2 cursor-pointer font-medium text-white hover:underline">
+                        go to profile
+                      </button>
+                    </Link>
                   </div>
                 </div>
                 <button

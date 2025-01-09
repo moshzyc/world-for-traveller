@@ -3,11 +3,14 @@ import axios from "axios"
 import { GET_GUIDE_URL } from "../constants/endPoint"
 import { GuideCard } from "../components/GuideCard"
 
+// דף מדריכי טיולים - מציג את כל המדריכים הזמינים //
 export const Guides = () => {
-  const [guides, setGuides] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  // ניהול מצב //
+  const [guides, setGuides] = useState([]) // רשימת המדריכים
+  const [loading, setLoading] = useState(true) // מצב טעינה
+  const [error, setError] = useState(null) // הודעות שגיאה
 
+  // טעינת המדריכים בטעינה ראשונית //
   useEffect(() => {
     const fetchGuides = async () => {
       try {
@@ -24,6 +27,7 @@ export const Guides = () => {
     fetchGuides()
   }, [])
 
+  // תצוגת טעינה //
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -32,6 +36,7 @@ export const Guides = () => {
     )
   }
 
+  // תצוגת שגיאה //
   if (error) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -40,9 +45,13 @@ export const Guides = () => {
     )
   }
 
+  // תצוגת רשימת המדריכים //
   return (
     <div className="mycontainer py-8">
+      {/* כותרת הדף */}
       <h1 className="mb-8 text-3xl font-bold text-[#2e7d32]">Travel Guides</h1>
+
+      {/* רשת כרטיסי מדריכים */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {guides.map((guide) => (
           <GuideCard key={guide._id} guide={guide} />

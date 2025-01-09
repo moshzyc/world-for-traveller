@@ -5,14 +5,18 @@ import axios from "axios"
 import { PRODUCTS_URL } from "../constants/endPoint"
 
 export const EditProduct = () => {
+  // שימוש בקונטקסט החנות
   const { categories, products, setCategory, setSubCategory, setTitle, title } =
     useContext(StoreContext)
-  const [subIndex, setSubIndex] = useState(0)
-  const [productEdited, setProductEdited] = useState(null)
-  const [searchId, setSearchId] = useState("")
-  const [searchType, setSearchType] = useState("title")
-  const [displayedProducts, setDisplayedProducts] = useState(products)
 
+  // ניהול מצב הקומפוננטה
+  const [subIndex, setSubIndex] = useState(0) // אינדקס תת-קטגוריה
+  const [productEdited, setProductEdited] = useState(null) // מוצר בעריכה
+  const [searchId, setSearchId] = useState("") // חיפוש לפי מזהה
+  const [searchType, setSearchType] = useState("title") // סוג החיפוש
+  const [displayedProducts, setDisplayedProducts] = useState(products) // מוצרים מוצגים
+
+  // פילטור מוצרים לפי מזהה
   const filterById = (id) => {
     if (!id.trim()) {
       setDisplayedProducts(products)
@@ -22,10 +26,12 @@ export const EditProduct = () => {
     setDisplayedProducts(filtered)
   }
 
+  // עדכון המוצרים המוצגים כאשר רשימת המוצרים משתנה
   useEffect(() => {
     setDisplayedProducts(products)
   }, [products])
 
+  // יצירת אפשרויות קטגוריות
   const categoriesGenerator = (arr) =>
     arr.map((item) => (
       <option value={item.category} key={item._id}>
@@ -33,6 +39,7 @@ export const EditProduct = () => {
       </option>
     ))
 
+  // יצירת אפשרויות תת-קטגוריות
   const subCategoriesGenerator = (arr) =>
     arr.map((item, index) => (
       <option value={item} key={`${item}-${index}`}>
@@ -43,9 +50,11 @@ export const EditProduct = () => {
   return (
     <div className="p-6">
       <div className="rounded-lg bg-white shadow-sm">
+        {/* אזור חיפוש וסינון */}
         <div className="border-b border-green-100 p-4">
           <div className="mb-6">
             <div className="flex flex-col gap-4">
+              {/* בחירת סוג חיפוש */}
               <div className="flex gap-4">
                 <label className="flex items-center gap-2">
                   <input
@@ -77,6 +86,7 @@ export const EditProduct = () => {
                 </label>
               </div>
 
+              {/* שדות חיפוש דינמיים */}
               {searchType === "title" ? (
                 <div className="flex flex-col gap-2">
                   <label className="font-medium text-green-800">
@@ -110,7 +120,9 @@ export const EditProduct = () => {
             </div>
           </div>
 
+          {/* בחירת קטגוריה ותת-קטגוריה */}
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {/* בחירת קטגוריה */}
             <div className="flex flex-col gap-2">
               <label className="font-medium text-green-800">Category</label>
               <select
@@ -126,6 +138,7 @@ export const EditProduct = () => {
               </select>
             </div>
 
+            {/* בחירת תת-קטגוריה */}
             <div className="flex flex-col gap-2">
               <label className="font-medium text-green-800">Subcategory</label>
               <select
@@ -143,12 +156,14 @@ export const EditProduct = () => {
           </div>
         </div>
 
+        {/* רשימת המוצרים */}
         <div className="divide-y divide-green-100">
           {displayedProducts.map((item) => (
             <div
               key={item._id}
               className="flex items-center justify-between p-4 transition-colors hover:bg-green-50"
             >
+              {/* פרטי המוצר */}
               <div className="flex w-[70%] gap-6">
                 <img
                   src={item.images[0]}
@@ -167,6 +182,7 @@ export const EditProduct = () => {
                   </p>
                 </div>
               </div>
+              {/* כפתורי פעולה */}
               <div className="flex flex-col gap-3">
                 <button
                   onClick={() => setProductEdited(item)}
@@ -194,6 +210,7 @@ export const EditProduct = () => {
         </div>
       </div>
 
+      {/* חלון עריכת מוצר */}
       {productEdited && (
         <EditProductWin
           {...productEdited}
