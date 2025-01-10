@@ -35,6 +35,7 @@ export const OrdersManagement = () => {
         withCredentials: true,
       })
       setOrders(response.data)
+      console.log(response.data)
     } catch (err) {
       setError("Failed to fetch orders")
       console.error(err)
@@ -176,6 +177,8 @@ export const OrdersManagement = () => {
                     {order.userName}
                   </div>
                   <div className="text-sm text-gray-500">{order.userEmail}</div>
+                  <div className="text-sm text-gray-900">{order.userPhone}</div>
+                  <div className="text-sm text-gray-500">{order.deliveryAddress}</div>
                 </td>
                 {/* פריטים */}
                 <td className="px-6 py-4">

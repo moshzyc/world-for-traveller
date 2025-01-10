@@ -414,7 +414,7 @@ const userCtrl = {
   async getAllOrders(req, res, next) {
     try {
       // שליפת כל המשתמשים עם פרטי ההזמנות שלהם
-      const users = await User.find({}, "orders name email").populate({
+      const users = await User.find({}, "orders name email phone").populate({
         path: "orders.cart.productId",
         select: "title price category",
       })
@@ -425,6 +425,7 @@ const userCtrl = {
           ...order.toObject(),
           userName: user.name,
           userEmail: user.email,
+          userPhone: user.phone,
           userId: user._id,
         }))
         return [...acc, ...userOrders]
