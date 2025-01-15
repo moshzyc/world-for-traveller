@@ -253,7 +253,7 @@ export const UsersManagement = ({ searchQuery }) => {
               </tr>
             </thead>
             {/* תוכן הטבלה */}
-            <tbody className="divide-y divide-gray-200 bg-white">
+            <tbody className="divide-y divide-gray-200 bg-white h-[400px] overflow-auto">
               {filteredUsers.map((user) => (
                 <tr key={user._id}>
                   <td className="whitespace-nowrap px-6 py-4">{user.name}</td>

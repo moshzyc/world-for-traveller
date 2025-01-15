@@ -7,7 +7,7 @@ export const EditGuide = () => {
   // ניהול מצב המדריכים והמדריך הנערך
   const [guides, setGuides] = useState([])
   const [guideEdited, setGuidesEdited] = useState(null)
-
+  const [fullContent, setFullContent] = useState(0)
   // טעינת המדריכים בעת טעינת הקומפוננטה
   useEffect(() => {
     getGuides()
@@ -25,7 +25,7 @@ export const EditGuide = () => {
 
   // פונקציה ליצירת רשימת המדריכים
   const guideGenerator = (arr) => {
-    return arr.map((item) => (
+    return arr.map((item, index) => (
       <div
         key={item._id}
         className="border-t border-green-100 p-6 transition-colors hover:bg-green-50"
@@ -43,8 +43,9 @@ export const EditGuide = () => {
               {item.title}
             </h3>
             <div className="rounded-lg bg-green-50 p-3">
-              <p className="whitespace-pre-line text-gray-600">
-                {item.content || ""}
+              <p onClick={()=>fullContent===index+1?setFullContent(0):setFullContent(index+1)} className="whitespace-pre-line text-gray-600">
+                {fullContent===index+1?item.content:item.content.substring(0, 150) +
+                  (item.content.length > 150 ? "..." : "") || ""}
               </p>
             </div>
           </div>

@@ -137,6 +137,7 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
         password: "",
         newPassword: "",
         phone: "",
+        address: "",
       })
       setSuccess("Profile updated successfully!")
     } catch (error) {
@@ -305,6 +306,10 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
               <label className="text-sm font-medium text-gray-600">Phone</label>
               <p className="mt-1 text-gray-800">{user?.phone}</p>
             </div>
+            <div>
+              <label className="text-sm font-medium text-gray-600">Address</label>
+              <p className="mt-1 text-gray-800">{user?.address}</p>
+            </div>
             <button
               onClick={() => setShowDeleteConfirm(true)}
               className="mt-4 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
@@ -343,6 +348,30 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
             />
           </div>
           <div>
+            <label className="text-sm font-medium text-gray-600">Phone</label>
+            <input
+              type="tel"
+              value={editForm.phone}
+              onChange={(e) =>
+                setEditForm({ ...editForm, phone: e.target.value })
+              }
+              placeholder="New phone number"
+              className="mt-1 w-full rounded-lg border p-2"
+            />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-gray-600">address</label>
+            <input
+              type="text"
+              value={editForm.address}
+              onChange={(e) =>
+                setEditForm({ ...editForm, address: e.target.value })
+              }
+              placeholder="New address"
+              className="mt-1 w-full rounded-lg border p-2"
+            />
+          </div>
+          <div>
             <label className="text-sm font-medium text-gray-600">
               Current Password (required)
             </label>
@@ -370,18 +399,7 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
               className="mt-1 w-full rounded-lg border p-2"
             />
           </div>
-          <div>
-            <label className="text-sm font-medium text-gray-600">Phone</label>
-            <input
-              type="tel"
-              value={editForm.phone}
-              onChange={(e) =>
-                setEditForm({ ...editForm, phone: e.target.value })
-              }
-              placeholder="New phone number"
-              className="mt-1 w-full rounded-lg border p-2"
-            />
-          </div>
+
           <div className="flex gap-2">
             <button
               type="submit"

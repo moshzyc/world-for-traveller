@@ -161,7 +161,7 @@ export const EditProduct = () => {
         </div>
 
         {/* רשימת המוצרים */}
-        <div className="divide-y divide-green-100">
+        <div className="divide-y divide-green-100 border h-[400px] overflow-auto">
           {displayedProducts.map((item) => (
             <div
               key={item._id}

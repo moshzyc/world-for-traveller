@@ -92,7 +92,7 @@ export const OrdersManagement = () => {
       </div>
 
       {/* תצוגה למובייל */}
-      <div className="block lg:hidden">
+      <div className="block lg:hidden overflow-auto h-[700px]">
         {filteredOrders.map((order) => (
           <div
             key={order._id}
@@ -105,6 +105,8 @@ export const OrdersManagement = () => {
               </div>
             </div>
             <div className="mb-2 text-sm text-gray-500">{order.userEmail}</div>
+            <div className="mb-2 text-sm text-gray-500">{order.userPhone}</div>
+            <div className="mb-2 text-sm text-gray-500">{order.deliveryAddress}</div>
             <div className="mb-2">{formatItems(order.cart)}</div>
             <div className="mb-2 font-medium">
               Total: {order.totalAmount} ILS
@@ -138,7 +140,7 @@ export const OrdersManagement = () => {
       </div>
 
       {/* תצוגת טבלה למסך רחב */}
-      <div className="hidden overflow-x-auto lg:block">
+      <div className="hidden lg:block h-[400px] overflow-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             {/* כותרות הטבלה */}

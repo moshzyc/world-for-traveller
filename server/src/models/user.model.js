@@ -10,12 +10,16 @@ const userSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      // required: true,
+      required: true,
     },
     password: {
       type: String,
       unique: true,
       required: true,
+    },
+    address: {
+      type: String,
+      required: false,
     },
     isVerified: {
       type: Boolean,
@@ -85,7 +89,7 @@ const userSchema = new mongoose.Schema(
         },
         deliveryAddress: {
           type: String,
-          required: true,
+          required: false,
         },
       },
     ],

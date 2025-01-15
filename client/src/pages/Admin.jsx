@@ -129,7 +129,7 @@ export const Admin = () => {
             </h3>
           </div>
           <div
-            className={`transition-all ${editGuides ? "animate-fadeIn" : "hidden"}`}
+            className={`transition-all h-[400px] overflow-auto ${editGuides ? "animate-fadeIn" : "hidden"}`}
           >
             <EditGuide />
           </div>
@@ -274,7 +274,7 @@ export const adminStyles = {
   select:
     "w-full rounded-lg border border-gray-300 p-2 transition-colors focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none",
   label: "block mb-1 font-medium text-gray-700",
-  formSection: "bg-white rounded-lg p-6 shadow-sm",
+  formSection: "bg-white rounded-lg p-6 shadow-sm ",
   sectionTitle: "text-xl font-semibold text-green-700 mb-4",
   button:
     "px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors focus:ring-2 focus:ring-green-500 focus:ring-offset-2",

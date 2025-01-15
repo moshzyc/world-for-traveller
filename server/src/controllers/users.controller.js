@@ -149,7 +149,7 @@ const userCtrl = {
   },
   async updateUser(req, res, next) {
     // חילוץ הפרטים שהמשתמש רוצה לעדכן
-    const { name, email, password, newPassword, phone } = req.body
+    const { name, email, password, newPassword, phone, address } = req.body
     try {
       // בדיקת תקינות האימייל אם הוא מסופק
       if (email && !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
@@ -175,6 +175,7 @@ const userCtrl = {
       if (name) user.name = name
       if (email) user.email = email
       if (phone) user.phone = phone
+      if (address) user.address = address
 
       // שמירת השינויים במסד הנתונים
       await user.save()
@@ -247,16 +248,22 @@ const userCtrl = {
     // חילוץ נתוני ההזמנה מגוף הבקשה
     const { cart, totalAmount, deliveryAddress } = req.body
     console.log("Received data:", { deliveryAddress, totalAmount, cart })
-    
+
     try {
       // בדיקת תקינות הנתונים הבסיסיים
-      if (!totalAmount || !deliveryAddress) {
-        return next(new AppError("Total amount and delivery address are required", 400))
+      if (!totalAmount) {
+        return next(new AppError("Total amount is required", 400))
       }
 
       // וידוא שהעגלה אינה ריקה
       if (!Array.isArray(cart) || cart.length === 0) {
         return next(new AppError("Cart cannot be empty", 400))
+      }
+
+      // Find user to get their address if needed
+      const user = await User.findById(req._id)
+      if (!user) {
+        return next(new AppError("User not found", 404))
       }
 
       // Using findOneAndUpdate to avoid validation issues
@@ -273,9 +280,9 @@ const userCtrl = {
               orderDate: new Date(),
               status: "pending",
               totalAmount: totalAmount,
-              deliveryAddress: deliveryAddress
-            }
-          }
+              deliveryAddress: deliveryAddress || user.address, // Use provided address or fall back to user's address
+            },
+          },
         },
         { new: true, runValidators: true }
       )
@@ -286,7 +293,7 @@ const userCtrl = {
 
       res.status(200).json({
         message: "Order saved successfully",
-        order: result.orders[result.orders.length - 1]
+        order: result.orders[result.orders.length - 1],
       })
     } catch (error) {
       console.error("Save order error:", error)

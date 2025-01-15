@@ -14,7 +14,7 @@ export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
   const { user, setUser } = useContext(UserContext)
   const { updateCartOnLogin } = useContext(StoreContext)
   const navigate = useNavigate()
-  
+
   // ניהול ערכי הטופס
   const [formValues, setFormValues] = useState({
     name: " ",
@@ -22,6 +22,7 @@ export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
     password: " ",
     phone: " ",
     birthDate: " ",
+    address: " ",
   })
 
   // איפוס הטופס כשעוברים בין הרשמה להתחברות
@@ -233,6 +234,28 @@ export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
                 id="phone"
                 type="tel"
                 autoComplete="tel"
+                onChange={(e) =>
+                  setFormValues({
+                    ...formValues,
+                    [e.target.name]: e.target.value,
+                  })
+                }
+                required={isSignup}
+              />
+            </div>
+            <div className="space-y-2">
+              <label
+                htmlFor="address"
+                className="block font-medium text-gray-700"
+              >
+                address
+              </label>
+              <input
+                name="address"
+                className="w-full rounded-lg border border-gray-300 p-2 focus:border-[#2e7d32] focus:outline-none focus:ring-1 focus:ring-[#2e7d32]"
+                id="address"
+                type="text"
+                autoComplete="address"
                 onChange={(e) =>
                   setFormValues({
                     ...formValues,
