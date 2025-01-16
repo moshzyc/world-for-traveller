@@ -163,7 +163,7 @@
   padding: 1rem;
   border-radius: 0 0 8px 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: right 0.3s ease;
+  /* transition: right 0.3s ease; */
   width: 300px;
 }
 
