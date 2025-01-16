@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import { useContext } from "react"
 import {
   createBrowserRouter,
   RouterProvider,
@@ -31,10 +31,6 @@ import ScrollToTop from "../components/ScrollToTop"
 
 export const AppRoutes = () => {
   const { user } = useContext(UserContext)
-
-  // console.log("Current user:", user)
-  // console.log("Is admin?:", user?.isAdmin)
-
   const router = createBrowserRouter([
     {
       path: "/",

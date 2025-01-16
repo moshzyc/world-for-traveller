@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import React, { useContext, useState, useEffect } from "react"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
 import css from "../css/store.module.css"

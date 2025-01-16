@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useContext, useState } from "react"
 import CartTable from "../components/CartTable"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
@@ -21,10 +22,8 @@ const CartPage = () => {
         <h2 className="mb-6 text-2xl font-bold text-[#2e7d32]">
           Shopping Cart
         </h2>
-
         {/* טבלת מוצרים בעגלה */}
         <CartTable fullScreen />
-
         {/* כפתור השלמת הזמנה - מוצג רק למשתמש מחובר עם פריטים בעגלה */}
         {user && cart.length > 0 && (
           <button
@@ -34,7 +33,6 @@ const CartPage = () => {
             Complete Order
           </button>
         )}
-
         {/* טופס השלמת הזמנה - מוצג רק כשלוחצים על הכפתור */}
         {user && order && <Order exit={setOrder} />}
 
@@ -53,5 +51,4 @@ const CartPage = () => {
     </main>
   )
 }
-
 export default CartPage

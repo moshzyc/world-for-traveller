@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+/* eslint-disable react/prop-types */
+import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../contexts/UserContextpProvider"
-import css from "../css/userForm.module.css"
 import { LOGIN_URL, SIGNUP_URL } from "../constants/endPoint"
 import axios from "axios"
 import { StoreContext } from "../contexts/StoreContaxtProvider"
@@ -11,9 +10,8 @@ export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
   // ניהול מצב השגיאות בטופס
   const [error, setError] = useState("")
   // שימוש בקונטקסט המשתמש והחנות
-  const { user, setUser } = useContext(UserContext)
+  const { setUser } = useContext(UserContext)
   const { updateCartOnLogin } = useContext(StoreContext)
-  const navigate = useNavigate()
 
   // ניהול ערכי הטופס
   const [formValues, setFormValues] = useState({
@@ -76,8 +74,6 @@ export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
         // טיפול בהצלחת ההתחברות
         if (onLoginSuccess) {
           onLoginSuccess()
-        } else {
-          window.location.reload()
         }
       }
     } catch (error) {
@@ -98,12 +94,10 @@ export default function UserForm({ isSignup, formChenge, onLoginSuccess }) {
   }
 
   return (
-    // טופס עם עיצוב מותאם
     <form
       onSubmit={onSubmit}
-      className={`mx-auto w-72 max-w-md rounded-lg bg-white p-4 shadow-lg ${
-        !onLoginSuccess ? "max-h-[90vh] overflow-y-auto" : ""
-      }`}
+      className={`mx-auto w-72 max-w-md rounded-lg bg-white p-4 shadow-lg ${!onLoginSuccess ? "max-h-[80vh] overflow-y-auto" : ""
+        }`}
     >
       {/* הצגת הודעות שגיאה */}
       {error && (

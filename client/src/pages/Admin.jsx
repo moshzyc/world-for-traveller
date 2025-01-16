@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react"
 import { AddProducts } from "../components/AddProducts"
 import { EditProduct } from "../components/EditProduct"

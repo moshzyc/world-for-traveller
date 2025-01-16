@@ -865,8 +865,9 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
                     <>
                       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                         {userPosts.map((post) => (
-                          <div
+                          <Link
                             key={post._id}
+                            to={`/community/post/${post._id}`}
                             className={`group overflow-hidden rounded-lg border transition-all hover:shadow-lg ${
                               post.status === "deleted"
                                 ? "border-red-200 bg-red-50"
@@ -922,7 +923,7 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
                                   </div>
                                 )}
                             </div>
-                          </div>
+                          </Link>
                         ))}
                       </div>
 
