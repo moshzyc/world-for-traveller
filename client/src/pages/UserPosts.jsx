@@ -86,7 +86,7 @@ export const UserPosts = () => {
               <option value="">All Categories</option>
               <option value="locations">Locations</option>
               <option value="products">Products</option>
-              <option value="tips">Trip Tips</option>
+              <option value="trip tips">Trip Tips</option>
             </select>
           </form>
 
