@@ -89,10 +89,10 @@ export const UserPosts = () => {
               <option value="tips">Travel Tips</option>
             </select>
           </form>
-          
+
         </div>
         <Link to="/community/add" className="btn">
-          {user&&(<button className="btn bg-[#2e7d32] text-white w-[100px] p-1 rounded-lg mb-4 hover:bg-[#31ab37] active:scale-95">Create Post</button>)}
+          {user && (<button className="btn bg-[#2e7d32] text-white w-[100px] p-1 rounded-lg mb-4 hover:bg-[#31ab37] active:scale-95">Create Post</button>)}
         </Link>
         {/* תצוגת טעינה, שגיאה או תוכן */}
         {loading ? (
@@ -129,7 +129,7 @@ export const UserPosts = () => {
                       {post.title}
                     </h2>
                     <p className="mb-4 line-clamp-2 text-gray-600">
-                      {post.content[0]}
+                      {post.content.substring(0, 150) + (post.content.length > 150 ? "..." : "") || ""}
                     </p>
 
                     {/* דירוג */}
@@ -174,11 +174,10 @@ export const UserPosts = () => {
                     onClick={() =>
                       setFilters((prev) => ({ ...prev, page: i + 1 }))
                     }
-                    className={`rounded px-3 py-1 ${
-                      pagination.currentPage === i + 1
-                        ? "bg-[#2e7d32] text-white"
-                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                    }`}
+                    className={`rounded px-3 py-1 ${pagination.currentPage === i + 1
+                      ? "bg-[#2e7d32] text-white"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                      }`}
                   >
                     {i + 1}
                   </button>
