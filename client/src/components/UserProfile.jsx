@@ -307,7 +307,9 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
               <p className="mt-1 text-gray-800">{user?.phone}</p>
             </div>
             <div>
-              <label className="text-sm font-medium text-gray-600">Address</label>
+              <label className="text-sm font-medium text-gray-600">
+                Address
+              </label>
               <p className="mt-1 text-gray-800">{user?.address}</p>
             </div>
             <button
@@ -557,7 +559,7 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
                   })
                 }}
               />
-{/*פרטי מזג אוויר*/}
+              {/*פרטי מזג אוויר*/}
               <WeatherInfo
                 locations={editTripForm.locations}
                 dates={editTripForm.dates}
@@ -607,30 +609,34 @@ export const UserProfile = ({ setIsSignup, fullScreen, onNav }) => {
           <div className={`flex ${fullScreen ? "" : "flex-col gap-4"}`}>
             {fullScreen ? (
               // Fullscreen layout
-              <div className="flex w-full justify-between">
+              <div className="flex w-full flex-col gap-4 sm:flex-row sm:justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-2xl font-bold text-[#2e7d32]">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-xl font-bold text-[#2e7d32] sm:h-16 sm:w-16 sm:text-2xl">
                     {user?.name?.charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <h1 className="text-2xl font-bold">{user?.name}</h1>
-                    <p className="text-green-100">{user?.email}</p>
+                    <h1 className="text-xl font-bold sm:text-2xl">
+                      {user?.name}
+                    </h1>
+                    <p className="text-sm text-green-100 sm:text-base">
+                      {user?.email}
+                    </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-4">
                   {role === "admin" && (
                     <button
                       onClick={() => {
                         navigate("/admin")
                         onNav && onNav()
                       }}
-                      className="rounded-lg bg-white px-4 py-2 font-medium text-[#2e7d32] transition-colors hover:bg-[#e8f5e9]"
+                      className="w-full rounded-lg bg-white px-3 py-2 text-sm font-medium text-[#2e7d32] transition-colors hover:bg-[#e8f5e9] sm:w-auto sm:px-4 sm:text-base"
                     >
                       Admin Dashboard
                     </button>
                   )}
                   <button
-                    className="rounded-lg bg-red-600 px-4 py-2 font-medium text-white transition-colors hover:bg-red-700"
+                    className="w-full rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 sm:w-auto sm:px-4 sm:text-base"
                     onClick={() => {
                       onLogout()
                       setIsSignup(false)
