@@ -148,7 +148,7 @@
 
 /* Search container */
 .searchContainer {
-  /* position: relative; */
+  position: relative;
   display: flex;
   height: 40px;
 }
@@ -156,19 +156,24 @@
 .searchInputWrapper {
   position: absolute;
   display: flex;
-
   top: 100%;
-  right: -100%;
+  right: -100px;
   background: white;
   padding: 1rem;
   border-radius: 0 0 8px 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  /* transition: right 0.3s ease; */
+  transition: all 0.3s ease;
   width: 300px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
 }
 
 .searchOpen .searchInputWrapper {
-  right: 0;
+  right: -130px;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 @media (min-width: 768px) {
@@ -177,6 +182,9 @@
     padding: 0;
     box-shadow: none;
     width: auto;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
   }
 
   .searchToggle {
