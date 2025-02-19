@@ -42,17 +42,72 @@ export const WeatherInfo = ({
           )
 
           const results = await Promise.all(weatherPromises)
-          const processedData = results.map((res) => ({
-            temperature: res.data.list[0].main.temp,
-            conditions: res.data.list[0].weather[0].main,
-            icon: res.data.list[0].weather[0].icon,
-          }))
+          const processedData = results.map((res) => {
+            const forecastList = res.data.list
+            const tripStartDate = new Date(dates.start)
+            const tripEndDate = new Date(dates.end)
+            tripEndDate.setHours(23, 59, 59, 999)
+
+            // Get the last available forecast date
+            const maxForecastDate = new Date(
+              forecastList[forecastList.length - 1].dt * 1000
+            )
+
+            // Get current weather for dates beyond forecast
+            const currentWeather = forecastList[0]
+
+            // Create an array of all dates in the trip
+            const tripDates = []
+            let currentDate = new Date(tripStartDate)
+            while (currentDate <= tripEndDate) {
+              const dateKey = currentDate.toISOString().split("T")[0]
+
+              // If date is beyond forecast range, use current weather
+              if (currentDate > maxForecastDate) {
+                tripDates.push({
+                  date: new Date(currentDate),
+                  temperature: currentWeather.main.temp,
+                  conditions: currentWeather.weather[0].main,
+                  icon: currentWeather.weather[0].icon,
+                  isBeyondForecast: true,
+                })
+              } else {
+                // Find forecast for this date
+                const dateForecast = forecastList.find((f) => {
+                  const forecastDate = new Date(f.dt * 1000)
+                  return forecastDate.toISOString().split("T")[0] === dateKey
+                })
+
+                if (dateForecast) {
+                  tripDates.push({
+                    date: new Date(currentDate),
+                    temperature: dateForecast.main.temp,
+                    conditions: dateForecast.weather[0].main,
+                    icon: dateForecast.weather[0].icon,
+                    isBeyondForecast: false,
+                  })
+                }
+              }
+
+              currentDate.setDate(currentDate.getDate() + 1)
+            }
+
+            return {
+              forecasts: tripDates.reduce((acc, forecast) => {
+                const dateKey = forecast.date.toISOString().split("T")[0]
+                acc[dateKey] = forecast
+                return acc
+              }, {}),
+              maxForecastDate,
+            }
+          })
 
           setWeatherData(processedData)
 
           // Get weather conditions for product recommendations
           const weatherConditions = processedData.map((data) => {
-            const temp = data.temperature
+            const temp =
+              data.forecasts[Object.keys(data.forecasts)[0]].temperature
             if (temp >= 25) return "hot"
             if (temp <= 15) return "cold"
             return "neutral"
@@ -86,7 +141,7 @@ export const WeatherInfo = ({
     }
 
     fetchWeatherAndProducts()
-  }, [locations, dates.start])
+  }, [locations, dates.start, dates.end])
 
   if (error) {
     return (
@@ -122,18 +177,43 @@ export const WeatherInfo = ({
                 {location?.name || "Unknown Location"}
               </h3>
               {safeWeatherData[index] ? (
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <span className="font-medium">Temperature:</span>{" "}
-                    {safeWeatherData[index].temperature !== "N/A"
-                      ? `${safeWeatherData[index].temperature}°C`
-                      : "Not available"}
+                <details className="weather-details">
+                  <summary className="mb-2 cursor-pointer font-medium">
+                    View weather forecast
+                  </summary>
+                  <div className="space-y-2">
+                    {Object.entries(safeWeatherData[index].forecasts).map(
+                      ([dateKey, forecast]) => {
+                        return (
+                          <div key={dateKey} className="rounded bg-white p-2">
+                            <div className="grid grid-cols-2 gap-2">
+                              <div>
+                                <span className="font-medium">Date:</span>{" "}
+                                {new Date(dateKey).toLocaleDateString()}
+                                {forecast.isBeyondForecast && (
+                                  <span className="block text-sm text-amber-600">
+                                    Forecast not available - showing today's
+                                    weather
+                                  </span>
+                                )}
+                              </div>
+                              <div>
+                                <span className="font-medium">
+                                  Temperature:
+                                </span>{" "}
+                                {`${forecast.temperature}°C`}
+                              </div>
+                              <div>
+                                <span className="font-medium">Conditions:</span>{" "}
+                                {forecast.conditions}
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      }
+                    )}
                   </div>
-                  <div>
-                    <span className="font-medium">Conditions:</span>{" "}
-                    {safeWeatherData[index].conditions || "Not available"}
-                  </div>
-                </div>
+                </details>
               ) : (
                 <p className="text-gray-500">Loading weather data...</p>
               )}
