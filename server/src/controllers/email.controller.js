@@ -9,30 +9,34 @@ const OAuth2 = google.auth.OAuth2
 // פונקציה ליצירת מעביר המיילים עם אימות OAuth2
 const createTransporter = async () => {
   try {
-    // יצירת לקוח OAuth2 עם פרטי ההזדהות של גוגל
+    console.log("Creating OAuth2 client...")
     const oauth2Client = new OAuth2(
       process.env.GMAIL_CLIENT_ID,
       process.env.GMAIL_CLIENT_SECRET,
       "https://developers.google.com/oauthplayground"
     )
 
-    // הגדרת טוקן הרענון לאימות
+    console.log("Setting credentials...")
     oauth2Client.setCredentials({
       refresh_token: process.env.GMAIL_REFRESH_TOKEN,
     })
 
-    // קבלת טוקן גישה חדש מגוגל
+    console.log("Getting access token...")
     const accessToken = await new Promise((resolve, reject) => {
       oauth2Client.getAccessToken((err, token) => {
         if (err) {
           console.log("**** Error getting access token: ", err)
+          if (err.message?.includes("invalid_grant")) {
+            console.error("Refresh token may be invalid or expired")
+          }
           reject(err)
         }
+        console.log("Access token received successfully")
         resolve(token)
       })
     })
 
-    // יצירת טרנספורטר למשלוח מיילים עם אימות OAuth2
+    console.log("Creating transporter...")
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -41,14 +45,22 @@ const createTransporter = async () => {
         clientId: process.env.GMAIL_CLIENT_ID,
         clientSecret: process.env.GMAIL_CLIENT_SECRET,
         refreshToken: process.env.GMAIL_REFRESH_TOKEN,
-        accessToken: accessToken,
+        accessToken,
       },
+      debug: true,
     })
+
+    // Test the connection
+    console.log("Verifying transporter...")
+    await transporter.verify()
+    console.log("Transporter verified successfully")
 
     return transporter
   } catch (err) {
-    // טיפול בשגיאות ביצירת הטרנספורטר
-    console.error("Error creating transporter:", err)
+    console.error("Detailed transporter error:", err)
+    if (err.code === "EAUTH") {
+      console.error("Authentication failed - check credentials")
+    }
     throw err
   }
 }
@@ -57,10 +69,10 @@ const emailCtrl = {
   // שליחת אימייל אישור הזמנה
   async sendOrderConfirmation(req, res, next) {
     try {
-      // חילוץ פרטי המייל מגוף הבקשה
+      console.log("Starting to send order confirmation...")
       const { to, subject, html } = req.body
 
-      // הגדרת אפשרויות המייל
+      console.log("Creating mail options:", { to, subject })
       const mailOptions = {
         from: process.env.EMAIL_USER,
         to,
@@ -68,18 +80,18 @@ const emailCtrl = {
         html,
       }
 
-      // יצירת טרנספורטר ושליחת המייל
+      console.log("Getting transporter...")
       const transporter = await createTransporter()
-      const info = await transporter.sendMail(mailOptions)
-      console.log("Email sent: ", info.response)
 
-      // שליחת תשובת הצלחה
+      console.log("Sending mail...")
+      const info = await transporter.sendMail(mailOptions)
+      console.log("Email sent successfully:", info.response)
+
       res.status(200).json({
         message: "Order confirmation email sent successfully",
       })
     } catch (error) {
-      // טיפול בשגיאות במשלוח המייל
-      console.error("Email error:", error)
+      console.error("Detailed email error:", error)
       next(new AppError("Failed to send email", 500, error))
     }
   },

@@ -1,6 +1,5 @@
 import dotenv from "dotenv"
 dotenv.config()
-
 import express from "express"
 import { PORT } from "./secrets/env.js"
 import appRouter from "./routes/app.routes.js"
