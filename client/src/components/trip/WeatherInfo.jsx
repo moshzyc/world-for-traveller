@@ -182,36 +182,36 @@ export const WeatherInfo = ({
                     View weather forecast
                   </summary>
                   <div className="space-y-2">
-                    {Object.entries(safeWeatherData[index].forecasts).map(
-                      ([dateKey, forecast]) => {
-                        return (
-                          <div key={dateKey} className="rounded bg-white p-2">
-                            <div className="grid grid-cols-2 gap-2">
-                              <div>
-                                <span className="font-medium">Date:</span>{" "}
-                                {new Date(dateKey).toLocaleDateString()}
-                                {forecast.isBeyondForecast && (
-                                  <span className="block text-sm text-amber-600">
-                                    Forecast not available - showing today's
-                                    weather
-                                  </span>
-                                )}
-                              </div>
-                              <div>
-                                <span className="font-medium">
-                                  Temperature:
-                                </span>{" "}
-                                {`${forecast.temperature}°C`}
-                              </div>
-                              <div>
-                                <span className="font-medium">Conditions:</span>{" "}
-                                {forecast.conditions}
-                              </div>
+                    {Object.entries(
+                      safeWeatherData[index]?.forecasts || {}
+                    ).map(([dateKey, forecast]) => {
+                      if (!forecast) return null
+
+                      return (
+                        <div key={dateKey} className="rounded bg-white p-2">
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <span className="font-medium">Date:</span>{" "}
+                              {new Date(dateKey).toLocaleDateString()}
+                              {forecast.isBeyondForecast && (
+                                <span className="block text-sm text-amber-600">
+                                  Forecast not available - showing today's
+                                  weather
+                                </span>
+                              )}
+                            </div>
+                            <div>
+                              <span className="font-medium">Temperature:</span>{" "}
+                              {`${forecast.temperature}°C`}
+                            </div>
+                            <div>
+                              <span className="font-medium">Conditions:</span>{" "}
+                              {forecast.conditions}
                             </div>
                           </div>
-                        )
-                      }
-                    )}
+                        </div>
+                      )
+                    })}
                   </div>
                 </details>
               ) : (
